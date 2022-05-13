@@ -215,6 +215,8 @@ namespace PlcSimAdvSimulator
             this.cIntregrator1.Name = "cIntregrator1";
             this.cIntregrator1.PlcActualValue = 0;
             this.cIntregrator1.PlcActualValueTag = "Value_Actual";
+            this.cIntregrator1.PlcGradient = 0;
+            this.cIntregrator1.PlcGradientTag = "Value_Gradient";
             this.cIntregrator1.PlcResetValueTag = "Eingang_06";
             this.cIntregrator1.PlcSetValue = 0;
             this.cIntregrator1.PlcSetValueTag = "Value_Set";

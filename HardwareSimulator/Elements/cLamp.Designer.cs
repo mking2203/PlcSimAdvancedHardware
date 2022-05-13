@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace PlcSimAdvSimulator
 {
@@ -39,6 +40,7 @@ namespace PlcSimAdvSimulator
         private ToolTip toolTip = new System.Windows.Forms.ToolTip();
 
         // Public and designer access to the property.
+        [Description("Represents a small rectangular pop-up window"), Category("Design")]
         public string ToolTip
         {
             get

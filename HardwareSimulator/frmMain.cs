@@ -131,6 +131,8 @@ namespace PlcSimAdvSimulator
                             c.PlcTargetValue = myInstance.ReadInt16(c.PlcTargetValueTag);
                         if (c.PlcActualValueTag != null)
                             myInstance.WriteInt16(c.PlcActualValueTag, Convert.ToInt16(c.PlcActualValue));
+                        if (c.PlcGradientTag != null)
+                            c.PlcGradient = myInstance.ReadInt16(c.PlcGradientTag);
 
                         if (c.PlcResetValueTag != null)
                         {

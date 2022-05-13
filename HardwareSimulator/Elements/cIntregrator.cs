@@ -29,6 +29,9 @@ namespace PlcSimAdvSimulator
         public string PlcActualValueTag { get; set; }
         public int PlcActualValue { get; set; }
 
+        public string PlcGradientTag { get; set; }
+        public int PlcGradient { get; set; }
+
         public string PlcResetValueTag { get; set; }
         public void PlcResetValue()
         {
@@ -61,7 +64,7 @@ namespace PlcSimAdvSimulator
                 if (start != 0)
                 {
                     long span = (plcTicks - start) / 10000;
-                    long wert = (span * 2000) / 1000;
+                    long wert = (span * PlcGradient) / 1000;
 
                     PlcActualValue = PlcActualValue + (int)wert;
 
