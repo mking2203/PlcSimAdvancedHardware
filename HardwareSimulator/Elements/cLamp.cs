@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -28,7 +29,7 @@ namespace PlcSimAdvSimulator
 
                 plcLampValue = value;
                 if (value)
-                    this.BackColor = Color.Green;
+                    this.BackColor = PlcActiveColor;
                 else
                     this.BackColor = SystemColors.Control;
 
@@ -40,18 +41,23 @@ namespace PlcSimAdvSimulator
 
         public string PlcLampTag { get; set; }
 
+        Color plcActiveColor = Color.ForestGreen;
+        [Description("Represents the ON color off the button"), Category("Design")]
+        public Color PlcActiveColor
+        {
+            get
+            {
+                return plcActiveColor;
+            }
+            set
+            {
+                plcActiveColor = value;
+            }
+        }
+
         public cLamp()
         {
             InitializeComponent();
         }
-
-        protected override void InitLayout()
-        {
-            base.InitLayout();
-            base.AutoSize = false;
-            base.BorderStyle = BorderStyle.FixedSingle;
-            base.TextAlign = ContentAlignment.MiddleCenter;
-        }
-
     }
 }

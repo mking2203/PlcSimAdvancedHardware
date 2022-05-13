@@ -31,37 +31,49 @@ namespace PlcSimAdvSimulator
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.txtTime = new System.Windows.Forms.Label();
+            this.txtPulse = new System.Windows.Forms.Label();
+            this.txtName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // txtTime
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "500 ms";
+            this.txtTime.AutoSize = true;
+            this.txtTime.Location = new System.Drawing.Point(30, 33);
+            this.txtTime.Name = "txtTime";
+            this.txtTime.Size = new System.Drawing.Size(41, 13);
+            this.txtTime.TabIndex = 0;
+            this.txtTime.Text = "500 ms";
             // 
-            // label2
+            // txtPulse
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(78, 75);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "O";
+            this.txtPulse.AutoSize = true;
+            this.txtPulse.Location = new System.Drawing.Point(78, 75);
+            this.txtPulse.Name = "txtPulse";
+            this.txtPulse.Size = new System.Drawing.Size(15, 13);
+            this.txtPulse.TabIndex = 1;
+            this.txtPulse.Text = "O";
+            // 
+            // txtName
+            // 
+            this.txtName.AutoSize = true;
+            this.txtName.Location = new System.Drawing.Point(4, 4);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(35, 13);
+            this.txtName.TabIndex = 2;
+            this.txtName.Text = "Name";
             // 
             // cPulse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtName);
+            this.Controls.Add(this.txtPulse);
+            this.Controls.Add(this.txtTime);
             this.Name = "cPulse";
             this.Size = new System.Drawing.Size(98, 98);
+            this.SizeChanged += new System.EventHandler(this.cPulse_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -86,7 +98,8 @@ namespace PlcSimAdvSimulator
             }
         }
 
-        private System.Windows.Forms.Label label1;
-        private Label label2;
+        private System.Windows.Forms.Label txtTime;
+        private Label txtPulse;
+        private Label txtName;
     }
 }

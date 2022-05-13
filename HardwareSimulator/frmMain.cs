@@ -10,9 +10,11 @@ using System.Windows.Forms;
 
 using System.Threading;
 using Siemens.Simatic.Simulation.Runtime;
+
 using System.Collections.Generic;
 using System.Text.Json;
 using System.IO;
+using System.Drawing;
 
 namespace PlcSimAdvSimulator
 {
@@ -20,7 +22,6 @@ namespace PlcSimAdvSimulator
     {
         private IInstance myInstance;
         private long aktTicks;
-        private long startTicks;
 
         private Thread tFeedbacks;
 
@@ -33,18 +34,20 @@ namespace PlcSimAdvSimulator
         {
             #region read json config
 
-            string json =File.ReadAllText(Application.StartupPath + "\\elements.json");
+            string json = File.ReadAllText(Application.StartupPath + "\\elements.json");
             List<Dictionary<string, string>> myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
 
             foreach (Dictionary<string, string> item in myList)
             {
-                if(item["Control"] == "cButton")
+                if (item["Control"] == "cButton")
                 {
                     cButton t = new cButton();
                     t.Text = item["Text"];
                     t.Size = GetSize(item["Size"]);
                     t.Location = GetLocation(item["Location"]);
                     t.PlcButtonTag = item["Button"];
+                    if (item.ContainsKey("ActiveColor"))
+                        t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
 
                     t.ToolTip = "OUT: " + item["Button"];
                     this.Controls.Add(t);
@@ -56,6 +59,8 @@ namespace PlcSimAdvSimulator
                     t.Size = GetSize(item["Size"]);
                     t.Location = GetLocation(item["Location"]);
                     t.PlcButtonTag = item["Button"];
+                    if (item.ContainsKey("ActiveColor"))
+                        t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
 
                     t.ToolTip = "OUT: " + item["Button"];
                     this.Controls.Add(t);
@@ -68,6 +73,8 @@ namespace PlcSimAdvSimulator
                     t.Location = GetLocation(item["Location"]);
                     t.PlcButtonTag = item["Button"];
                     t.PlcLampTag = item["Lamp"];
+                    if (item.ContainsKey("ActiveColor"))
+                        t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
 
                     t.ToolTip = "IN: " + item["Lamp"] + "- OUT: " + item["Button"];
                     this.Controls.Add(t);
@@ -75,10 +82,17 @@ namespace PlcSimAdvSimulator
                 else if (item["Control"] == "cLamp")
                 {
                     cLamp t = new cLamp();
+
+                    t.AutoSize = false;
+                    t.BorderStyle = BorderStyle.FixedSingle;
+                    t.TextAlign = ContentAlignment.MiddleCenter;
+
                     t.Text = item["Text"];
                     t.Size = GetSize(item["Size"]);
                     t.Location = GetLocation(item["Location"]);
                     t.PlcLampTag = item["Lamp"];
+                    if (item.ContainsKey("ActiveColor"))
+                        t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
 
                     t.ToolTip = "OUT: " + item["Lamp"];
                     this.Controls.Add(t);
@@ -92,6 +106,19 @@ namespace PlcSimAdvSimulator
                     t.PlcButtonTag = item["Button"];
 
                     t.ToolTip = "OUT: " + item["Button"];
+                    this.Controls.Add(t);
+                }
+                else if (item["Control"] == "cPulse")
+                {
+                    cPulse t = new cPulse();
+                    t.Caption = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+
+                    t.PlcOutputTag = item["Output"];
+                    t.PlcTimeMS = Int16.Parse(item["TimeMS"]);
+
+                    t.ToolTip = "OUT: " + item["Output"];
                     this.Controls.Add(t);
                 }
                 else if (item["Control"] == "cLabel")
@@ -120,18 +147,12 @@ namespace PlcSimAdvSimulator
             //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
 
             // get all vars
-            STagInfo[] data = myInstance.TagInfos;
-
-            // save the start time
-            startTicks = myInstance.SystemTime.Ticks / 10000;
+            //STagInfo[] data = myInstance.TagInfos;
 
             //Start a thread to synchronize feedbacks inputs 
             tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
             tFeedbacks.IsBackground = true;
             tFeedbacks.Start();
-
-            cPulse1.ToolTip = "Pulse:\nOUT - " + cPulse1.PlcOutputTag + "\n" + cPulse1.PlcTimeMS.ToString() + " ms";
-            cIntregrator1.ToolTip = "Intregrator";
         }
 
         private System.Drawing.Size GetSize(string value)

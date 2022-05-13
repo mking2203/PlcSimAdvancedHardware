@@ -33,7 +33,6 @@ namespace PlcSimAdvSimulator
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cPulse1 = new PlcSimAdvSimulator.cPulse();
             this.cIntregrator1 = new PlcSimAdvSimulator.cIntregrator();
             this.cButton1 = new PlcSimAdvSimulator.cButton();
             this.cButton3 = new PlcSimAdvSimulator.cButton();
@@ -62,17 +61,6 @@ namespace PlcSimAdvSimulator
             this.txtTime.Size = new System.Drawing.Size(33, 17);
             this.txtTime.Text = "Time";
             // 
-            // cPulse1
-            // 
-            this.cPulse1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cPulse1.Location = new System.Drawing.Point(486, 136);
-            this.cPulse1.Name = "cPulse1";
-            this.cPulse1.PlcOutputTag = "Eingang_05";
-            this.cPulse1.PlcTimeMS = 1000;
-            this.cPulse1.Size = new System.Drawing.Size(98, 98);
-            this.cPulse1.TabIndex = 14;
-            this.cPulse1.ToolTip = "";
-            // 
             // cIntregrator1
             // 
             this.cIntregrator1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -97,6 +85,7 @@ namespace PlcSimAdvSimulator
             // 
             this.cButton1.Location = new System.Drawing.Point(670, 241);
             this.cButton1.Name = "cButton1";
+            this.cButton1.PlcActiveColor = System.Drawing.Color.Empty;
             this.cButton1.PlcButtonTag = "Eingang_06";
             this.cButton1.PlcButtonValue = false;
             this.cButton1.Size = new System.Drawing.Size(75, 23);
@@ -109,6 +98,7 @@ namespace PlcSimAdvSimulator
             // 
             this.cButton3.Location = new System.Drawing.Point(670, 285);
             this.cButton3.Name = "cButton3";
+            this.cButton3.PlcActiveColor = System.Drawing.Color.Empty;
             this.cButton3.PlcButtonTag = "Eingang_07";
             this.cButton3.PlcButtonValue = false;
             this.cButton3.Size = new System.Drawing.Size(75, 23);
@@ -125,10 +115,11 @@ namespace PlcSimAdvSimulator
             this.Controls.Add(this.cButton3);
             this.Controls.Add(this.cButton1);
             this.Controls.Add(this.cIntregrator1);
-            this.Controls.Add(this.cPulse1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "frmMain";
-            this.Text = "Form1";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "PlcSimAdvanced Hardware";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
@@ -143,7 +134,6 @@ namespace PlcSimAdvSimulator
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel txtTime;
-        private cPulse cPulse1;
         private cIntregrator cIntregrator1;
         private cButton cButton1;
         private cButton cButton3;

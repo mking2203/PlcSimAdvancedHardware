@@ -4,14 +4,16 @@
 		"Text": "ToggleButton Input 1",
 		"Size": "100x50",
 		"Location": "10,10",
-		"Button": "Eingang_01"
+		"Button": "Eingang_01",
+		"ActiveColor":  "Green"
 	},
 	{
 		"Control": "cButton",
 		"Text": "Button Input 2",
 		"Size": "100x50",
 		"Location": "10,70",
-		"Button": "Eingang_02"
+		"Button": "Eingang_02",
+		"ActiveColor":  "Orange"
 	},
 	{
 		"Control": "cCheckBox",
@@ -26,42 +28,48 @@
 		"Size": "100x50",
 		"Location": "10,190",
 		"Button": "Eingang_04",
-		"Lamp": "Ausgang_03"
+		"Lamp": "Ausgang_03",
+		"ActiveColor":  "Red"
 	},
 	{
 		"Control": "cLamp",
 		"Text": "Input 1",
 		"Size": "50x50",
 		"Location": "150,10",
-		"Lamp": "Eingang_01"
+		"Lamp": "Eingang_01",
+		"ActiveColor":  "Yellow"
 	},
 	{
 		"Control": "cLamp",
 		"Text": "Input 2",
 		"Size": "50x50",
 		"Location": "150,70",
-		"Lamp": "Eingang_02"
+		"Lamp": "Eingang_02",
+		"ActiveColor":  "Blue"
 	},
 	{
 		"Control": "cLamp",
 		"Text": "Input 3",
 		"Size": "50x50",
 		"Location": "150,130",
-		"Lamp": "Eingang_03"
+		"Lamp": "Eingang_03",
+		"ActiveColor":  "Orange"
 	},
 	{
 		"Control": "cLamp",
 		"Text": "Input 4",
 		"Size": "50x50",
 		"Location": "150,190",
-		"Lamp": "Eingang_04"
+		"Lamp": "Eingang_04",
+		"ActiveColor":  "Coral"
 	},
 	{
 		"Control": "cLamp",
 		"Text": "Output 1",
 		"Size": "50x50",
 		"Location": "210,10",
-		"Lamp": "Ausgang_01"
+		"Lamp": "Ausgang_01",
+		"ActiveColor":  "White"
 	},
 	{
 		"Control": "cLamp",
@@ -75,7 +83,8 @@
 		"Text": "Output 3",
 		"Size": "50x50",
 		"Location": "210,130",
-		"Lamp": "Ausgang_03"
+		"Lamp": "Ausgang_03",
+		"ActiveColor":  "Gold"
 	},
 	{
 		"Control": "cLabel",
@@ -83,5 +92,13 @@
 		"Size": "200x50",
 		"Location": "300,10",
 		"FontSize": "15"
+	},
+	{
+		"Control": "cPulse",
+		"Text": "Pulse I0.5",
+		"Size": "100x100",
+		"Location": "500,100",
+        "Output": "Eingang_05",
+		"TimeMS": "1000"
 	}
 ]

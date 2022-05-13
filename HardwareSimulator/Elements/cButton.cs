@@ -6,6 +6,7 @@
 //
 
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -22,10 +23,24 @@ namespace PlcSimAdvSimulator
 
         public string PlcButtonTag { get; set; }
 
+        Color plcActiveColor = Color.ForestGreen;
+        [Description("Represents the ON color off the button"), Category("Design")]
+        public Color PlcActiveColor
+        {
+            get
+            {
+                return plcActiveColor;
+            }
+            set
+            {
+                plcActiveColor = value;
+            }
+        }
+
         private void cButton_MouseDown(object sender, MouseEventArgs e)
         {
             PlcButtonValue = true;
-            this.BackColor = Color.ForestGreen;
+            this.BackColor = PlcActiveColor;
         }
 
         private void cButton_MouseUp(object sender, MouseEventArgs e)

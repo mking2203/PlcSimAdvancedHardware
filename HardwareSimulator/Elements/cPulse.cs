@@ -27,7 +27,7 @@ namespace PlcSimAdvSimulator
             set
             {
                 plcTimeMS = value;
-                label1.Text = plcTimeMS.ToString() + " ms";
+                txtTime.Text = plcTimeMS.ToString() + " ms";
             }
         }
         public bool PlcOutputValue
@@ -42,15 +42,29 @@ namespace PlcSimAdvSimulator
                     }
 
                 if (plcOutpuValue)
-                    label2.BackColor = Color.Green;
+                    txtPulse.BackColor = Color.Green;
                 else
-                    label2.BackColor = SystemColors.Control;
+                    txtPulse.BackColor = SystemColors.Control;
 
                 return plcOutpuValue;
             }
         }
 
         public string PlcOutputTag { get; set; }
+
+        public string caption;
+        public string Caption
+        {
+            get
+            {
+                return caption;
+            }
+            set
+            {
+                caption = value;
+                txtName.Text = caption;
+            }
+        }
 
         public long PlcTicks
         {
@@ -65,7 +79,14 @@ namespace PlcSimAdvSimulator
         public cPulse()
         {
             InitializeComponent();
-            label1.Text = plcTimeMS.ToString() + " ms";
+            txtTime.Text = plcTimeMS.ToString() + " ms";      
+        }
+
+        private void cPulse_SizeChanged(object sender, EventArgs e)
+        {
+            txtName.Location = new Point(10, 10);
+            txtTime.Location = new Point(10, this.Height / 2);
+            txtPulse.Location = new Point(this.Width - 30, this.Height - 30);
         }
     }
 }
