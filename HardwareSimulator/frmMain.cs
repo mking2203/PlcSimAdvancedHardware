@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 using System.Threading;
 using Siemens.Simatic.Simulation.Runtime;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.IO;
 
 namespace PlcSimAdvSimulator
 {
@@ -28,6 +31,83 @@ namespace PlcSimAdvSimulator
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            #region read json config
+
+            string json =File.ReadAllText(Application.StartupPath + "\\elements.json");
+            List<Dictionary<string, string>> myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+
+            foreach (Dictionary<string, string> item in myList)
+            {
+                if(item["Control"] == "cButton")
+                {
+                    cButton t = new cButton();
+                    t.Text = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+                    t.PlcButtonTag = item["Button"];
+
+                    t.ToolTip = "OUT: " + item["Button"];
+                    this.Controls.Add(t);
+                }
+                else if (item["Control"] == "cToggleButton")
+                {
+                    cToggleButton t = new cToggleButton();
+                    t.Text = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+                    t.PlcButtonTag = item["Button"];
+
+                    t.ToolTip = "OUT: " + item["Button"];
+                    this.Controls.Add(t);
+                }
+                else if (item["Control"] == "cButtonLamp")
+                {
+                    cButtonLamp t = new cButtonLamp();
+                    t.Text = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+                    t.PlcButtonTag = item["Button"];
+                    t.PlcLampTag = item["Lamp"];
+
+                    t.ToolTip = "IN: " + item["Lamp"] + "- OUT: " + item["Button"];
+                    this.Controls.Add(t);
+                }
+                else if (item["Control"] == "cLamp")
+                {
+                    cLamp t = new cLamp();
+                    t.Text = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+                    t.PlcLampTag = item["Lamp"];
+
+                    t.ToolTip = "OUT: " + item["Lamp"];
+                    this.Controls.Add(t);
+                }
+                else if (item["Control"] == "cCheckBox")
+                {
+                    cCheckBox t = new cCheckBox();
+                    t.Text = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+                    t.PlcButtonTag = item["Button"];
+
+                    t.ToolTip = "OUT: " + item["Button"];
+                    this.Controls.Add(t);
+                }
+                else if (item["Control"] == "cLabel")
+                {
+                    Label t = new Label();
+                    t.Text = item["Text"];
+                    t.Size = GetSize(item["Size"]);
+                    t.Location = GetLocation(item["Location"]);
+                    t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
+
+                    this.Controls.Add(t);
+                }
+            }
+
+            #endregion
+
             //Connect local to PlcSimAdvanced
             Console.WriteLine("Starting simulation");
             myInstance = SimulationRuntimeManager.CreateInterface("PLC");
@@ -50,17 +130,17 @@ namespace PlcSimAdvSimulator
             tFeedbacks.IsBackground = true;
             tFeedbacks.Start();
 
-            cButton2.ToolTip = "Button:\nOUT - " + cButton2.PlcButtonTag;
-            cToggleButton1.ToolTip = "Toggle-Button:\nOUT - " + cToggleButton1.PlcButtonTag;
-            cCheckBox2.ToolTip = "Checkbox:\nOUT - " + cCheckBox2.PlcButtonTag;
-            cLamp1.ToolTip = "Lamp:\nOUT - " + cLamp1.PlcLampTag;
-            cLamp2.ToolTip = "Lamp:\nOUT - " + cLamp2.PlcLampTag;
-            cLamp4.ToolTip = "Lamp:\nOUT - " + cLamp4.PlcLampTag;
-            cButtonLamp1.ToolTip = "ButtonLamp:\nIN - " + cButtonLamp1.PlcButtonTag + "\n" + "OUT - " + cButtonLamp1.PlcLampTag;
             cPulse1.ToolTip = "Pulse:\nOUT - " + cPulse1.PlcOutputTag + "\n" + cPulse1.PlcTimeMS.ToString() + " ms";
-            cLamp3.ToolTip = "Lamp:\nOUT - " + cLamp3.PlcLampTag;
-            cLamp5.ToolTip = "Lamp:\nOUT - " + cLamp5.PlcLampTag;
             cIntregrator1.ToolTip = "Intregrator";
+        }
+
+        private System.Drawing.Size GetSize(string value)
+        {
+            return new System.Drawing.Size(Convert.ToInt16(value.Split('x')[0]), Convert.ToInt16(value.Split('x')[1]));
+        }
+        private System.Drawing.Point GetLocation(string value)
+        {
+            return new System.Drawing.Point(Convert.ToInt16(value.Split(',')[0]), Convert.ToInt16(value.Split(',')[1]));
         }
 
         private void synchroFeedbacks(IInstance myInstance)
@@ -73,6 +153,7 @@ namespace PlcSimAdvSimulator
                 // enumerate through controls
                 foreach (Control crtl in this.Controls)
                 {
+                    #region work on controls
                     if (crtl is cButton)
                     {
                         cButton c = (cButton)crtl;
@@ -149,6 +230,7 @@ namespace PlcSimAdvSimulator
                                 c.PlcStopValue();
                         }
                     }
+                    #endregion
                 }
             }
         }

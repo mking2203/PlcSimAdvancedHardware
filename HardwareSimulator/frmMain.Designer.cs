@@ -33,16 +33,7 @@ namespace PlcSimAdvSimulator
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cButton2 = new PlcSimAdvSimulator.cButton();
-            this.cToggleButton1 = new PlcSimAdvSimulator.cToggleButton();
-            this.cCheckBox2 = new PlcSimAdvSimulator.cCheckBox();
-            this.cButtonLamp1 = new PlcSimAdvSimulator.cButtonLamp();
-            this.cLamp4 = new PlcSimAdvSimulator.cLamp();
-            this.cLamp1 = new PlcSimAdvSimulator.cLamp();
-            this.cLamp2 = new PlcSimAdvSimulator.cLamp();
             this.cPulse1 = new PlcSimAdvSimulator.cPulse();
-            this.cLamp3 = new PlcSimAdvSimulator.cLamp();
-            this.cLamp5 = new PlcSimAdvSimulator.cLamp();
             this.cIntregrator1 = new PlcSimAdvSimulator.cIntregrator();
             this.cButton1 = new PlcSimAdvSimulator.cButton();
             this.cButton3 = new PlcSimAdvSimulator.cButton();
@@ -71,102 +62,6 @@ namespace PlcSimAdvSimulator
             this.txtTime.Size = new System.Drawing.Size(33, 17);
             this.txtTime.Text = "Time";
             // 
-            // cButton2
-            // 
-            this.cButton2.Location = new System.Drawing.Point(12, 99);
-            this.cButton2.Name = "cButton2";
-            this.cButton2.PlcButtonTag = "Eingang_02";
-            this.cButton2.PlcButtonValue = false;
-            this.cButton2.Size = new System.Drawing.Size(223, 77);
-            this.cButton2.TabIndex = 2;
-            this.cButton2.Tag = "";
-            this.cButton2.Text = "Button";
-            this.cButton2.ToolTip = "";
-            this.cButton2.UseVisualStyleBackColor = true;
-            // 
-            // cToggleButton1
-            // 
-            this.cToggleButton1.Location = new System.Drawing.Point(12, 12);
-            this.cToggleButton1.Name = "cToggleButton1";
-            this.cToggleButton1.PlcButtonTag = "Eingang_01";
-            this.cToggleButton1.PlcButtonValue = false;
-            this.cToggleButton1.Size = new System.Drawing.Size(223, 81);
-            this.cToggleButton1.TabIndex = 3;
-            this.cToggleButton1.Tag = "";
-            this.cToggleButton1.Text = "ToggleButton";
-            this.cToggleButton1.ToolTip = "";
-            this.cToggleButton1.UseVisualStyleBackColor = true;
-            // 
-            // cCheckBox2
-            // 
-            this.cCheckBox2.AutoSize = true;
-            this.cCheckBox2.Location = new System.Drawing.Point(121, 199);
-            this.cCheckBox2.Name = "cCheckBox2";
-            this.cCheckBox2.PlcButtonTag = "Eingang_03";
-            this.cCheckBox2.PlcButtonValue = false;
-            this.cCheckBox2.Size = new System.Drawing.Size(75, 17);
-            this.cCheckBox2.TabIndex = 5;
-            this.cCheckBox2.Text = "CheckBox";
-            this.cCheckBox2.ToolTip = "";
-            this.cCheckBox2.UseVisualStyleBackColor = true;
-            // 
-            // cButtonLamp1
-            // 
-            this.cButtonLamp1.BackColor = System.Drawing.SystemColors.Control;
-            this.cButtonLamp1.Location = new System.Drawing.Point(202, 295);
-            this.cButtonLamp1.Name = "cButtonLamp1";
-            this.cButtonLamp1.PlcButtonTag = "Eingang_04";
-            this.cButtonLamp1.PlcButtonValue = false;
-            this.cButtonLamp1.PlcLampTag = "Ausgang_03";
-            this.cButtonLamp1.PlcLampValue = false;
-            this.cButtonLamp1.Size = new System.Drawing.Size(154, 63);
-            this.cButtonLamp1.TabIndex = 9;
-            this.cButtonLamp1.Text = "cButtonLamp1";
-            this.cButtonLamp1.ToolTip = "";
-            this.cButtonLamp1.UseVisualStyleBackColor = true;
-            // 
-            // cLamp4
-            // 
-            this.cLamp4.BackColor = System.Drawing.SystemColors.Control;
-            this.cLamp4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cLamp4.Location = new System.Drawing.Point(254, 199);
-            this.cLamp4.Name = "cLamp4";
-            this.cLamp4.PlcLampTag = "Eingang_03";
-            this.cLamp4.PlcLampValue = false;
-            this.cLamp4.Size = new System.Drawing.Size(45, 50);
-            this.cLamp4.TabIndex = 11;
-            this.cLamp4.Text = "cLamp4";
-            this.cLamp4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cLamp4.ToolTip = "";
-            // 
-            // cLamp1
-            // 
-            this.cLamp1.BackColor = System.Drawing.SystemColors.Control;
-            this.cLamp1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cLamp1.Location = new System.Drawing.Point(257, 115);
-            this.cLamp1.Name = "cLamp1";
-            this.cLamp1.PlcLampTag = "Eingang_02";
-            this.cLamp1.PlcLampValue = false;
-            this.cLamp1.Size = new System.Drawing.Size(45, 42);
-            this.cLamp1.TabIndex = 12;
-            this.cLamp1.Text = "cLamp1";
-            this.cLamp1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cLamp1.ToolTip = "";
-            // 
-            // cLamp2
-            // 
-            this.cLamp2.BackColor = System.Drawing.SystemColors.Control;
-            this.cLamp2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cLamp2.Location = new System.Drawing.Point(257, 45);
-            this.cLamp2.Name = "cLamp2";
-            this.cLamp2.PlcLampTag = "Eingang_01";
-            this.cLamp2.PlcLampValue = false;
-            this.cLamp2.Size = new System.Drawing.Size(45, 39);
-            this.cLamp2.TabIndex = 13;
-            this.cLamp2.Text = "cLamp2";
-            this.cLamp2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cLamp2.ToolTip = "";
-            // 
             // cPulse1
             // 
             this.cPulse1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -177,36 +72,6 @@ namespace PlcSimAdvSimulator
             this.cPulse1.Size = new System.Drawing.Size(98, 98);
             this.cPulse1.TabIndex = 14;
             this.cPulse1.ToolTip = "";
-            // 
-            // cLamp3
-            // 
-            this.cLamp3.BackColor = System.Drawing.SystemColors.Control;
-            this.cLamp3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cLamp3.Location = new System.Drawing.Point(364, 45);
-            this.cLamp3.Name = "cLamp3";
-            this.cLamp3.PlcLampTag = "Ausgang_01";
-            this.cLamp3.PlcLampValue = false;
-            this.cLamp3.Size = new System.Drawing.Size(45, 39);
-            this.cLamp3.TabIndex = 15;
-            this.cLamp3.Tag = "";
-            this.cLamp3.Text = "cLamp3";
-            this.cLamp3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cLamp3.ToolTip = "";
-            // 
-            // cLamp5
-            // 
-            this.cLamp5.BackColor = System.Drawing.SystemColors.Control;
-            this.cLamp5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cLamp5.Location = new System.Drawing.Point(364, 115);
-            this.cLamp5.Name = "cLamp5";
-            this.cLamp5.PlcLampTag = "Ausgang_02";
-            this.cLamp5.PlcLampValue = false;
-            this.cLamp5.Size = new System.Drawing.Size(45, 39);
-            this.cLamp5.TabIndex = 16;
-            this.cLamp5.Tag = "";
-            this.cLamp5.Text = "cLamp5";
-            this.cLamp5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cLamp5.ToolTip = "";
             // 
             // cIntregrator1
             // 
@@ -260,16 +125,7 @@ namespace PlcSimAdvSimulator
             this.Controls.Add(this.cButton3);
             this.Controls.Add(this.cButton1);
             this.Controls.Add(this.cIntregrator1);
-            this.Controls.Add(this.cLamp5);
-            this.Controls.Add(this.cLamp3);
             this.Controls.Add(this.cPulse1);
-            this.Controls.Add(this.cLamp2);
-            this.Controls.Add(this.cLamp1);
-            this.Controls.Add(this.cLamp4);
-            this.Controls.Add(this.cButtonLamp1);
-            this.Controls.Add(this.cCheckBox2);
-            this.Controls.Add(this.cToggleButton1);
-            this.Controls.Add(this.cButton2);
             this.Controls.Add(this.statusStrip1);
             this.Name = "frmMain";
             this.Text = "Form1";
@@ -287,16 +143,7 @@ namespace PlcSimAdvSimulator
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel txtTime;
-        private cButton cButton2;
-        private cToggleButton cToggleButton1;
-        private cCheckBox cCheckBox2;
-        private cButtonLamp cButtonLamp1;
-        private cLamp cLamp4;
-        private cLamp cLamp1;
-        private cLamp cLamp2;
         private cPulse cPulse1;
-        private cLamp cLamp3;
-        private cLamp cLamp5;
         private cIntregrator cIntregrator1;
         private cButton cButton1;
         private cButton cButton3;
