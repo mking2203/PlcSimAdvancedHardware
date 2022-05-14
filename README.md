@@ -11,7 +11,7 @@ Actual functions:<br>
 *Trackbar (Dint Value like analog inputs)<br>
 *Inregrator (raises value in certain speed)<br>
 *Pulse generator (Bool)<br>
-*Label (just ot put some text)<br>
+*Label (just to put some text)<br>
 
 You can find my TIA 16 demo project also here.
 
