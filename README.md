@@ -3,14 +3,15 @@ Siemens PlcSimAdvanced Hardware Simulator
 
 Working with the Siemens Software PlcSimAdvanced I realized I can do a simulation of the PLC but not for the IO's. I know there are products out there, but quite expensive for small machines. I discovered the API which comes with the simulation. So I wrote a Hardware simulator where I can manipulate the inputs which leads me to a virtual commissioning.
 
-Actual functions:
--Button (Bool)
--Toogle-button (Bool)
--Checkbox (Bool)
--Lamps (Bool)
--Trackbar (Dint Value like analog inputs)
--Inregrator (raises value in certain speed)
--Pulse generator (Bool)
+Actual functions:<br>
+*Button (Bool)<br>
+*Toogle-button (Bool)<br>
+*Checkbox (Bool)<br>
+*Lamps (Bool)<br>
+*Trackbar (Dint Value like analog inputs)<br>
+*Inregrator (raises value in certain speed)<br>
+*Pulse generator (Bool)<br>
+*Label (just ot put some text)<br>
 
 You can find my TIA 16 demo project also here.
 
