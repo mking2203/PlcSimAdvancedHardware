@@ -32,19 +32,19 @@ namespace PlcSimAdvSimulator
         public string PlcGradientTag { get; set; }
         public int PlcGradient { get; set; }
 
-        public string PlcResetValueTag { get; set; }
-        public void PlcResetValue()
+        public string PlcSetTag { get; set; }
+        public void PlcReset()
         {
             PlcActualValue = PlcSetValue;
             start = 0;
         }
-        public string PlcStartValueTag { get; set; }
-        public void PlcStartValue()
+        public string PlcStartTag { get; set; }
+        public void PlcStart()
         {
             if (start == 0)
                 start = PlcTicks;
         }
-        public void PlcStopValue()
+        public void PlcStop()
         {
             start = 0;
         }

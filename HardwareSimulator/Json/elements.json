@@ -1,5 +1,9 @@
 [
 	{
+		"Control": "Settings",
+		"PLC": "PLC"
+	},
+	{
 		"Control": "cToggleButton",
 		"Text": "ToggleButton Input 1",
 		"Size": "100x50",

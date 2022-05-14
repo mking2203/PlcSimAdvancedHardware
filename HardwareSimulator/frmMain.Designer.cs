@@ -33,9 +33,6 @@ namespace PlcSimAdvSimulator
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cIntregrator1 = new PlcSimAdvSimulator.cIntregrator();
-            this.cButton1 = new PlcSimAdvSimulator.cButton();
-            this.cButton3 = new PlcSimAdvSimulator.cButton();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,60 +58,11 @@ namespace PlcSimAdvSimulator
             this.txtTime.Size = new System.Drawing.Size(33, 17);
             this.txtTime.Text = "Time";
             // 
-            // cIntregrator1
-            // 
-            this.cIntregrator1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cIntregrator1.Location = new System.Drawing.Point(486, 241);
-            this.cIntregrator1.Name = "cIntregrator1";
-            this.cIntregrator1.PlcActualValue = 0;
-            this.cIntregrator1.PlcActualValueTag = "Value_Actual";
-            this.cIntregrator1.PlcGradient = 0;
-            this.cIntregrator1.PlcGradientTag = "Value_Gradient";
-            this.cIntregrator1.PlcResetValueTag = "Eingang_06";
-            this.cIntregrator1.PlcSetValue = 0;
-            this.cIntregrator1.PlcSetValueTag = "Value_Set";
-            this.cIntregrator1.PlcStartValueTag = "Eingang_07";
-            this.cIntregrator1.PlcTargetValue = 0;
-            this.cIntregrator1.PlcTargetValueTag = "Value_Target";
-            this.cIntregrator1.PlcTicks = ((long)(0));
-            this.cIntregrator1.Size = new System.Drawing.Size(148, 148);
-            this.cIntregrator1.TabIndex = 17;
-            this.cIntregrator1.ToolTip = "";
-            // 
-            // cButton1
-            // 
-            this.cButton1.Location = new System.Drawing.Point(670, 241);
-            this.cButton1.Name = "cButton1";
-            this.cButton1.PlcActiveColor = System.Drawing.Color.Empty;
-            this.cButton1.PlcButtonTag = "Eingang_06";
-            this.cButton1.PlcButtonValue = false;
-            this.cButton1.Size = new System.Drawing.Size(75, 23);
-            this.cButton1.TabIndex = 18;
-            this.cButton1.Text = "Reset";
-            this.cButton1.ToolTip = "";
-            this.cButton1.UseVisualStyleBackColor = true;
-            // 
-            // cButton3
-            // 
-            this.cButton3.Location = new System.Drawing.Point(670, 285);
-            this.cButton3.Name = "cButton3";
-            this.cButton3.PlcActiveColor = System.Drawing.Color.Empty;
-            this.cButton3.PlcButtonTag = "Eingang_07";
-            this.cButton3.PlcButtonValue = false;
-            this.cButton3.Size = new System.Drawing.Size(75, 23);
-            this.cButton3.TabIndex = 19;
-            this.cButton3.Text = "Start";
-            this.cButton3.ToolTip = "";
-            this.cButton3.UseVisualStyleBackColor = true;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.cButton3);
-            this.Controls.Add(this.cButton1);
-            this.Controls.Add(this.cIntregrator1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "frmMain";
             this.ShowIcon = false;
@@ -134,9 +82,6 @@ namespace PlcSimAdvSimulator
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel txtTime;
-        private cIntregrator cIntregrator1;
-        private cButton cButton1;
-        private cButton cButton3;
     }
 }
 
