@@ -69,6 +69,8 @@ namespace PlcSimAdvSimulator
                         t.PlcButtonTag = item["Button"];
                         if (item.ContainsKey("ActiveColor"))
                             t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                        if (item.ContainsKey("Value"))
+                            t.PlcButtonValue = bool.Parse(item["Value"]);
 
                         t.ToolTip = "OUT: " + item["Button"];
                         this.Controls.Add(t);
@@ -101,6 +103,28 @@ namespace PlcSimAdvSimulator
                         t.PlcLampTag = item["Lamp"];
                         if (item.ContainsKey("ActiveColor"))
                             t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                        if (item.ContainsKey("Output"))
+                            t.PlcOutputTag = item["Output"];
+
+                        t.ToolTip = "OUT: " + item["Lamp"];
+                        this.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cInvert")
+                    {
+                        cInvert t = new cInvert();
+
+                        t.AutoSize = false;
+                        t.BorderStyle = BorderStyle.FixedSingle;
+                        t.TextAlign = ContentAlignment.MiddleCenter;
+
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+                        t.PlcLampTag = item["Lamp"];
+                        if (item.ContainsKey("ActiveColor"))
+                            t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                        if (item.ContainsKey("Invert"))
+                            t.PlcInvertTag = item["Invert"];
 
                         t.ToolTip = "OUT: " + item["Lamp"];
                         this.Controls.Add(t);
@@ -112,6 +136,8 @@ namespace PlcSimAdvSimulator
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
                         t.PlcButtonTag = item["Button"];
+                        if (item.ContainsKey("Value"))
+                            t.PlcButtonValue = bool.Parse(item["Value"]);
 
                         t.ToolTip = "OUT: " + item["Button"];
                         this.Controls.Add(t);
@@ -141,6 +167,9 @@ namespace PlcSimAdvSimulator
                         t.PlcMaxValue = Int16.Parse(item["Max"]);
                         t.PlcMinValue = Int16.Parse(item["Min"]);
 
+                        if (item.ContainsKey("Value"))
+                            t.PlcOutputValue = Int16.Parse(item["Value"]);
+
                         t.ToolTip = "OUT: " + item["Output"];
                         this.Controls.Add(t);
                     }
@@ -150,7 +179,8 @@ namespace PlcSimAdvSimulator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
-                        t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
+                        if (item.ContainsKey("FontSize"))
+                            t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
 
                         this.Controls.Add(t);
                     }
@@ -162,6 +192,9 @@ namespace PlcSimAdvSimulator
                         t.Location = GetLocation(item["Location"]);
 
                         t.PlcActualValueTag = item["Actual"];
+                        if (item.ContainsKey("Value"))
+                            t.PlcActualValue = Int16.Parse(item["Value"]);
+
                         t.PlcGradientTag = item["Gradiant"];
                         t.PlcSetValueTag = item["SetPoint"];
                         t.PlcTargetValueTag = item["Target"];
@@ -172,34 +205,48 @@ namespace PlcSimAdvSimulator
                         t.ToolTip = "OUT: " + item["Text"];
                         this.Controls.Add(t);
                     }
+                    else
+                    {
+                        MessageBox.Show("Unknown control: " + item["Control"]);
+
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Error reading JSON:" + ex.Message);
                 Application.Exit();
+                return;
             }
 
             #endregion
 
-            //Connect local to PlcSimAdvanced
-            Console.WriteLine("Starting simulation");
-            myInstance = SimulationRuntimeManager.CreateInterface(PlcName);
+            try
+            {
+                //Connect local to PlcSimAdvanced
+                Console.WriteLine("Starting simulation");
+                myInstance = SimulationRuntimeManager.CreateInterface(PlcName);
 
-            //Update tag list from API
-            Console.WriteLine("Tags synchronization");
-            myInstance.UpdateTagList();
+                //Update tag list from API
+                Console.WriteLine("Tags synchronization");
+                myInstance.UpdateTagList();
 
-            // write taglist as xml
-            //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
+                // write taglist as xml
+                //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
 
-            // get all vars
-            STagInfo[] data = myInstance.TagInfos;
+                // get all vars
+                STagInfo[] data = myInstance.TagInfos;
 
-            //Start a thread to synchronize feedbacks inputs 
-            tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
-            tFeedbacks.IsBackground = true;
-            tFeedbacks.Start();
+                //Start a thread to synchronize feedbacks inputs 
+                tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
+                tFeedbacks.IsBackground = true;
+                tFeedbacks.Start();
+            }
+            catch
+            {
+                MessageBox.Show("Could not start PLC instance " + PlcName);
+                Application.Exit();
+            }
         }
 
         private System.Drawing.Size GetSize(string value)
@@ -230,27 +277,43 @@ namespace PlcSimAdvSimulator
                             if (c.PlcButtonTag != null)
                                 myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                         }
-                        if (crtl is cToggleButton)
+                        else if (crtl is cToggleButton)
                         {
                             cToggleButton c = (cToggleButton)crtl;
                             if (c.PlcButtonTag != null)
                                 myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                         }
-                        if (crtl is cCheckBox)
+                        else if (crtl is cCheckBox)
                         {
                             cCheckBox c = (cCheckBox)crtl;
                             if (c.PlcButtonTag != null)
                                 myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                         }
-                        if (crtl is cLamp)
+                        else if (crtl is cLamp)
                         {
                             cLamp c = (cLamp)crtl;
                             if (c.PlcLampTag != null)
                             {
                                 c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
                             }
+                            if (c.PlcOutputTag != null)
+                            {
+                                myInstance.WriteBool(c.PlcOutputTag, c.PlcLampValue);
+                            }
                         }
-                        if (crtl is cButtonLamp)
+                        else if (crtl is cInvert)
+                        {
+                            cInvert c = (cInvert)crtl;
+                            if (c.PlcLampTag != null)
+                            {
+                                c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
+                            }
+                            if (c.PlcInvertTag != null)
+                            {
+                                myInstance.WriteBool(c.PlcInvertTag, !c.PlcLampValue);
+                            }
+                        }
+                        else if (crtl is cButtonLamp)
                         {
                             cButtonLamp c = (cButtonLamp)crtl;
                             // input
@@ -262,7 +325,7 @@ namespace PlcSimAdvSimulator
                             if (c.PlcLampTag != null)
                                 c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
                         }
-                        if (crtl is cPulse)
+                        else if (crtl is cPulse)
                         {
                             cPulse c = (cPulse)crtl;
                             c.PlcTicks = aktTicks;
@@ -270,14 +333,14 @@ namespace PlcSimAdvSimulator
                             if (c.PlcOutputTag != null)
                                 myInstance.WriteBool(c.PlcOutputTag, c.PlcOutputValue);
                         }
-                        if (crtl is cTrackbar)
+                        else if (crtl is cTrackbar)
                         {
                             cTrackbar c = (cTrackbar)crtl;
 
                             if (c.PlcOutputTag != null)
-                                myInstance.WriteUInt16(c.PlcOutputTag, c.PlcOutputValue);
+                                myInstance.WriteUInt16(c.PlcOutputTag, (UInt16)c.PlcOutputValue);
                         }
-                        if (crtl is cIntregrator)
+                        else if (crtl is cIntregrator)
                         {
                             cIntregrator c = (cIntregrator)crtl;
                             c.PlcTicks = aktTicks;
@@ -326,7 +389,8 @@ namespace PlcSimAdvSimulator
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // abort reading
-            tFeedbacks.Abort();
+            if (tFeedbacks != null)
+                tFeedbacks.Abort();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

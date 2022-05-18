@@ -2,7 +2,7 @@
 // PlcSimAdvanced Hardware Simulation (Siemens TIA Portal)
 // Mark König, 05/2022
 //
-// cLamp, shows state of a bool value 
+// cInvert, invert state of a bool value 
 //
 
 using System;
@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace PlcSimAdvSimulator
 {
-    public partial class cLamp : Label
+    public partial class cInvert : Label
     {
         private bool plcLampValue;
         public bool PlcLampValue
@@ -35,13 +35,11 @@ namespace PlcSimAdvSimulator
 
                 if (update)
                     this.Invalidate();
-
             }
         }
 
         public string PlcLampTag { get; set; }
-
-        public string PlcOutputTag { get; set; }
+        public string PlcInvertTag { get; set; }
 
         Color plcActiveColor = Color.ForestGreen;
         [Description("Represents the ON color off the button"), Category("Design")]
@@ -57,7 +55,7 @@ namespace PlcSimAdvSimulator
             }
         }
 
-        public cLamp()
+        public cInvert()
         {
             InitializeComponent();
         }

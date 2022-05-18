@@ -13,7 +13,26 @@ namespace PlcSimAdvSimulator
 {
     public partial class cCheckBox : CheckBox
     {
-        public bool PlcButtonValue { get; set; }
+        private bool plcButtonValue;
+        public bool PlcButtonValue
+        {
+            get
+            {
+                return plcButtonValue;
+            }
+            set
+            {
+                plcButtonValue = value;
+                if (plcButtonValue)
+                {
+                    this.Checked = true;
+                }
+                else
+                {
+                    this.Checked = false;
+                }
+            }
+        }
 
         public string PlcButtonTag { get; set; }
 

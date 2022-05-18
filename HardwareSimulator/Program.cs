@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//
+// PlcSimAdvanced Hardware Simulation (Siemens TIA Portal)
+// Mark König, 05/2022
+//
+// Programm.cs main entry point 
+//
+
+using System;
 using System.Windows.Forms;
 
 namespace PlcSimAdvSimulator

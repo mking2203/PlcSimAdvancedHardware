@@ -23,11 +23,31 @@ namespace PlcSimAdvSimulator
 
         private void CTrackbar_ValueChanged(object sender, EventArgs e)
         {
-            PlcOutputValue = (UInt16)trackBar1.Value;
-            txtValue.Invoke((MethodInvoker)(() => txtValue.Text = "Actual Value: " + PlcOutputValue.ToString()));
-        }
+            PlcOutputValue = (Int16)trackBar1.Value;
 
-        public UInt16 PlcOutputValue { get; set; }
+            if (txtValue.InvokeRequired)
+            {
+                txtValue.Invoke((MethodInvoker)(() => txtValue.Text = "Actual Value: " + PlcOutputValue.ToString()));
+            }
+            else
+            {
+                txtValue.Text = "Actual Value: " + PlcOutputValue.ToString();
+            }
+        }
+        
+        private Int16 plcOutputValue;     
+        public Int16 PlcOutputValue 
+        { 
+            get
+            {
+                return plcOutputValue;
+            }
+            set
+            {
+                plcOutputValue = value;
+                trackBar1.Value = (int)value;
+            }
+        }
 
         public string PlcOutputTag { get; set; }
 
@@ -36,7 +56,7 @@ namespace PlcSimAdvSimulator
             set
             {
                 trackBar1.Maximum = value;
-                PlcOutputValue = (UInt16)trackBar1.Value;
+                PlcOutputValue = (Int16)trackBar1.Value;
                 txtValue.Text = "Actual Value: " + PlcOutputValue.ToString();
             }
         }
@@ -45,7 +65,7 @@ namespace PlcSimAdvSimulator
             set
             {
                 trackBar1.Minimum = value;
-                PlcOutputValue = (UInt16)trackBar1.Value;
+                PlcOutputValue = (Int16)trackBar1.Value;
                 txtValue.Text = "Actual Value: " + PlcOutputValue.ToString();
             }
         }

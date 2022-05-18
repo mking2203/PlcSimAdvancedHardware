@@ -19,11 +19,32 @@ namespace PlcSimAdvSimulator
             InitializeComponent();
         }
 
-        public bool PlcButtonValue { get; set; }
+        private bool plcButtonValue;
+        public bool PlcButtonValue
+        {
+            get
+            {
+                return plcButtonValue;
+            }
+            set
+            {
+                plcButtonValue = value;
+                if (plcButtonValue)
+                {
+                    this.BackColor = plcActiveColor;
+                }
+                else
+                {
+                    this.BackColor = SystemColors.Control;
+                }
+
+            }
+        }
+
 
         public string PlcButtonTag { get; set; }
 
-        Color plcActiveColor = Color.ForestGreen;
+        private Color plcActiveColor = Color.ForestGreen;
         [Description("Represents the ON color off the button"), Category("Design")]
         public Color PlcActiveColor
         {
