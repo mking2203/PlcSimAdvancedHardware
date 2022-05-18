@@ -350,7 +350,7 @@ namespace PlcSimAdvSimulator
                             if (c.PlcTargetValueTag != null)
                                 c.PlcTargetValue = myInstance.ReadInt32(c.PlcTargetValueTag);
                             if (c.PlcActualValueTag != null)
-                                myInstance.WriteInt32(c.PlcActualValueTag, Convert.ToInt16(c.PlcActualValue));
+                                myInstance.WriteInt16(c.PlcActualValueTag, Convert.ToInt16(c.PlcActualValue));
                             if (c.PlcGradientTag != null)
                                 c.PlcGradient = myInstance.ReadInt32(c.PlcGradientTag);
 
@@ -378,7 +378,7 @@ namespace PlcSimAdvSimulator
                     Console.WriteLine("Exception: " + ex.Message);
 
                     Console.WriteLine("Restart simulation");
-                    myInstance = SimulationRuntimeManager.CreateInterface("Magna1");
+                    myInstance = SimulationRuntimeManager.CreateInterface(PlcName);
                     myInstance.UpdateTagList();
 
 

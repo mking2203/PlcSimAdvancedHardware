@@ -9,7 +9,8 @@
 		"Size": "100x50",
 		"Location": "10,10",
 		"Button": "Eingang_01",
-		"ActiveColor":  "Green"
+		"ActiveColor":  "Green",
+		"Value": "True"
 	},
 	{
 		"Control": "cButton",
@@ -104,5 +105,28 @@
 		"Location": "500,100",
         "Output": "Eingang_05",
 		"TimeMS": "1000"
+	},
+	{
+		"Control": "cIntregrator",
+		"Text": "Simuation Durchfluss",
+		"Size": "150x150",
+		"Location": "500,300",
+		"Actual": "Value_Actual",
+		"SetPoint": "Value_Set",
+		"Target": "Value_Target",
+		"Gradiant": "Value_Gradient",
+		"Start": "Eingang_02",
+		"Set": "Eingang_04",
+		"Value": "10000"
+	},
+	{
+		"Control": "cTrackbar",
+		"Text": "Analog",
+		"Size": "150x100",
+		"Location": "700,100",
+		"Output": "AnalogValue",
+		"Max": "27000",
+		"Min": "100",
+		"Value": "15000"		
 	}
 ]

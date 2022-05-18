@@ -14,6 +14,7 @@ namespace PlcSimAdvSimulator
     public partial class cIntregrator : UserControl
     {
         private long start;
+        private int direction;
 
         public cIntregrator()
         {
@@ -42,7 +43,17 @@ namespace PlcSimAdvSimulator
         public void PlcStart()
         {
             if (start == 0)
+            {
                 start = PlcTicks;
+                if(PlcTargetValue > PlcActualValue)
+                {
+                    direction = 1;
+                }
+                else
+                {
+                    direction = -1;
+                }
+            }
         }
         public void PlcStop()
         {
@@ -66,9 +77,10 @@ namespace PlcSimAdvSimulator
                     long span = (plcTicks - start) / 10000;
                     long wert = (span * PlcGradient) / 1000;
 
-                    PlcActualValue = PlcActualValue + (int)wert;
+                    PlcActualValue = PlcActualValue + ((int)wert * direction);
 
-                    if (PlcActualValue > PlcTargetValue)
+                    if (((PlcActualValue > PlcTargetValue) && (direction == 1)) ||
+                        ((PlcActualValue < PlcTargetValue) && (direction == -1)))
                     {
                         start = 0;
                         PlcActualValue = PlcTargetValue;
@@ -79,9 +91,18 @@ namespace PlcSimAdvSimulator
 
                 try
                 {
-                    txtSet.Invoke((MethodInvoker)(() => txtSet.Text = "SetValue: " + PlcSetValue.ToString()));
-                    txtTarget.Invoke((MethodInvoker)(() => txtTarget.Text = "TargetValue: " + PlcTargetValue.ToString()));
-                    txtActual.Invoke((MethodInvoker)(() => txtActual.Text = "Actual: " + PlcActualValue.ToString()));
+                    if (txtSet.InvokeRequired)
+                    {
+                        txtSet.Invoke((MethodInvoker)(() => txtSet.Text = "SetValue: " + PlcSetValue.ToString()));
+                        txtTarget.Invoke((MethodInvoker)(() => txtTarget.Text = "TargetValue: " + PlcTargetValue.ToString()));
+                        txtActual.Invoke((MethodInvoker)(() => txtActual.Text = "Actual: " + PlcActualValue.ToString()));
+                    }
+                    else
+                    {
+                        txtSet.Text = "SetValue: " + PlcSetValue.ToString();
+                        txtTarget.Text = "TargetValue: " + PlcTargetValue.ToString();
+                        txtActual.Text = "Actual: " + PlcActualValue.ToString();
+                    }
 
                     if ((dt.Second % 2) != 0)
                     {
