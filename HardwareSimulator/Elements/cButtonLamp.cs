@@ -22,6 +22,8 @@ namespace PlcSimAdvSimulator
         public bool PlcButtonValue { get; set; }
         public string PlcButtonTag { get; set; }
 
+        public string PlcOption { get; set; }
+
         private bool plcLampValue;
         public bool PlcLampValue
         {
@@ -63,12 +65,18 @@ namespace PlcSimAdvSimulator
 
         private void cButton_MouseDown(object sender, MouseEventArgs e)
         {
-            PlcButtonValue = true;         
+            if (!PlcOption.Contains("NC"))
+                PlcButtonValue = true;
+            else
+                PlcButtonValue = false;
         }
 
         private void cButton_MouseUp(object sender, MouseEventArgs e)
         {
-            PlcButtonValue = false;
+            if (!PlcOption.Contains("NC"))
+                PlcButtonValue = false;
+            else
+                PlcButtonValue = true;
         }
     }
 }

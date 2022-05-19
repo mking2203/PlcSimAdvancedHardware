@@ -114,6 +114,12 @@
     <Compile Include="Elements\cInvert.Designer.cs">
       <DependentUpon>cInvert.cs</DependentUpon>
     </Compile>
+    <Compile Include="Elements\cTableSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Elements\cTableSet.Designer.cs">
+      <DependentUpon>cTableSet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Elements\cLamp.cs">
       <SubType>Component</SubType>
     </Compile>

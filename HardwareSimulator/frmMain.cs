@@ -56,6 +56,13 @@ namespace PlcSimAdvSimulator
                         t.PlcButtonTag = item["Button"];
                         if (item.ContainsKey("ActiveColor"))
                             t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                        if (item.ContainsKey("Option"))
+                        {
+                            t.PlcOption = item["Option"];
+                            if (t.PlcOption.Contains("NC"))
+                                t.PlcButtonValue = true;
+                        }
+
 
                         t.ToolTip = "OUT: " + item["Button"];
                         this.Controls.Add(t);
@@ -85,6 +92,12 @@ namespace PlcSimAdvSimulator
                         t.PlcLampTag = item["Lamp"];
                         if (item.ContainsKey("ActiveColor"))
                             t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                        if (item.ContainsKey("Option"))
+                        {
+                            t.PlcOption = item["Option"];
+                            if (t.PlcOption.Contains("NC"))
+                                t.PlcButtonValue = true;
+                        }
 
                         t.ToolTip = "IN: " + item["Lamp"] + "- OUT: " + item["Button"];
                         this.Controls.Add(t);
@@ -205,6 +218,60 @@ namespace PlcSimAdvSimulator
                         t.ToolTip = "OUT: " + item["Text"];
                         this.Controls.Add(t);
                     }
+                    else if (item["Control"] == "cTableSet")
+                    {
+                        cTableSet t = new cTableSet();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.PlcValueTag = item["Output"];
+
+                        if (item.ContainsKey("Step01"))
+                            t.PlcTagStep01 = item["Step01"];
+                        if (item.ContainsKey("Step02"))
+                            t.PlcTagStep02 = item["Step02"];
+                        if (item.ContainsKey("Step03"))
+                            t.PlcTagStep03 = item["Step03"];
+                        if (item.ContainsKey("Step04"))
+                            t.PlcTagStep04 = item["Step04"];
+                        if (item.ContainsKey("Step05"))
+                            t.PlcTagStep05 = item["Step05"];
+                        if (item.ContainsKey("Step06"))
+                            t.PlcTagStep06 = item["Step06"];
+                        if (item.ContainsKey("Step07"))
+                            t.PlcTagStep07 = item["Step07"];
+                        if (item.ContainsKey("Step08"))
+                            t.PlcTagStep08 = item["Step08"];
+                        if (item.ContainsKey("Step09"))
+                            t.PlcTagStep09 = item["Step09"];
+                        if (item.ContainsKey("Step10"))
+                            t.PlcTagStep10 = item["Step10"];
+
+                        if (item.ContainsKey("Value01"))
+                            t.PlcValueStep01 = Int16.Parse(item["Value01"]);
+                        if (item.ContainsKey("Value02"))
+                            t.PlcValueStep02 = Int16.Parse(item["Value02"]);
+                        if (item.ContainsKey("Value03"))
+                            t.PlcValueStep03 = Int16.Parse(item["Value03"]);
+                        if (item.ContainsKey("Value04"))
+                            t.PlcValueStep04 = Int16.Parse(item["Value04"]);
+                        if (item.ContainsKey("Value05"))
+                            t.PlcValueStep05 = Int16.Parse(item["Value05"]);
+                        if (item.ContainsKey("Value06"))
+                            t.PlcValueStep06 = Int16.Parse(item["Value06"]);
+                        if (item.ContainsKey("Value07"))
+                            t.PlcValueStep07 = Int16.Parse(item["Value07"]);
+                        if (item.ContainsKey("Value08"))
+                            t.PlcValueStep08 = Int16.Parse(item["Value08"]);
+                        if (item.ContainsKey("Value09"))
+                            t.PlcValueStep09 = Int16.Parse(item["Value09"]);
+                        if (item.ContainsKey("Value10"))
+                            t.PlcValueStep01 = Int16.Parse(item["Value10"]);
+
+                        t.ToolTip = "OUT: " + item["Text"];
+                        this.Controls.Add(t);
+                    }
                     else
                     {
                         MessageBox.Show("Unknown control: " + item["Control"]);
@@ -231,10 +298,10 @@ namespace PlcSimAdvSimulator
                 Console.WriteLine("Tags synchronization");
                 myInstance.UpdateTagList();
 
-                // write taglist as xml
+                // write taglist as xml for test
                 //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
 
-                // get all vars
+                // get all vars for test
                 STagInfo[] data = myInstance.TagInfos;
 
                 //Start a thread to synchronize feedbacks inputs 
@@ -369,6 +436,41 @@ namespace PlcSimAdvSimulator
                                     c.PlcStop();
                             }
                         }
+                        else if (crtl is cTableSet)
+                        {
+                            cTableSet c = (cTableSet)crtl;
+                            if (c.PlcTagStep01 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep01));
+                            else if (c.PlcTagStep02 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep02));
+                            else if (c.PlcTagStep03 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep03));
+                            else if (c.PlcTagStep04 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep04));
+                            else if (c.PlcTagStep05 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep05));
+                            else if (c.PlcTagStep06 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep06));
+                            else if (c.PlcTagStep07 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep07));
+                            else if (c.PlcTagStep08 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep08));
+                            else if (c.PlcTagStep09 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep09));
+                            else if (c.PlcTagStep10 != null)
+                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep10));
+                        }
+
                         #endregion
                     }
                 }

@@ -22,6 +22,7 @@ namespace PlcSimAdvSimulator
         public bool PlcButtonValue { get; set; }
 
         public string PlcButtonTag { get; set; }
+        public string PlcOption { get; set; }
 
         Color plcActiveColor = Color.ForestGreen;
         [Description("Represents the ON color off the button"), Category("Design")]
@@ -39,13 +40,31 @@ namespace PlcSimAdvSimulator
 
         private void cButton_MouseDown(object sender, MouseEventArgs e)
         {
-            PlcButtonValue = true;
+            if (PlcOption != null)
+            {
+                if (!PlcOption.Contains("NC"))
+                    PlcButtonValue = true;
+                else
+                    PlcButtonValue = false;
+            }
+            else
+                PlcButtonValue = true;
+
             this.BackColor = PlcActiveColor;
         }
 
         private void cButton_MouseUp(object sender, MouseEventArgs e)
         {
-            PlcButtonValue = false;
+            if (PlcOption != null)
+            {
+                if (!PlcOption.Contains("NC"))
+                    PlcButtonValue = false;
+                else
+                    PlcButtonValue = true;
+            }
+            else
+                PlcButtonValue = false;
+
             this.BackColor = SystemColors.Control;
         }
     }
