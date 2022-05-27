@@ -275,7 +275,6 @@ namespace PlcSimAdvSimulator
                     else
                     {
                         MessageBox.Show("Unknown control: " + item["Control"]);
-
                     }
                 }
             }
@@ -338,6 +337,7 @@ namespace PlcSimAdvSimulator
                     foreach (Control crtl in this.Controls)
                     {
                         #region work on controls
+
                         if (crtl is cButton)
                         {
                             cButton c = (cButton)crtl;
