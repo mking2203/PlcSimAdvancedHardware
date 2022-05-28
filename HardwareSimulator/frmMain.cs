@@ -118,26 +118,8 @@ namespace PlcSimAdvSimulator
                             t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
                         if (item.ContainsKey("Output"))
                             t.PlcOutputTag = item["Output"];
-
-                        t.ToolTip = "OUT: " + item["Lamp"];
-                        this.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cInvert")
-                    {
-                        cInvert t = new cInvert();
-
-                        t.AutoSize = false;
-                        t.BorderStyle = BorderStyle.FixedSingle;
-                        t.TextAlign = ContentAlignment.MiddleCenter;
-
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-                        t.PlcLampTag = item["Lamp"];
-                        if (item.ContainsKey("ActiveColor"))
-                            t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
-                        if (item.ContainsKey("Invert"))
-                            t.PlcInvertTag = item["Invert"];
+                        if (item.ContainsKey("nOutput"))
+                            t.PlcOutputTag = item["nOutput"];
 
                         t.ToolTip = "OUT: " + item["Lamp"];
                         this.Controls.Add(t);
