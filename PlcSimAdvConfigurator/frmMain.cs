@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.IO;
-
+using Siemens.Simatic.Simulation.Runtime;
 using Microsoft.VisualBasic;
 
 namespace PlcSimAdvConfigurator
@@ -27,6 +27,8 @@ namespace PlcSimAdvConfigurator
         string controlID = string.Empty;
         string plcName = string.Empty;
         string actID = string.Empty;
+
+        private IInstance myInstance;
 
         public frmMain()
         {
@@ -495,6 +497,21 @@ namespace PlcSimAdvConfigurator
                     pMain.Controls.Add(t);
                 }
             }
+
+            try
+            {
+                myInstance = SimulationRuntimeManager.CreateInterface(plcName);
+
+                //Update tag list from API
+                Console.WriteLine("Tags synchronization");
+                myInstance.UpdateTagList();
+
+                Console.WriteLine("Tags finished");
+            }
+            catch
+            {
+                MessageBox.Show("Could not start PLC instance " + plcName);
+            }
         }
 
         private void dataProperties_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -548,7 +565,17 @@ namespace PlcSimAdvConfigurator
 
                 }
             }
+            if (key == "Button")
+            {
+                if (myInstance != null)
+                {
+                    // get all vars for test
+                    STagInfo[] data = myInstance.TagInfos;
 
+                    frmSelect sel = new frmSelect(data);
+                    sel.ShowDialog();
+                }
+            }
         }
     }
 }

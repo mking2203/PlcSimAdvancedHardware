@@ -158,7 +158,9 @@ namespace PlcSimAdvConfigurator
             this.Controls.Add(this.btnToggleButton);
             this.Controls.Add(this.btnButton);
             this.Controls.Add(this.pMain);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.FrmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).EndInit();
