@@ -29,6 +29,7 @@ namespace PlcSimAdvConfigurator
         string actID = string.Empty;
 
         private IInstance myInstance;
+        private STagInfo[] VarData;
 
         public frmMain()
         {
@@ -255,6 +256,8 @@ namespace PlcSimAdvConfigurator
 
             myList.Add(newItem);
 
+            t.AutoCheck = false;
+
             AddControl((Control)t);
         }
 
@@ -277,16 +280,6 @@ namespace PlcSimAdvConfigurator
             crtl.BringToFront();
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            var options = new JsonSerializerOptions();
-            options.WriteIndented = true;
-            options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-
-            string json = JsonSerializer.Serialize<List<Dictionary<string, string>>>(myList, options);
-            File.WriteAllText(Application.StartupPath + "\\elementsNeu.json", json, System.Text.Encoding.UTF8);
-        }
-
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             if (actID != string.Empty)
@@ -296,6 +289,7 @@ namespace PlcSimAdvConfigurator
                 if (res == DialogResult.Yes)
                 {
                     DeleteItemByID(actID);
+                    dataProperties.DataSource = null;
                 }
             }
         }
@@ -334,7 +328,12 @@ namespace PlcSimAdvConfigurator
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            string json = File.ReadAllText(Application.StartupPath + "\\elements.json");
+            LoadJson(Application.StartupPath + "\\elements.json");
+        }
+
+        private void LoadJson(string FileName)
+        {
+            string json = File.ReadAllText(FileName);
             myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
 
             foreach (Dictionary<string, string> item in myList)
@@ -498,83 +497,214 @@ namespace PlcSimAdvConfigurator
                 }
             }
 
+            ConnectPLC();
+        }
+
+        private void ConnectPLC()
+        {
+            txtSimulation.Text = "Simulation: not connected";
+            VarData = null;
+
             try
             {
                 myInstance = SimulationRuntimeManager.CreateInterface(plcName);
 
+                txtSimulation.Text = "Simulation: connected";
+
                 //Update tag list from API
-                Console.WriteLine("Tags synchronization");
                 myInstance.UpdateTagList();
 
-                Console.WriteLine("Tags finished");
+                txtSimulation.Text = "Simulation: update tags";
+
+                // get all vars
+                VarData = myInstance.TagInfos;
+
+                txtSimulation.Text = "Simulation: ready";
             }
-            catch
+            catch (Exception ex)
             {
                 MessageBox.Show("Could not start PLC instance " + plcName);
+                txtSimulation.Text = "Simulation: error ->" + ex.Message;
             }
         }
 
-        private void dataProperties_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void mnuExit_Click(object sender, EventArgs e)
         {
-            string key = (string)dataProperties.Rows[e.RowIndex].Cells[0].Value;
-            string val = (string)dataProperties.Rows[e.RowIndex].Cells[1].Value;
+            Application.Exit();
+        }
 
-            if (key == "Text")
+        private void dataProperties_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
             {
-                string input = Interaction.InputBox("Prompt", "Neuer Text", val, 10, 10);
+                string key = (string)dataProperties.Rows[e.RowIndex].Cells[0].Value;
+                string val = (string)dataProperties.Rows[e.RowIndex].Cells[1].Value;
 
-                if ((input != val) && (input.Length > 0))
+                if (key == "Text")
                 {
-                    GetItemByID(actID)["Text"] = input;
+                    string input = Interaction.InputBox("Enter new text for the control:", "New text", val);
 
-                    foreach (Control c in pMain.Controls)
+                    if ((input != val) && (input.Length > 0))
                     {
-                        if ((string)c.Tag == actID)
-                        {
-                            c.Text = input;
-                            dataProperties.Rows[e.RowIndex].Cells[1].Value = input;
-                            return;
-                        }
-                    }
-                }
-            }
-            if (key == "Size")
-            {
-                string input = Interaction.InputBox("Prompt", "Neue Grösse", val, 10, 10);
-
-                if ((input != val) && (input.Length > 0))
-                {
-                    try
-                    {
-                        Size newSize = GetSize(input);
-
-                        GetItemByID(actID)["Size"] = newSize.Width.ToString() + "x" + newSize.Height.ToString();
+                        GetItemByID(actID)["Text"] = input;
 
                         foreach (Control c in pMain.Controls)
                         {
                             if ((string)c.Tag == actID)
                             {
-                                c.Size = newSize;
-                                dataProperties.Rows[e.RowIndex].Cells[1].Value = newSize.Width.ToString() + "x" + newSize.Height.ToString();
+                                c.Text = input;
+                                dataProperties.Rows[e.RowIndex].Cells[1].Value = input;
                                 return;
                             }
                         }
                     }
-                    catch { }
+                }
+                if (key == "Size")
+                {
+                    string input = Interaction.InputBox("Enter a new size in the format AAAxBBB (e.g. 100x50):", "New size", val);
 
+                    if ((input != val) && (input.Length > 0))
+                    {
+                        try
+                        {
+                            Size newSize = GetSize(input);
+
+                            GetItemByID(actID)["Size"] = newSize.Width.ToString() + "x" + newSize.Height.ToString();
+
+                            foreach (Control c in pMain.Controls)
+                            {
+                                if ((string)c.Tag == actID)
+                                {
+                                    c.Size = newSize;
+                                    dataProperties.Rows[e.RowIndex].Cells[1].Value = newSize.Width.ToString() + "x" + newSize.Height.ToString();
+                                    return;
+                                }
+                            }
+                        }
+                        catch { }
+
+
+                    }
+                }
+                if (key == "Button")
+                {
+                    if (myInstance != null)
+                    {
+                        if (VarData != null)
+                        {
+                            frmSelectVar sel = new frmSelectVar(VarData);
+                            sel.ActualSelection = val;
+
+                            DialogResult res = sel.ShowDialog();
+                            if (res == DialogResult.OK)
+                            {
+                                GetItemByID(actID)["Button"] = sel.ActualSelection;
+                                dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection;
+                            }
+                        }
+                    }
+                }
+                if (key == "Value")
+                {
+                    if (myInstance != null)
+                    {
+                        frmSelectDefault sel = new frmSelectDefault();
+                        sel.ActualSelection = bool.Parse(val);
+
+                        DialogResult res = sel.ShowDialog();
+                        if (res == DialogResult.OK)
+                        {
+                            GetItemByID(actID)["Value"] = sel.ActualSelection.ToString();
+                            dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection.ToString();
+                        }
+                    }
+                }
+                if (key == "ActiveColor")
+                {
+                    colorDialog1.Color = ColorTranslator.FromHtml(val);
+                    DialogResult res = colorDialog1.ShowDialog();
+
+                    if (res == DialogResult.OK)
+                    {
+                        string f = ColorTranslator.ToHtml(colorDialog1.Color);
+                        GetItemByID(actID)["ActiveColor"] = f;
+                        dataProperties.Rows[e.RowIndex].Cells[1].Value = f;
+                    }
 
                 }
             }
-            if (key == "Button")
-            {
-                if (myInstance != null)
-                {
-                    // get all vars for test
-                    STagInfo[] data = myInstance.TagInfos;
+        }
 
-                    frmSelect sel = new frmSelect(data);
-                    sel.ShowDialog();
-                }
+        private void mnuNew_Click(object sender, EventArgs e)
+        {
+
+            string input = Interaction.InputBox("Enter PLC name:", "New project", "");
+
+            if (input.Length > 0)
+            {
+                myList.Clear();
+
+                Dictionary<string, string> item = new Dictionary<string, string>();
+                item.Add("Control", "Settings");
+                item.Add("PLC", input);
+                item.Add("ID", "1");
+
+                plcName = input;
+                controlID = "1";
+
+                myList.Add(item);
+
+                pMain.Controls.Clear();
+            }
+
+            ConnectPLC();
+        }
+
+        private void mnuReload_Click(object sender, EventArgs e)
+        {
+            ConnectPLC();
+        }
+
+        private void mnuSave_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Title = "Save configuration";
+            saveFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.FileName = plcName + ".json";
+
+            DialogResult res = saveFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                SaveFile(saveFileDialog1.FileName);
+            }
+        }
+
+        private void SaveFile(string FileName)
+        {
+            var options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+
+            string json = JsonSerializer.Serialize<List<Dictionary<string, string>>>(myList, options);
+            File.WriteAllText(FileName, json, System.Text.Encoding.UTF8);
+        }
+
+        private void mnuOpen_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Title = "Open configuration";
+            openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.FileName = plcName + ".json";
+
+            DialogResult res = openFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                pMain.Controls.Clear();
+                myList.Clear();
+
+                LoadJson(openFileDialog1.FileName);
             }
         }
     }

@@ -18,6 +18,8 @@ namespace PlcSimAdvConfigurator
                 { "Size", "100x50" },
                 { "Location", "20,20" },
                 { "Button", "" },
+                { "Output_Q", "" },
+                { "Output_nQ", "" },
                 { "ActiveColor", "" }
             };
 
@@ -33,6 +35,8 @@ namespace PlcSimAdvConfigurator
                 { "Size", "100x50" },
                 { "Location", "20,20" },
                 { "Button", "" },
+                { "Output_Q", "" },
+                { "Output_nQ", "" },
                 { "ActiveColor", "" },
                 { "Value", "False" }
             };
@@ -50,6 +54,8 @@ namespace PlcSimAdvConfigurator
                 { "Location", "20,20" },
                 { "Button", "" },
                 { "Lamp", "" },
+                { "Output_Q", "" },
+                { "Output_nQ", "" },
                 { "ActiveColor", "" }
             };
 
@@ -98,7 +104,8 @@ namespace PlcSimAdvConfigurator
                 { "Text", "Button" },
                 { "Size", "100x50" },
                 { "Location", "20,20" },
-                { "FontSize", "15" }
+                { "FontSize", "15" },
+                { "BackColor", "" },
             };
 
             return result;

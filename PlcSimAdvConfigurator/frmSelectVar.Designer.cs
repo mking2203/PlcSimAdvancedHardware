@@ -1,7 +1,7 @@
 ﻿
 namespace PlcSimAdvConfigurator
 {
-    partial class frmSelect
+    partial class frmSelectVar
     {
         /// <summary>
         /// Required designer variable.
@@ -31,11 +31,16 @@ namespace PlcSimAdvConfigurator
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.txtFilter = new System.Windows.Forms.TextBox();
             this.radioMarker = new System.Windows.Forms.RadioButton();
             this.radioOutput = new System.Windows.Forms.RadioButton();
             this.radioInput = new System.Windows.Forms.RadioButton();
             this.radioAll = new System.Windows.Forms.RadioButton();
-            this.txtFilter = new System.Windows.Forms.TextBox();
+            this.txtVar = new System.Windows.Forms.Label();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -51,11 +56,13 @@ namespace PlcSimAdvConfigurator
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(601, 426);
+            this.dataGridView1.Size = new System.Drawing.Size(601, 379);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnClear);
             this.groupBox1.Controls.Add(this.txtFilter);
             this.groupBox1.Controls.Add(this.radioMarker);
             this.groupBox1.Controls.Add(this.radioOutput);
@@ -68,6 +75,25 @@ namespace PlcSimAdvConfigurator
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter";
             // 
+            // btnClear
+            // 
+            this.btnClear.BackColor = System.Drawing.Color.White;
+            this.btnClear.Location = new System.Drawing.Point(134, 131);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(26, 23);
+            this.btnClear.TabIndex = 5;
+            this.btnClear.Text = "X";
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // txtFilter
+            // 
+            this.txtFilter.Location = new System.Drawing.Point(21, 132);
+            this.txtFilter.Name = "txtFilter";
+            this.txtFilter.Size = new System.Drawing.Size(107, 20);
+            this.txtFilter.TabIndex = 4;
+            this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
+            // 
             // radioMarker
             // 
             this.radioMarker.AutoSize = true;
@@ -75,7 +101,7 @@ namespace PlcSimAdvConfigurator
             this.radioMarker.Name = "radioMarker";
             this.radioMarker.Size = new System.Drawing.Size(58, 17);
             this.radioMarker.TabIndex = 3;
-            this.radioMarker.Text = "Merker";
+            this.radioMarker.Text = "Marker";
             this.radioMarker.UseVisualStyleBackColor = true;
             this.radioMarker.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
             // 
@@ -84,9 +110,9 @@ namespace PlcSimAdvConfigurator
             this.radioOutput.AutoSize = true;
             this.radioOutput.Location = new System.Drawing.Point(21, 66);
             this.radioOutput.Name = "radioOutput";
-            this.radioOutput.Size = new System.Drawing.Size(73, 17);
+            this.radioOutput.Size = new System.Drawing.Size(62, 17);
             this.radioOutput.TabIndex = 2;
-            this.radioOutput.Text = "Ausgänge";
+            this.radioOutput.Text = "Outputs";
             this.radioOutput.UseVisualStyleBackColor = true;
             this.radioOutput.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
             // 
@@ -95,9 +121,9 @@ namespace PlcSimAdvConfigurator
             this.radioInput.AutoSize = true;
             this.radioInput.Location = new System.Drawing.Point(21, 43);
             this.radioInput.Name = "radioInput";
-            this.radioInput.Size = new System.Drawing.Size(70, 17);
+            this.radioInput.Size = new System.Drawing.Size(54, 17);
             this.radioInput.TabIndex = 1;
-            this.radioInput.Text = "Eingänge";
+            this.radioInput.Text = "Inputs";
             this.radioInput.UseVisualStyleBackColor = true;
             this.radioInput.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
             // 
@@ -114,31 +140,71 @@ namespace PlcSimAdvConfigurator
             this.radioAll.UseVisualStyleBackColor = true;
             this.radioAll.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
             // 
-            // txtFilter
+            // txtVar
             // 
-            this.txtFilter.Location = new System.Drawing.Point(28, 132);
-            this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(100, 20);
-            this.txtFilter.TabIndex = 4;
-            this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
+            this.txtVar.AutoSize = true;
+            this.txtVar.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtVar.Location = new System.Drawing.Point(25, 409);
+            this.txtVar.Name = "txtVar";
+            this.txtVar.Size = new System.Drawing.Size(147, 24);
+            this.txtVar.TabIndex = 2;
+            this.txtVar.Text = "Actual selection:";
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(620, 398);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(80, 40);
+            this.btnSave.TabIndex = 3;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(648, 291);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(100, 40);
+            this.btnDelete.TabIndex = 4;
+            this.btnDelete.Text = "Variable löschen";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(708, 398);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(80, 40);
+            this.btnCancel.TabIndex = 5;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // frmSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.txtVar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dataGridView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmSelect";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Variable wählen";
+            this.Text = "Select parameter";
+            this.Load += new System.EventHandler(this.frmSelect_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -151,5 +217,10 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.RadioButton radioInput;
         private System.Windows.Forms.RadioButton radioAll;
         private System.Windows.Forms.TextBox txtFilter;
+        private System.Windows.Forms.Button btnClear;
+        internal System.Windows.Forms.Label txtVar;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

@@ -55,7 +55,7 @@ namespace PlcSimAdvSimulator
                         t.Location = GetLocation(item["Location"]);
                         t.PlcButtonTag = item["Button"];
                         if (item.ContainsKey("ActiveColor"))
-                            t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                            t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
                         if (item.ContainsKey("Option"))
                         {
                             t.PlcOption = item["Option"];
@@ -75,7 +75,7 @@ namespace PlcSimAdvSimulator
                         t.Location = GetLocation(item["Location"]);
                         t.PlcButtonTag = item["Button"];
                         if (item.ContainsKey("ActiveColor"))
-                            t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                            t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
                         if (item.ContainsKey("Value"))
                             t.PlcButtonValue = bool.Parse(item["Value"]);
 
@@ -91,7 +91,7 @@ namespace PlcSimAdvSimulator
                         t.PlcButtonTag = item["Button"];
                         t.PlcLampTag = item["Lamp"];
                         if (item.ContainsKey("ActiveColor"))
-                            t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                            t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
                         if (item.ContainsKey("Option"))
                         {
                             t.PlcOption = item["Option"];
@@ -99,7 +99,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcButtonValue = true;
                         }
 
-                        t.ToolTip = "IN: " + item["Lamp"] + "- OUT: " + item["Button"];
+                        t.ToolTip = "IN: " + item["Lamp"] + " - OUT: " + item["Button"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cLamp")
@@ -115,7 +115,7 @@ namespace PlcSimAdvSimulator
                         t.Location = GetLocation(item["Location"]);
                         t.PlcLampTag = item["Lamp"];
                         if (item.ContainsKey("ActiveColor"))
-                            t.PlcActiveColor = Color.FromName(item["ActiveColor"]);
+                            t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
                         if (item.ContainsKey("Output"))
                             t.PlcOutputTag = item["Output"];
                         if (item.ContainsKey("nOutput"))
@@ -329,7 +329,7 @@ namespace PlcSimAdvSimulator
                         else if (crtl is cToggleButton)
                         {
                             cToggleButton c = (cToggleButton)crtl;
-                            if (c.PlcButtonTag != null)
+                            if (!String.IsNullOrEmpty(c.PlcButtonTag))
                                 myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                         }
                         else if (crtl is cCheckBox)
@@ -341,7 +341,7 @@ namespace PlcSimAdvSimulator
                         else if (crtl is cLamp)
                         {
                             cLamp c = (cLamp)crtl;
-                            if (c.PlcLampTag != null)
+                            if (!String.IsNullOrEmpty(c.PlcLampTag))
                             {
                                 c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
                             }
@@ -353,11 +353,11 @@ namespace PlcSimAdvSimulator
                         else if (crtl is cInvert)
                         {
                             cInvert c = (cInvert)crtl;
-                            if (c.PlcLampTag != null)
+                            if (!String.IsNullOrEmpty(c.PlcLampTag))
                             {
                                 c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
                             }
-                            if (c.PlcInvertTag != null)
+                            if (!String.IsNullOrEmpty(c.PlcInvertTag))
                             {
                                 myInstance.WriteBool(c.PlcInvertTag, !c.PlcLampValue);
                             }
@@ -371,8 +371,10 @@ namespace PlcSimAdvSimulator
                                 myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                             }
                             // output
-                            if (c.PlcLampTag != null)
+                            if (!String.IsNullOrEmpty(c.PlcLampTag))
+                            {
                                 c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
+                            }
                         }
                         else if (crtl is cPulse)
                         {
@@ -424,33 +426,33 @@ namespace PlcSimAdvSimulator
                             if (c.PlcTagStep01 != null)
                                 if (myInstance.ReadBool(c.PlcTagStep01))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep01));
-                            else if (c.PlcTagStep02 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep02));
-                            else if (c.PlcTagStep03 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep03));
-                            else if (c.PlcTagStep04 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep04));
-                            else if (c.PlcTagStep05 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep05));
-                            else if (c.PlcTagStep06 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep06));
-                            else if (c.PlcTagStep07 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep07));
-                            else if (c.PlcTagStep08 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep08));
-                            else if (c.PlcTagStep09 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep09));
-                            else if (c.PlcTagStep10 != null)
-                                if (myInstance.ReadBool(c.PlcTagStep01))
-                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep10));
+                                else if (c.PlcTagStep02 != null)
+                                    if (myInstance.ReadBool(c.PlcTagStep01))
+                                        myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep02));
+                                    else if (c.PlcTagStep03 != null)
+                                        if (myInstance.ReadBool(c.PlcTagStep01))
+                                            myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep03));
+                                        else if (c.PlcTagStep04 != null)
+                                            if (myInstance.ReadBool(c.PlcTagStep01))
+                                                myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep04));
+                                            else if (c.PlcTagStep05 != null)
+                                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep05));
+                                                else if (c.PlcTagStep06 != null)
+                                                    if (myInstance.ReadBool(c.PlcTagStep01))
+                                                        myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep06));
+                                                    else if (c.PlcTagStep07 != null)
+                                                        if (myInstance.ReadBool(c.PlcTagStep01))
+                                                            myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep07));
+                                                        else if (c.PlcTagStep08 != null)
+                                                            if (myInstance.ReadBool(c.PlcTagStep01))
+                                                                myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep08));
+                                                            else if (c.PlcTagStep09 != null)
+                                                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                                                    myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep09));
+                                                                else if (c.PlcTagStep10 != null)
+                                                                    if (myInstance.ReadBool(c.PlcTagStep01))
+                                                                        myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep10));
                         }
 
                         #endregion

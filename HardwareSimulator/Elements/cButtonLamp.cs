@@ -65,18 +65,34 @@ namespace PlcSimAdvSimulator
 
         private void cButton_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!PlcOption.Contains("NC"))
-                PlcButtonValue = true;
+            if (!String.IsNullOrEmpty(PlcOption))
+            {
+                if (!PlcOption.Contains("NC"))
+                    PlcButtonValue = true;
+                else
+                    PlcButtonValue = false;
+            }
             else
-                PlcButtonValue = false;
+            {
+                PlcButtonValue = true;
+            }
+
         }
 
         private void cButton_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!PlcOption.Contains("NC"))
-                PlcButtonValue = false;
+            if (!String.IsNullOrEmpty(PlcOption))
+            {
+                if (!PlcOption.Contains("NC"))
+                    PlcButtonValue = false;
+                else
+                    PlcButtonValue = true;
+            }
             else
-                PlcButtonValue = true;
+            {
+                PlcButtonValue = false;
+            }
         }
+
     }
 }

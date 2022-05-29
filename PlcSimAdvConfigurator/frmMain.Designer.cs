@@ -34,25 +34,41 @@ namespace PlcSimAdvConfigurator
             this.btnToggleButton = new System.Windows.Forms.Button();
             this.btnButtonLamp = new System.Windows.Forms.Button();
             this.btnLamp = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.txtItemID = new System.Windows.Forms.Label();
             this.btnCheckBox = new System.Windows.Forms.Button();
             this.dataProperties = new System.Windows.Forms.DataGridView();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuReload = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.txtSimulation = new System.Windows.Forms.ToolStripStatusLabel();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
+            this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pMain
             // 
             this.pMain.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pMain.Location = new System.Drawing.Point(209, 1);
+            this.pMain.Location = new System.Drawing.Point(203, 33);
             this.pMain.Name = "pMain";
             this.pMain.Size = new System.Drawing.Size(800, 600);
             this.pMain.TabIndex = 0;
             // 
             // btnButton
             // 
-            this.btnButton.Location = new System.Drawing.Point(12, 12);
+            this.btnButton.Location = new System.Drawing.Point(12, 59);
             this.btnButton.Name = "btnButton";
             this.btnButton.Size = new System.Drawing.Size(180, 40);
             this.btnButton.TabIndex = 1;
@@ -62,7 +78,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnToggleButton
             // 
-            this.btnToggleButton.Location = new System.Drawing.Point(12, 58);
+            this.btnToggleButton.Location = new System.Drawing.Point(12, 105);
             this.btnToggleButton.Name = "btnToggleButton";
             this.btnToggleButton.Size = new System.Drawing.Size(180, 40);
             this.btnToggleButton.TabIndex = 2;
@@ -72,7 +88,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnButtonLamp
             // 
-            this.btnButtonLamp.Location = new System.Drawing.Point(12, 104);
+            this.btnButtonLamp.Location = new System.Drawing.Point(12, 151);
             this.btnButtonLamp.Name = "btnButtonLamp";
             this.btnButtonLamp.Size = new System.Drawing.Size(180, 40);
             this.btnButtonLamp.TabIndex = 3;
@@ -82,7 +98,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnLamp
             // 
-            this.btnLamp.Location = new System.Drawing.Point(12, 150);
+            this.btnLamp.Location = new System.Drawing.Point(12, 197);
             this.btnLamp.Name = "btnLamp";
             this.btnLamp.Size = new System.Drawing.Size(180, 40);
             this.btnLamp.TabIndex = 4;
@@ -90,23 +106,13 @@ namespace PlcSimAdvConfigurator
             this.btnLamp.UseVisualStyleBackColor = true;
             this.btnLamp.Click += new System.EventHandler(this.btnLamp_Click);
             // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(1018, 552);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(207, 40);
-            this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
-            // 
             // btnDelete
             // 
             this.btnDelete.Location = new System.Drawing.Point(1018, 455);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(207, 40);
             this.btnDelete.TabIndex = 6;
-            this.btnDelete.Text = "Delete";
+            this.btnDelete.Text = "Delete Item";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
@@ -121,7 +127,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnCheckBox
             // 
-            this.btnCheckBox.Location = new System.Drawing.Point(12, 218);
+            this.btnCheckBox.Location = new System.Drawing.Point(12, 265);
             this.btnCheckBox.Name = "btnCheckBox";
             this.btnCheckBox.Size = new System.Drawing.Size(180, 40);
             this.btnCheckBox.TabIndex = 8;
@@ -134,36 +140,147 @@ namespace PlcSimAdvConfigurator
             this.dataProperties.AllowUserToAddRows = false;
             this.dataProperties.AllowUserToDeleteRows = false;
             this.dataProperties.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataProperties.Location = new System.Drawing.Point(1018, 4);
+            this.dataProperties.Location = new System.Drawing.Point(1013, 33);
             this.dataProperties.MultiSelect = false;
             this.dataProperties.Name = "dataProperties";
             this.dataProperties.ReadOnly = true;
             this.dataProperties.RowHeadersVisible = false;
             this.dataProperties.Size = new System.Drawing.Size(207, 359);
             this.dataProperties.TabIndex = 9;
-            this.dataProperties.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataProperties_CellContentDoubleClick);
+            this.dataProperties.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataProperties_CellClick);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.simulationToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1234, 24);
+            this.menuStrip1.TabIndex = 10;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuOpen,
+            this.mnuNew,
+            this.mnuSave,
+            this.toolStripMenuItem1,
+            this.mnuExit});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // mnuOpen
+            // 
+            this.mnuOpen.Name = "mnuOpen";
+            this.mnuOpen.Size = new System.Drawing.Size(180, 22);
+            this.mnuOpen.Text = "Open";
+            this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
+            // 
+            // mnuNew
+            // 
+            this.mnuNew.Name = "mnuNew";
+            this.mnuNew.Size = new System.Drawing.Size(180, 22);
+            this.mnuNew.Text = "New";
+            this.mnuNew.Click += new System.EventHandler(this.mnuNew_Click);
+            // 
+            // mnuSave
+            // 
+            this.mnuSave.Name = "mnuSave";
+            this.mnuSave.Size = new System.Drawing.Size(180, 22);
+            this.mnuSave.Text = "Save";
+            this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // mnuExit
+            // 
+            this.mnuExit.Name = "mnuExit";
+            this.mnuExit.Size = new System.Drawing.Size(180, 22);
+            this.mnuExit.Text = "Exit";
+            this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+            // 
+            // simulationToolStripMenuItem
+            // 
+            this.simulationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuReload});
+            this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
+            this.simulationToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.simulationToolStripMenuItem.Text = "Simulation";
+            // 
+            // mnuReload
+            // 
+            this.mnuReload.Name = "mnuReload";
+            this.mnuReload.Size = new System.Drawing.Size(110, 22);
+            this.mnuReload.Text = "Reload";
+            this.mnuReload.Click += new System.EventHandler(this.mnuReload_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(17, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Toolbox";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtSimulation});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 639);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1234, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 12;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // txtSimulation
+            // 
+            this.txtSimulation.Name = "txtSimulation";
+            this.txtSimulation.Size = new System.Drawing.Size(78, 17);
+            this.txtSimulation.Text = "txtSimulation";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1234, 604);
+            this.ClientSize = new System.Drawing.Size(1234, 661);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.dataProperties);
             this.Controls.Add(this.btnCheckBox);
             this.Controls.Add(this.txtItemID);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnLamp);
             this.Controls.Add(this.btnButtonLamp);
             this.Controls.Add(this.btnToggleButton);
             this.Controls.Add(this.btnButton);
             this.Controls.Add(this.pMain);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmMain";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "PLC";
             this.Load += new System.EventHandler(this.FrmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -176,11 +293,25 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.Button btnToggleButton;
         private System.Windows.Forms.Button btnButtonLamp;
         private System.Windows.Forms.Button btnLamp;
-        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Label txtItemID;
         private System.Windows.Forms.Button btnCheckBox;
         private System.Windows.Forms.DataGridView dataProperties;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuOpen;
+        private System.Windows.Forms.ToolStripMenuItem mnuSave;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem mnuExit;
+        private System.Windows.Forms.ToolStripMenuItem simulationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuReload;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel txtSimulation;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.ToolStripMenuItem mnuNew;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 
