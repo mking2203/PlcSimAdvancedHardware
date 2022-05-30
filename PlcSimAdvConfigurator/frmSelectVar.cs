@@ -9,17 +9,19 @@ namespace PlcSimAdvConfigurator
     public partial class frmSelectVar : Form
     {
         private STagInfo[] myData;
+        private EDataType myType;
         public string ActualSelection
         {
             get; set;
         }
 
         private DataTable dt = new DataTable();
-        public frmSelectVar(STagInfo[] data)
+        public frmSelectVar(STagInfo[] data, EDataType dataType)
         {
             InitializeComponent();
 
             myData = data;
+            myType = dataType;
         }
 
         private void radio_CheckedChanged(object sender, EventArgs e)
@@ -39,7 +41,8 @@ namespace PlcSimAdvConfigurator
 
             foreach (STagInfo info in myData)
             {
-                if (info.DataType == EDataType.Bool)
+                if ((info.DataType == myType) && (myType == EDataType.Bool) ||
+                    (info.DataType != EDataType.Bool) && (myType != EDataType.Bool))
                 {
                     if ((radioAll.Checked) ||
                         (radioInput.Checked && (info.Area == EArea.Input)) ||

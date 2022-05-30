@@ -138,11 +138,11 @@
     <Compile Include="Elements\cButton.Designer.cs">
       <DependentUpon>cButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="Elements\cTrackbar.cs">
+    <Compile Include="Elements\cTrackBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Elements\cTrackbar.Designer.cs">
-      <DependentUpon>cTrackbar.cs</DependentUpon>
+    <Compile Include="Elements\cTrackBar.Designer.cs">
+      <DependentUpon>cTrackBar.cs</DependentUpon>
     </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
@@ -164,8 +164,8 @@
     <EmbeddedResource Include="Elements\cButton.resx">
       <DependentUpon>cButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Elements\cTrackbar.resx">
-      <DependentUpon>cTrackbar.cs</DependentUpon>
+    <EmbeddedResource Include="Elements\cTrackBar.resx">
+      <DependentUpon>cTrackBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>

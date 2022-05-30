@@ -110,7 +110,6 @@ namespace PlcSimAdvConfigurator
 
             return result;
         }
-
         public static Dictionary<string, string> getPulse()
         {
             Dictionary<string, string> result = new Dictionary<string, string>
@@ -127,5 +126,23 @@ namespace PlcSimAdvConfigurator
 
             return result;
         }
+        public static Dictionary<string, string> getTrackbar()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>
+            {
+                { "ID" , "" },
+                { "Control", "cTrackBar" },
+                { "Text", "Trackbar" },
+                { "Size", "100x100" },
+                { "Location", "20,20" },
+                { "Max" , "27000" },
+                { "Min" , "0" },
+                { "Output", "" },
+                { "Value", "" }
+            };
+
+            return result;
+        }
+
     }
 }

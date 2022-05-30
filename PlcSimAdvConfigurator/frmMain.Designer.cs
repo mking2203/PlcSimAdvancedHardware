@@ -54,6 +54,8 @@ namespace PlcSimAdvConfigurator
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnPulse = new System.Windows.Forms.Button();
+            this.btnTrackBar = new System.Windows.Forms.Button();
+            this.btnLabel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -261,11 +263,33 @@ namespace PlcSimAdvConfigurator
             this.btnPulse.UseVisualStyleBackColor = true;
             this.btnPulse.Click += new System.EventHandler(this.btnPulse_Click);
             // 
+            // btnTrackBar
+            // 
+            this.btnTrackBar.Location = new System.Drawing.Point(12, 388);
+            this.btnTrackBar.Name = "btnTrackBar";
+            this.btnTrackBar.Size = new System.Drawing.Size(180, 40);
+            this.btnTrackBar.TabIndex = 14;
+            this.btnTrackBar.Text = "TrackBar";
+            this.btnTrackBar.UseVisualStyleBackColor = true;
+            this.btnTrackBar.Click += new System.EventHandler(this.btnTrackBar_Click);
+            // 
+            // btnLabel
+            // 
+            this.btnLabel.Location = new System.Drawing.Point(12, 445);
+            this.btnLabel.Name = "btnLabel";
+            this.btnLabel.Size = new System.Drawing.Size(180, 40);
+            this.btnLabel.TabIndex = 15;
+            this.btnLabel.Text = "Label";
+            this.btnLabel.UseVisualStyleBackColor = true;
+            this.btnLabel.Click += new System.EventHandler(this.btnLabel_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1234, 661);
+            this.Controls.Add(this.btnLabel);
+            this.Controls.Add(this.btnTrackBar);
             this.Controls.Add(this.btnPulse);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
@@ -325,6 +349,8 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnPulse;
+        private System.Windows.Forms.Button btnTrackBar;
+        private System.Windows.Forms.Button btnLabel;
     }
 }
 

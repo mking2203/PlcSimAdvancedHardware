@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace PlcSimAdvSimulator
+namespace PlcSimAdvConfigurator
 {
     partial class cTrackBar
     {

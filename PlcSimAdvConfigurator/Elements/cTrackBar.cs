@@ -1,16 +1,47 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace PlcSimAdvSimulator
+namespace PlcSimAdvConfigurator
 {
     public partial class cTrackBar : UserControl
     {
+
+        public delegate void MouseDownHandler(object sender, MouseEventArgs e);
+        public event MouseDownHandler ModMouseDown;
+        public delegate void ModMouseUpHandler(object sender, MouseEventArgs e);
+        public event ModMouseUpHandler ModMouseUp;
+        public delegate void ModMouseMoveHandler(object sender, MouseEventArgs e);
+        public event ModMouseMoveHandler ModMouseMove;
+
         public cTrackBar()
         {
             InitializeComponent();
 
             txtValue.Text = "Actual Value: 0";
             trackBar1.ValueChanged += CTrackbar_ValueChanged;
+
+            foreach (Control control in this.Controls)
+            {
+                control.MouseDown += new MouseEventHandler(control_MouseDown);
+                control.MouseUp += new MouseEventHandler(control_MouseUp);
+                control.MouseMove += new MouseEventHandler(control_MouseMove);
+            }
+        }
+
+        private void control_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (ModMouseDown != null)
+                ModMouseDown.Invoke(this, e);
+        }
+        private void control_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (ModMouseUp != null)
+                ModMouseUp.Invoke(this, e);
+        }
+        private void control_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (ModMouseMove != null)
+                ModMouseMove.Invoke(this, e);
         }
 
         private void TrackBar1_SizeChanged(object sender, EventArgs e)
@@ -34,10 +65,10 @@ namespace PlcSimAdvSimulator
                 txtValue.Text = "Actual Value: " + PlcOutputValue.ToString();
             }
         }
-        
-        private Int16 plcOutputValue;     
-        public Int16 PlcOutputValue 
-        { 
+
+        private Int16 plcOutputValue;
+        public Int16 PlcOutputValue
+        {
             get
             {
                 return plcOutputValue;
@@ -94,5 +125,7 @@ namespace PlcSimAdvSimulator
                 return txtName.Text;
             }
         }
+
+
     }
 }

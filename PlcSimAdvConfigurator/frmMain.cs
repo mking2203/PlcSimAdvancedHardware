@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.IO;
 using Siemens.Simatic.Simulation.Runtime;
 using Microsoft.VisualBasic;
+using PlcSimAdvConfigurator.Properties;
 
 namespace PlcSimAdvConfigurator
 {
@@ -28,6 +29,7 @@ namespace PlcSimAdvConfigurator
         string plcName = string.Empty;
         string actID = string.Empty;
 
+        // api interface
         private IInstance myInstance;
         private STagInfo[] VarData;
 
@@ -151,136 +153,206 @@ namespace PlcSimAdvConfigurator
         #region new controls
         private void btnButton_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> newItem = Defination.getButton();
-            Button t = new Button();
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getButton();
+                Button t = new Button();
 
-            t.Text = "neuer Button";
-            newItem["Text"] = t.Text;
+                t.Text = "neuer Button";
+                newItem["Text"] = t.Text;
 
-            t.Size = GetSize(newItem["Size"]);
+                t.Size = GetSize(newItem["Size"]);
 
-            t.Location = new Point(snap, snap);
-            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
-            t.Tag = controlID;
-            newItem["ID"] = controlID;
-            IncControlID();
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
-            myList.Add(newItem);
+                myList.Add(newItem);
 
-            AddControl((Control)t);
+                AddControl((Control)t);
+            }
         }
 
         private void btnToggleButton_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> newItem = Defination.getToggleButton();
-            Button t = new Button();
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getToggleButton();
+                Button t = new Button();
 
-            t.Text = "neuer Toggle Button";
-            newItem["Text"] = t.Text;
+                t.Text = "neuer Toggle Button";
+                newItem["Text"] = t.Text;
 
-            t.Size = GetSize(newItem["Size"]);
+                t.Size = GetSize(newItem["Size"]);
 
-            t.Location = new Point(snap, snap);
-            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
-            t.Tag = controlID;
-            newItem["ID"] = controlID;
-            IncControlID();
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
-            myList.Add(newItem);
+                myList.Add(newItem);
 
-            AddControl((Control)t);
+                AddControl((Control)t);
+            }
         }
 
         private void btnButtonLamp_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> newItem = Defination.getButtonLamp();
-            Button t = new Button();
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getButtonLamp();
+                Button t = new Button();
 
-            t.Text = "neue Button - Lamp";
-            newItem["Text"] = t.Text;
+                t.Text = "neue Button - Lamp";
+                newItem["Text"] = t.Text;
 
-            t.Size = GetSize(newItem["Size"]);
+                t.Size = GetSize(newItem["Size"]);
 
-            t.Location = new Point(snap, snap);
-            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
-            t.Tag = controlID;
-            newItem["ID"] = controlID;
-            IncControlID();
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
-            myList.Add(newItem);
+                myList.Add(newItem);
 
-            AddControl((Control)t);
+                AddControl((Control)t);
+            }
         }
 
         private void btnLamp_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> newItem = Defination.getLamp();
-            Button t = new Button();
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getLamp();
+                Button t = new Button();
 
-            t.Text = "neue Lampe";
-            newItem["Text"] = t.Text;
+                t.Text = "neue Lampe";
+                newItem["Text"] = t.Text;
 
-            t.Size = GetSize(newItem["Size"]);
+                t.Size = GetSize(newItem["Size"]);
 
-            t.Location = new Point(snap, snap);
-            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
-            t.Tag = controlID;
-            newItem["ID"] = controlID;
-            IncControlID();
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
-            myList.Add(newItem);
+                myList.Add(newItem);
 
-            AddControl((Control)t);
+                AddControl((Control)t);
+            }
         }
 
         private void btnCheckBox_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> newItem = Defination.getCheckBox();
-            CheckBox t = new CheckBox();
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getCheckBox();
+                CheckBox t = new CheckBox();
 
-            t.Text = "neue Checkbox";
-            newItem["Text"] = t.Text;
+                t.Text = "neue Checkbox";
+                newItem["Text"] = t.Text;
 
-            t.Size = GetSize(newItem["Size"]);
+                t.Size = GetSize(newItem["Size"]);
 
-            t.Location = new Point(snap, snap);
-            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
-            t.Tag = controlID;
-            newItem["ID"] = controlID;
-            IncControlID();
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
-            myList.Add(newItem);
+                myList.Add(newItem);
 
-            t.AutoCheck = false;
+                t.AutoCheck = false;
 
-            AddControl((Control)t);
+                AddControl((Control)t);
+            }
         }
 
         private void btnPulse_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> newItem = Defination.getPulse();
-            Button t = new Button();
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getPulse();
+                Button t = new Button();
 
-            t.Text = "neuer Pulse Generator";
-            newItem["Text"] = t.Text;
+                t.Text = "neuer Pulse Generator";
+                newItem["Text"] = t.Text;
 
-            t.Size = GetSize(newItem["Size"]);
+                t.Size = GetSize(newItem["Size"]);
 
-            t.Location = new Point(snap, snap);
-            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
-            t.Tag = controlID;
-            newItem["ID"] = controlID;
-            IncControlID();
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
-            myList.Add(newItem);
+                myList.Add(newItem);
 
-            AddControl((Control)t);
+                AddControl((Control)t);
+            }
+        }
+
+        private void btnTrackBar_Click(object sender, EventArgs e)
+        {
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getTrackbar();
+                cTrackBar t = new cTrackBar();
+
+                t.Text = "neue TrackBar";
+                newItem["Text"] = t.Text;
+
+                t.Size = GetSize(newItem["Size"]);
+
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
+
+                myList.Add(newItem);
+
+                AddControl((Control)t);
+            }
+        }
+
+        private void btnLabel_Click(object sender, EventArgs e)
+        {
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getLabel();
+                Label t = new Label();
+
+                t.Text = "neuer Label";
+                newItem["Text"] = t.Text;
+
+                t.Font = new System.Drawing.Font("Arial", 15.0f);
+
+                t.Size = GetSize(newItem["Size"]);
+
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
+
+                myList.Add(newItem);
+
+                AddControl((Control)t);
+            }
         }
 
         #endregion
@@ -350,176 +422,190 @@ namespace PlcSimAdvConfigurator
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            LoadJson(Application.StartupPath + "\\elements.json");
+            string lastFile = (Settings.Default["LastConfigFile"].ToString());
+            if (!String.IsNullOrEmpty(lastFile))
+            {
+                LoadJson(lastFile);
+            }
+
+            //LoadJson(Application.StartupPath + "\\elements.json");
         }
 
         private void LoadJson(string FileName)
         {
-            string json = File.ReadAllText(FileName);
-            myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
-
-            foreach (Dictionary<string, string> item in myList)
+            if (File.Exists(FileName))
             {
-                if (item["Control"] == "Settings")
+                string json = File.ReadAllText(FileName);
+                myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+
+                foreach (Dictionary<string, string> item in myList)
                 {
-                    plcName = item["PLC"];
-                    controlID = item["ID"];
-                    this.Text = "Actual PLC: " + plcName;
+                    if (item["Control"] == "Settings")
+                    {
+                        plcName = item["PLC"];
+                        controlID = item["ID"];
+                        this.Text = "Actual PLC: " + plcName;
+                    }
+                    else if (item["Control"] == "cButton")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cToggleButton")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cButtonLamp")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cLamp")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cCheckBox")
+                    {
+                        CheckBox t = new CheckBox();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cPulse")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cTrackBar")
+                    {
+                        cTrackBar t = new cTrackBar();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.ModMouseDown += CrtlMouseDown;
+                        t.ModMouseMove += CrtlMouseMove;
+                        t.ModMouseUp += CrtlMouseUp;
+
+                        //t.MouseDown += CrtlMouseDown;
+                        //t.MouseMove += CrtlMouseMove;
+                        //t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cLabel")
+                    {
+                        Label t = new Label();
+                        t.Text = item["Text"];
+                        t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+                        t.BorderStyle = BorderStyle.FixedSingle;
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cIntregrator")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cTableSet")
+                    {
+                        Button t = new Button();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
                 }
-                else if (item["Control"] == "cButton")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
 
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cToggleButton")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cButtonLamp")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cLamp")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cCheckBox")
-                {
-                    CheckBox t = new CheckBox();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cPulse")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cTrackbar")
-                {
-                    TrackBar t = new TrackBar();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cLabel")
-                {
-                    Label t = new Label();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-                    t.BorderStyle = BorderStyle.FixedSingle;
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cIntregrator")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
-                else if (item["Control"] == "cTableSet")
-                {
-                    Button t = new Button();
-                    t.Text = item["Text"];
-                    t.Size = GetSize(item["Size"]);
-                    t.Location = GetLocation(item["Location"]);
-
-                    t.MouseDown += CrtlMouseDown;
-                    t.MouseMove += CrtlMouseMove;
-                    t.MouseUp += CrtlMouseUp;
-
-                    t.Tag = item["ID"];
-
-                    pMain.Controls.Add(t);
-                }
+                ConnectPLC();
             }
-
-            ConnectPLC();
         }
 
         private void ConnectPLC()
@@ -617,7 +703,25 @@ namespace PlcSimAdvConfigurator
                     {
                         if (VarData != null)
                         {
-                            frmSelectVar sel = new frmSelectVar(VarData);
+                            frmSelectVar sel = new frmSelectVar(VarData, EDataType.Bool);
+                            sel.ActualSelection = val;
+
+                            DialogResult res = sel.ShowDialog();
+                            if (res == DialogResult.OK)
+                            {
+                                GetItemByID(actID)[key] = sel.ActualSelection;
+                                dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection;
+                            }
+                        }
+                    }
+                }
+                if (key == "Output")
+                {
+                    if (myInstance != null)
+                    {
+                        if (VarData != null)
+                        {
+                            frmSelectVar sel = new frmSelectVar(VarData, EDataType.Word);
                             sel.ActualSelection = val;
 
                             DialogResult res = sel.ShowDialog();
@@ -633,15 +737,50 @@ namespace PlcSimAdvConfigurator
                 {
                     if (myInstance != null)
                     {
-                        frmSelectDefault sel = new frmSelectDefault();
-                        sel.ActualSelection = bool.Parse(val);
+                        Dictionary<string, string> item = GetItemByID(actID);
 
-                        DialogResult res = sel.ShowDialog();
-                        if (res == DialogResult.OK)
+                        if (item["Control"] != "cTrackBar")
                         {
-                            GetItemByID(actID)["Value"] = sel.ActualSelection.ToString();
-                            dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection.ToString();
+                            bool set = false;
+                            bool.TryParse(val, out set);
+
+                            frmSelectDefault sel = new frmSelectDefault();
+                            sel.ActualSelection = set;
+
+                            DialogResult res = sel.ShowDialog();
+                            if (res == DialogResult.OK)
+                            {
+                                GetItemByID(actID)["Value"] = sel.ActualSelection.ToString();
+                                dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection.ToString();
+                            }
                         }
+                        else
+                        {
+                            string input = Interaction.InputBox("Enter new value for the control:", "New value", val);
+
+                            if ((input != val) && (input.Length > 0))
+                            {
+                                int set = 0;
+                                int.TryParse(input, out set);
+
+                                GetItemByID(actID)["Value"] = set.ToString();
+                                dataProperties.Rows[e.RowIndex].Cells[1].Value = set.ToString();
+                            }
+                        }
+                    }
+                }
+                if ((key == "Min") ||
+                    (key == "Max"))
+                {
+                    string input = Interaction.InputBox("Enter new value for the control:", "New value", val);
+
+                    if ((input != val) && (input.Length > 0))
+                    {
+                        int set = 0;
+                        int.TryParse(input, out set);
+
+                        GetItemByID(actID)[key] = set.ToString();
+                        dataProperties.Rows[e.RowIndex].Cells[1].Value = set.ToString();
                     }
                 }
                 if (key == "ActiveColor")
@@ -702,6 +841,9 @@ namespace PlcSimAdvConfigurator
             if (res == DialogResult.OK)
             {
                 SaveFile(saveFileDialog1.FileName);
+
+                Settings.Default["LastConfigFile"] = saveFileDialog1.FileName;
+                Settings.Default.Save();
             }
         }
 
@@ -727,9 +869,13 @@ namespace PlcSimAdvConfigurator
             if (res == DialogResult.OK)
             {
                 pMain.Controls.Clear();
-                myList.Clear();
+                if (myList != null)
+                    myList.Clear();
 
                 LoadJson(openFileDialog1.FileName);
+
+                Settings.Default["LastConfigFile"] = openFileDialog1.FileName;
+                Settings.Default.Save();
             }
         }
     }

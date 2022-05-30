@@ -21,6 +21,7 @@ namespace PlcSimAdvSimulator
     public partial class frmMain : Form
     {
         private IInstance myInstance;
+        private STagInfo[] myData;
         private string PlcName = string.Empty;
 
         private long aktTicks;
@@ -161,20 +162,25 @@ namespace PlcSimAdvSimulator
                         t.ToolTip = "OUT: " + item["Output_Q"];
                         this.Controls.Add(t);
                     }
-                    else if (item["Control"] == "cTrackbar")
+                    else if (item["Control"] == "cTrackBar")
                     {
-                        cTrackbar t = new cTrackbar();
-                        t.Caption = item["Text"];
+                        cTrackBar t = new cTrackBar();
+                        t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
 
                         t.PlcOutputTag = item["Output"];
 
-                        t.PlcMaxValue = Int16.Parse(item["Max"]);
-                        t.PlcMinValue = Int16.Parse(item["Min"]);
+                        if (item.ContainsKey("Max"))
+                            if (!String.IsNullOrEmpty(item["Max"]))
+                                t.PlcMaxValue = Int16.Parse(item["Max"]);
+                        if (item.ContainsKey("Min"))
+                            if (!String.IsNullOrEmpty(item["Min"]))
+                                t.PlcMinValue = Int16.Parse(item["Min"]);
 
                         if (item.ContainsKey("Value"))
-                            t.PlcOutputValue = Int16.Parse(item["Value"]);
+                            if (!String.IsNullOrEmpty(item["Value"]))
+                                t.PlcOutputValue = Int16.Parse(item["Value"]);
 
                         t.ToolTip = "OUT: " + item["Output"];
                         this.Controls.Add(t);
@@ -294,7 +300,7 @@ namespace PlcSimAdvSimulator
                 //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
 
                 // get all vars for test
-                STagInfo[] data = myInstance.TagInfos;
+                myData = myInstance.TagInfos;
 
                 //Start a thread to synchronize feedbacks inputs 
                 tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
@@ -400,12 +406,24 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(c.PlcnOutputTag))
                                 myInstance.WriteBool(c.PlcnOutputTag, !c.PlcOutputValue);
                         }
-                        else if (crtl is cTrackbar)
+                        else if (crtl is cTrackBar)
                         {
-                            cTrackbar c = (cTrackbar)crtl;
+                            cTrackBar c = (cTrackBar)crtl;
 
                             if (c.PlcOutputTag != null)
-                                myInstance.WriteUInt16(c.PlcOutputTag, (UInt16)c.PlcOutputValue);
+                                if (!String.IsNullOrEmpty(c.PlcOutputTag))
+                                {
+                                    foreach (STagInfo s in myData)
+                                    {
+                                        if (s.Name == c.PlcOutputTag)
+                                        {
+                                            if (s.DataType == EDataType.Word)
+                                                myInstance.WriteUInt16(c.PlcOutputTag, (UInt16)c.PlcOutputValue);
+                                            if(s.DataType ==EDataType.Int)
+                                                myInstance.WriteInt16(c.PlcOutputTag, (Int16)c.PlcOutputValue);
+                                        }
+                                    }
+                                }
                         }
                         else if (crtl is cIntregrator)
                         {
