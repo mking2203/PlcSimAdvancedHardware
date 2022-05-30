@@ -108,12 +108,6 @@
     <Compile Include="Elements\cIntregrator.Designer.cs">
       <DependentUpon>cIntregrator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Elements\cInvert.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Elements\cInvert.Designer.cs">
-      <DependentUpon>cInvert.cs</DependentUpon>
-    </Compile>
     <Compile Include="Elements\cTableSet.cs">
       <SubType>Component</SubType>
     </Compile>

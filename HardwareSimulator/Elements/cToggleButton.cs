@@ -41,8 +41,12 @@ namespace PlcSimAdvSimulator
             }
         }
 
-
         public string PlcButtonTag { get; set; }
+
+        // output the signal
+        public string PlcOutputTag { get; set; }
+        // output the invert signal
+        public string PlcnOutputTag { get; set; }
 
         private Color plcActiveColor = Color.ForestGreen;
         [Description("Represents the ON color off the button"), Category("Design")]

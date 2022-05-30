@@ -110,5 +110,22 @@ namespace PlcSimAdvConfigurator
 
             return result;
         }
+
+        public static Dictionary<string, string> getPulse()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>
+            {
+                { "ID" , "" },
+                { "Control", "cPulse" },
+                { "Text", "Pulse Generator" },
+                { "Size", "100x100" },
+                { "Location", "20,20" },
+                { "TimeMS" , "1000" },
+                { "Output_Q", "" },
+                { "Output_nQ", "" }
+            };
+
+            return result;
+        }
     }
 }

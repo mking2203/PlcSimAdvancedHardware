@@ -50,7 +50,10 @@ namespace PlcSimAdvSimulator
             }
         }
 
+        // output the signal
         public string PlcOutputTag { get; set; }
+        // output the invert signal
+        public string PlcnOutputTag { get; set; }
 
         public string caption;
         public string Caption
@@ -79,7 +82,7 @@ namespace PlcSimAdvSimulator
         public cPulse()
         {
             InitializeComponent();
-            txtTime.Text = plcTimeMS.ToString() + " ms";      
+            txtTime.Text = plcTimeMS.ToString() + " ms";
         }
 
         private void cPulse_SizeChanged(object sender, EventArgs e)

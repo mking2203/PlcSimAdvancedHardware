@@ -242,7 +242,7 @@ namespace PlcSimAdvConfigurator
             Dictionary<string, string> newItem = Defination.getCheckBox();
             CheckBox t = new CheckBox();
 
-            t.Text = "neue Chekcbox";
+            t.Text = "neue Checkbox";
             newItem["Text"] = t.Text;
 
             t.Size = GetSize(newItem["Size"]);
@@ -257,6 +257,28 @@ namespace PlcSimAdvConfigurator
             myList.Add(newItem);
 
             t.AutoCheck = false;
+
+            AddControl((Control)t);
+        }
+
+        private void btnPulse_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, string> newItem = Defination.getPulse();
+            Button t = new Button();
+
+            t.Text = "neuer Pulse Generator";
+            newItem["Text"] = t.Text;
+
+            t.Size = GetSize(newItem["Size"]);
+
+            t.Location = new Point(snap, snap);
+            newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+
+            t.Tag = controlID;
+            newItem["ID"] = controlID;
+            IncControlID();
+
+            myList.Add(newItem);
 
             AddControl((Control)t);
         }
@@ -586,7 +608,10 @@ namespace PlcSimAdvConfigurator
 
                     }
                 }
-                if (key == "Button")
+                if ((key == "Button") ||
+                    (key == "Lamp") ||
+                    (key == "Output_Q") ||
+                    (key == "Output_nQ"))
                 {
                     if (myInstance != null)
                     {
@@ -598,7 +623,7 @@ namespace PlcSimAdvConfigurator
                             DialogResult res = sel.ShowDialog();
                             if (res == DialogResult.OK)
                             {
-                                GetItemByID(actID)["Button"] = sel.ActualSelection;
+                                GetItemByID(actID)[key] = sel.ActualSelection;
                                 dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection;
                             }
                         }
