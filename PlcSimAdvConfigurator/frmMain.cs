@@ -355,6 +355,38 @@ namespace PlcSimAdvConfigurator
             }
         }
 
+        private void btnIntregrator_Click(object sender, EventArgs e)
+        {
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getIntregator();
+                cIntregrator t = new cIntregrator();
+
+                t.Text = "neuer Label";
+                newItem["Text"] = t.Text;
+
+                t.Size = GetSize(newItem["Size"]);
+
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
+
+                if (!String.IsNullOrEmpty((string)newItem["SetPoint"]))
+                    t.PlcSetValue = int.Parse(newItem["SetPoint"]);
+                if (!String.IsNullOrEmpty((string)newItem["Target"]))
+                    t.PlcTargetValue = int.Parse(newItem["Target"]);
+                // force output
+                t.PlcTicks = 0;
+
+                myList.Add(newItem);
+
+                AddControl((Control)t);
+            }
+        }
+
         #endregion
 
         private void IncControlID()
@@ -697,7 +729,9 @@ namespace PlcSimAdvConfigurator
                 if ((key == "Button") ||
                     (key == "Lamp") ||
                     (key == "Output_Q") ||
-                    (key == "Output_nQ"))
+                    (key == "Output_nQ") ||
+                    (key == "Start") ||
+                    (key == "Set"))
                 {
                     if (myInstance != null)
                     {
@@ -715,7 +749,10 @@ namespace PlcSimAdvConfigurator
                         }
                     }
                 }
-                if (key == "Output")
+                if ((key == "Output") ||
+                    (key == "Target") ||
+                    (key == "Gradiant") ||
+                    (key == "SetPoint"))
                 {
                     if (myInstance != null)
                     {
@@ -878,5 +915,6 @@ namespace PlcSimAdvConfigurator
                 Settings.Default.Save();
             }
         }
+
     }
 }

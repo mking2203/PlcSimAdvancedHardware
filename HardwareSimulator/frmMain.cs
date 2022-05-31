@@ -95,12 +95,12 @@ namespace PlcSimAdvSimulator
                         if (item.ContainsKey("ActiveColor"))
                             if (!String.IsNullOrEmpty(item["ActiveColor"]))
                                 t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
-                        if (item.ContainsKey("Option"))
-                        {
-                            t.PlcOption = item["Option"];
-                            if (t.PlcOption.Contains("NC"))
-                                t.PlcButtonValue = true;
-                        }
+                        if (item.ContainsKey("Output_Q"))
+                            if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                t.PlcOutputTag = item["Output_Q"];
+                        if (item.ContainsKey("Output_nQ"))
+                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                t.PlcnOutputTag = item["Output_nQ"];
 
                         t.ToolTip = "IN: " + item["Lamp"] + " - OUT: " + item["Button"];
                         this.Controls.Add(t);
@@ -203,8 +203,8 @@ namespace PlcSimAdvSimulator
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
 
-                        t.PlcActualValueTag = item["Actual"];
-                        if (item.ContainsKey("Value"))
+                        t.PlcActualValueTag = item["Output"];
+                        if (!String.IsNullOrEmpty(item["Value"]))
                             t.PlcActualValue = Int16.Parse(item["Value"]);
 
                         t.PlcGradientTag = item["Gradiant"];
@@ -419,7 +419,7 @@ namespace PlcSimAdvSimulator
                                         {
                                             if (s.DataType == EDataType.Word)
                                                 myInstance.WriteUInt16(c.PlcOutputTag, (UInt16)c.PlcOutputValue);
-                                            if(s.DataType ==EDataType.Int)
+                                            if (s.DataType == EDataType.Int)
                                                 myInstance.WriteInt16(c.PlcOutputTag, (Int16)c.PlcOutputValue);
                                         }
                                     }

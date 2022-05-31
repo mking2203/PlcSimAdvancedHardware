@@ -56,6 +56,7 @@ namespace PlcSimAdvConfigurator
             this.btnPulse = new System.Windows.Forms.Button();
             this.btnTrackBar = new System.Windows.Forms.Button();
             this.btnLabel = new System.Windows.Forms.Button();
+            this.btnIntregrator = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -130,7 +131,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnCheckBox
             // 
-            this.btnCheckBox.Location = new System.Drawing.Point(12, 265);
+            this.btnCheckBox.Location = new System.Drawing.Point(12, 243);
             this.btnCheckBox.Name = "btnCheckBox";
             this.btnCheckBox.Size = new System.Drawing.Size(180, 40);
             this.btnCheckBox.TabIndex = 8;
@@ -255,7 +256,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnPulse
             // 
-            this.btnPulse.Location = new System.Drawing.Point(12, 325);
+            this.btnPulse.Location = new System.Drawing.Point(12, 289);
             this.btnPulse.Name = "btnPulse";
             this.btnPulse.Size = new System.Drawing.Size(180, 40);
             this.btnPulse.TabIndex = 13;
@@ -265,7 +266,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnTrackBar
             // 
-            this.btnTrackBar.Location = new System.Drawing.Point(12, 388);
+            this.btnTrackBar.Location = new System.Drawing.Point(12, 335);
             this.btnTrackBar.Name = "btnTrackBar";
             this.btnTrackBar.Size = new System.Drawing.Size(180, 40);
             this.btnTrackBar.TabIndex = 14;
@@ -275,7 +276,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnLabel
             // 
-            this.btnLabel.Location = new System.Drawing.Point(12, 445);
+            this.btnLabel.Location = new System.Drawing.Point(12, 381);
             this.btnLabel.Name = "btnLabel";
             this.btnLabel.Size = new System.Drawing.Size(180, 40);
             this.btnLabel.TabIndex = 15;
@@ -283,11 +284,22 @@ namespace PlcSimAdvConfigurator
             this.btnLabel.UseVisualStyleBackColor = true;
             this.btnLabel.Click += new System.EventHandler(this.btnLabel_Click);
             // 
+            // btnIntregrator
+            // 
+            this.btnIntregrator.Location = new System.Drawing.Point(12, 427);
+            this.btnIntregrator.Name = "btnIntregrator";
+            this.btnIntregrator.Size = new System.Drawing.Size(180, 40);
+            this.btnIntregrator.TabIndex = 16;
+            this.btnIntregrator.Text = "Intregrator";
+            this.btnIntregrator.UseVisualStyleBackColor = true;
+            this.btnIntregrator.Click += new System.EventHandler(this.btnIntregrator_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1234, 661);
+            this.Controls.Add(this.btnIntregrator);
             this.Controls.Add(this.btnLabel);
             this.Controls.Add(this.btnTrackBar);
             this.Controls.Add(this.btnPulse);
@@ -351,6 +363,7 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.Button btnPulse;
         private System.Windows.Forms.Button btnTrackBar;
         private System.Windows.Forms.Button btnLabel;
+        private System.Windows.Forms.Button btnIntregrator;
     }
 }
 

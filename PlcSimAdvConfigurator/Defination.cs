@@ -143,6 +143,26 @@ namespace PlcSimAdvConfigurator
 
             return result;
         }
+        public static Dictionary<string, string> getIntregator()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>
+            {
+                { "ID" , "" },
+                { "Control", "cIntregrator" },
+                { "Text", "Intregrator" },
+                { "Size", "100x100" },
+                { "Location", "20,20" },
+                { "Output", "" },
+                { "Value" , "" },
+                { "Gradiant","" },
+                { "SetPoint", "" },
+                { "Target", "" },
+                { "Set", "" },
+                { "Start", "" }
+            };
+
+            return result;
+        }
 
     }
 }
