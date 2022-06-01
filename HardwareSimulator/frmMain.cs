@@ -54,10 +54,7 @@ namespace PlcSimAdvSimulator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
-                        t.PlcButtonTag = item["Button"];
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
                         if (item.ContainsKey("Output_Q"))
                             if (!String.IsNullOrEmpty(item["Output_Q"]))
                                 t.PlcOutputTag = item["Output_Q"];
@@ -65,7 +62,11 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["Output_nQ"]))
                                 t.PlcnOutputTag = item["Output_nQ"];
 
-                        t.ToolTip = "OUT: " + item["Button"];
+                        if (item.ContainsKey("ActiveColor"))
+                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cToggleButton")
@@ -74,14 +75,23 @@ namespace PlcSimAdvSimulator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
-                        t.PlcButtonTag = item["Button"];
+
+                        if (item.ContainsKey("Output_Q"))
+                            if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                t.PlcOutputTag = item["Output_Q"];
+                        if (item.ContainsKey("Output_nQ"))
+                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                t.PlcnOutputTag = item["Output_nQ"];
+
                         if (item.ContainsKey("ActiveColor"))
                             if (!String.IsNullOrEmpty(item["ActiveColor"]))
                                 t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
-                        if (item.ContainsKey("Value"))
-                            t.PlcButtonValue = bool.Parse(item["Value"]);
 
-                        t.ToolTip = "OUT: " + item["Button"];
+                        if (item.ContainsKey("Value"))
+                            if (!String.IsNullOrEmpty(item["Value"]))
+                                t.PlcButtonValue = bool.Parse(item["Value"]);
+
+                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cButtonLamp")
@@ -90,11 +100,7 @@ namespace PlcSimAdvSimulator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
-                        t.PlcButtonTag = item["Button"];
-                        t.PlcLampTag = item["Lamp"];
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
                         if (item.ContainsKey("Output_Q"))
                             if (!String.IsNullOrEmpty(item["Output_Q"]))
                                 t.PlcOutputTag = item["Output_Q"];
@@ -102,24 +108,24 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["Output_nQ"]))
                                 t.PlcnOutputTag = item["Output_nQ"];
 
-                        t.ToolTip = "IN: " + item["Lamp"] + " - OUT: " + item["Button"];
+                        if (item.ContainsKey("Lamp"))
+                            if (!String.IsNullOrEmpty(item["Lamp"]))
+                                t.PlcLampTag = item["Lamp"];
+
+                        if (item.ContainsKey("ActiveColor"))
+                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                        t.ToolTip = "IN: " + (string)item["Lamp"] + " - OUT: " + (string)item["Output_Q"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cLamp")
                     {
                         cLamp t = new cLamp();
-
-                        t.AutoSize = false;
-                        t.BorderStyle = BorderStyle.FixedSingle;
-                        t.TextAlign = ContentAlignment.MiddleCenter;
-
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
-                        t.PlcLampTag = item["Lamp"];
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
                         if (item.ContainsKey("Output_Q"))
                             if (!String.IsNullOrEmpty(item["Output_Q"]))
                                 t.PlcOutputTag = item["Output_Q"];
@@ -127,7 +133,17 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["Output_nQ"]))
                                 t.PlcnOutputTag = item["Output_nQ"];
 
-                        t.ToolTip = "OUT: " + item["Lamp"];
+                        if (item.ContainsKey("ActiveColor"))
+                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                        t.AutoSize = false;
+                        t.BorderStyle = BorderStyle.FixedSingle;
+                        t.TextAlign = ContentAlignment.MiddleCenter;
+                        if (!String.IsNullOrEmpty(item["Lamp"]))
+                            t.PlcLampTag = item["Lamp"];
+
+                        t.ToolTip = "OUT: " + (string)item["Lamp"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cCheckBox")
@@ -136,17 +152,25 @@ namespace PlcSimAdvSimulator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
-                        t.PlcButtonTag = item["Button"];
-                        if (item.ContainsKey("Value"))
-                            t.PlcButtonValue = bool.Parse(item["Value"]);
 
-                        t.ToolTip = "OUT: " + item["Button"];
+                        if (item.ContainsKey("Output_Q"))
+                            if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                t.PlcOutputTag = item["Output_Q"];
+                        if (item.ContainsKey("Output_nQ"))
+                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                t.PlcnOutputTag = item["Output_nQ"];
+
+                        if (item.ContainsKey("Value"))
+                            if (item.ContainsKey("Value"))
+                                t.PlcButtonValue = bool.Parse(item["Value"]);
+
+                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cPulse")
                     {
                         cPulse t = new cPulse();
-                        t.Caption = item["Text"];
+                        t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
 
@@ -157,9 +181,11 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["Output_nQ"]))
                                 t.PlcnOutputTag = item["Output_nQ"];
 
-                        t.PlcTimeMS = Int16.Parse(item["TimeMS"]);
+                        if (item.ContainsKey("TimeMS"))
+                            if (!String.IsNullOrEmpty(item["TimeMS"]))
+                                t.PlcTimeMS = Int16.Parse(item["TimeMS"]);
 
-                        t.ToolTip = "OUT: " + item["Output_Q"];
+                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cTrackBar")
@@ -169,7 +195,9 @@ namespace PlcSimAdvSimulator
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
 
-                        t.PlcOutputTag = item["Output"];
+                        if (item.ContainsKey("Output"))
+                            if (!String.IsNullOrEmpty(item["Output"]))
+                                t.PlcOutputTag = item["Output"];
 
                         if (item.ContainsKey("Max"))
                             if (!String.IsNullOrEmpty(item["Max"]))
@@ -182,7 +210,7 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["Value"]))
                                 t.PlcOutputValue = Int16.Parse(item["Value"]);
 
-                        t.ToolTip = "OUT: " + item["Output"];
+                        t.ToolTip = "OUT: " + (string)item["Output"];
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cLabel")
@@ -191,6 +219,7 @@ namespace PlcSimAdvSimulator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
+
                         if (item.ContainsKey("FontSize"))
                             t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
 
@@ -203,16 +232,30 @@ namespace PlcSimAdvSimulator
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
 
-                        t.PlcActualValueTag = item["Output"];
-                        if (!String.IsNullOrEmpty(item["Value"]))
-                            t.PlcActualValue = Int16.Parse(item["Value"]);
+                        if (item.ContainsKey("Output"))
+                            if (!String.IsNullOrEmpty(item["Output"]))
+                                t.PlcActualValueTag = item["Output"];
 
-                        t.PlcGradientTag = item["Gradiant"];
-                        t.PlcSetValueTag = item["SetPoint"];
-                        t.PlcTargetValueTag = item["Target"];
 
-                        t.PlcSetTag = item["Set"];
-                        t.PlcStartTag = item["Start"];
+                        if (item.ContainsKey("Value"))
+                            if (!String.IsNullOrEmpty(item["Value"]))
+                                t.PlcActualValue = Int16.Parse(item["Value"]);
+                        if (item.ContainsKey("Gradiant"))
+                            if (!String.IsNullOrEmpty(item["Gradiant"]))
+                                t.PlcGradientTag = item["Gradiant"];
+                        if (item.ContainsKey("SetPoint"))
+                            if (!String.IsNullOrEmpty(item["SetPoint"]))
+                                t.PlcSetValueTag = item["SetPoint"];
+                        if (item.ContainsKey("Target"))
+                            if (!String.IsNullOrEmpty(item["Target"]))
+                                t.PlcTargetValueTag = item["Target"];
+
+                        if (item.ContainsKey("Set"))
+                            if (!String.IsNullOrEmpty(item["Set"]))
+                                t.PlcSetTag = item["Set"];
+                        if (item.ContainsKey("Start"))
+                            if (!String.IsNullOrEmpty(item["Start"]))
+                                t.PlcStartTag = item["Start"];
 
                         t.ToolTip = "OUT: " + item["Text"];
                         this.Controls.Add(t);
@@ -271,6 +314,24 @@ namespace PlcSimAdvSimulator
                         t.ToolTip = "OUT: " + item["Text"];
                         this.Controls.Add(t);
                     }
+                    else if (item["Control"] == "cInput")
+                    {
+                        cInput t = new cInput();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        if (item.ContainsKey("Output"))
+                            if (!String.IsNullOrEmpty(item["Output"]))
+                                t.PlcOutputTag = item["Output"];
+
+                        if (item.ContainsKey("Value"))
+                            if (!String.IsNullOrEmpty(item["Value"]))
+                                t.PlcOutputValue = Int16.Parse(item["Value"]);
+
+                        t.ToolTip = "OUT: " + (string)item["Output"];
+                        this.Controls.Add(t);
+                    }
                     else
                     {
                         MessageBox.Show("Unknown control: " + item["Control"]);
@@ -279,7 +340,7 @@ namespace PlcSimAdvSimulator
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error reading JSON:" + ex.Message);
+                MessageBox.Show("Error reading JSON:" + ex.Message + "\n" + ex.StackTrace);
                 Application.Exit();
                 return;
             }
@@ -300,8 +361,10 @@ namespace PlcSimAdvSimulator
                 //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
 
                 // get all vars for test
+                Console.WriteLine("Get tag info's");
                 myData = myInstance.TagInfos;
 
+                Console.WriteLine("End synchronization - start simulator");
                 //Start a thread to synchronize feedbacks inputs 
                 tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
                 tFeedbacks.IsBackground = true;
@@ -340,8 +403,6 @@ namespace PlcSimAdvSimulator
                         if (crtl is cButton)
                         {
                             cButton c = (cButton)crtl;
-                            if (!String.IsNullOrEmpty(c.PlcButtonTag))
-                                myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcOutputTag))
                                 myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcnOutputTag))
@@ -350,8 +411,6 @@ namespace PlcSimAdvSimulator
                         else if (crtl is cToggleButton)
                         {
                             cToggleButton c = (cToggleButton)crtl;
-                            if (!String.IsNullOrEmpty(c.PlcButtonTag))
-                                myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcOutputTag))
                                 myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcnOutputTag))
@@ -360,8 +419,6 @@ namespace PlcSimAdvSimulator
                         else if (crtl is cCheckBox)
                         {
                             cCheckBox c = (cCheckBox)crtl;
-                            if (!String.IsNullOrEmpty(c.PlcButtonTag))
-                                myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcOutputTag))
                                 myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcnOutputTag))
@@ -381,9 +438,9 @@ namespace PlcSimAdvSimulator
                         {
                             cButtonLamp c = (cButtonLamp)crtl;
                             // input
-                            if (c.PlcButtonTag != null)
+                            if (c.PlcOutputTag != null)
                             {
-                                myInstance.WriteBool(c.PlcButtonTag, c.PlcButtonValue);
+                                myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
                             }
                             // output
                             if (!String.IsNullOrEmpty(c.PlcLampTag))
@@ -464,53 +521,72 @@ namespace PlcSimAdvSimulator
                             }
                             else if (c.PlcTagStep02 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep02))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep02));
                             }
                             else if (c.PlcTagStep03 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep03))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep03));
                             }
                             else if (c.PlcTagStep04 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep04))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep04));
                             }
                             else if (c.PlcTagStep05 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep05))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep05));
                             }
                             else if (c.PlcTagStep06 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep06))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep06));
                             }
                             else if (c.PlcTagStep07 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep07))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep07));
                             }
                             else if (c.PlcTagStep08 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep08))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep08));
                             }
                             else if (c.PlcTagStep09 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep09))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep09));
                             }
                             else if (c.PlcTagStep10 != null)
                             {
-                                if (myInstance.ReadBool(c.PlcTagStep01))
+                                if (myInstance.ReadBool(c.PlcTagStep10))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep10));
                             }
                         }
+                        else if (crtl is cInput)
+                        {
+                            cInput c = (cInput)crtl;
 
-                        #endregion
+                            if (c.PlcOutputTag != null)
+                                if (!String.IsNullOrEmpty(c.PlcOutputTag))
+                                {
+                                    foreach (STagInfo s in myData)
+                                    {
+                                        if (s.Name == c.PlcOutputTag)
+                                        {
+                                            if (s.DataType == EDataType.Word)
+                                                myInstance.WriteUInt16(c.PlcOutputTag, (UInt16)c.PlcOutputValue);
+                                            if (s.DataType == EDataType.Int)
+                                                myInstance.WriteInt16(c.PlcOutputTag, (Int16)c.PlcOutputValue);
+                                        }
+                                    }
+                                }
+                        }
                     }
+
+                    #endregion
                 }
                 catch (Exception ex)
                 {

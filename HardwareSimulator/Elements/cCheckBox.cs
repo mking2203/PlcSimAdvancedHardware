@@ -34,9 +34,7 @@ namespace PlcSimAdvSimulator
             }
         }
 
-        public string PlcButtonTag { get; set; }
-
-        // output the signal
+        // set / output the signal
         public string PlcOutputTag { get; set; }
         // output the invert signal
         public string PlcnOutputTag { get; set; }

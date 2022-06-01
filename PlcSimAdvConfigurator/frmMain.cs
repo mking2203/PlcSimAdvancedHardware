@@ -151,6 +151,7 @@ namespace PlcSimAdvConfigurator
         #endregion
 
         #region new controls
+
         private void btnButton_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -175,7 +176,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnToggleButton_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -200,7 +200,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnButtonLamp_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -225,7 +224,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnLamp_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -250,7 +248,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnCheckBox_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -277,7 +274,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnPulse_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -302,7 +298,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnTrackBar_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -327,7 +322,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnLabel_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -354,7 +348,6 @@ namespace PlcSimAdvConfigurator
                 AddControl((Control)t);
             }
         }
-
         private void btnIntregrator_Click(object sender, EventArgs e)
         {
             if (myList != null)
@@ -362,7 +355,7 @@ namespace PlcSimAdvConfigurator
                 Dictionary<string, string> newItem = Defination.getIntregator();
                 cIntregrator t = new cIntregrator();
 
-                t.Text = "neuer Label";
+                t.Text = "neuer Intregrator";
                 newItem["Text"] = t.Text;
 
                 t.Size = GetSize(newItem["Size"]);
@@ -378,8 +371,59 @@ namespace PlcSimAdvConfigurator
                     t.PlcSetValue = int.Parse(newItem["SetPoint"]);
                 if (!String.IsNullOrEmpty((string)newItem["Target"]))
                     t.PlcTargetValue = int.Parse(newItem["Target"]);
+
                 // force output
                 t.PlcTicks = 0;
+
+                myList.Add(newItem);
+
+                AddControl((Control)t);
+            }
+        }
+        private void btnTableSet_Click(object sender, EventArgs e)
+        {
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getTableSet();
+                cTableSet t = new cTableSet();
+
+                t.Text = "neuer TableSet";
+                newItem["Text"] = t.Text;
+
+                t.Size = GetSize(newItem["Size"]);
+
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
+
+                t.BorderStyle = BorderStyle.FixedSingle;
+
+                myList.Add(newItem);
+
+                AddControl((Control)t);
+            }
+        }
+        private void btnInput_Click(object sender, EventArgs e)
+        {
+            if (myList != null)
+            {
+                Dictionary<string, string> newItem = Defination.getInput();
+                cInput t = new cInput();
+
+                t.Text = "neue Eingabe";
+                newItem["Text"] = t.Text;
+
+                t.Size = GetSize(newItem["Size"]);
+
+                t.Location = new Point(snap, snap);
+                newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
+
+                t.Tag = controlID;
+                newItem["ID"] = controlID;
+                IncControlID();
 
                 myList.Add(newItem);
 
@@ -550,6 +594,8 @@ namespace PlcSimAdvConfigurator
                         t.MouseUp += CrtlMouseUp;
 
                         t.Tag = item["ID"];
+
+                        t.AutoCheck = false;
 
                         pMain.Controls.Add(t);
                     }
@@ -731,7 +777,8 @@ namespace PlcSimAdvConfigurator
                     (key == "Output_Q") ||
                     (key == "Output_nQ") ||
                     (key == "Start") ||
-                    (key == "Set"))
+                    (key == "Set") ||
+                    (key.StartsWith("Step")))
                 {
                     if (myInstance != null)
                     {
@@ -770,13 +817,14 @@ namespace PlcSimAdvConfigurator
                         }
                     }
                 }
-                if (key == "Value")
+                if ((key == "Value") ||
+                    (key.StartsWith("Value")))
                 {
                     if (myInstance != null)
                     {
                         Dictionary<string, string> item = GetItemByID(actID);
 
-                        if (item["Control"] != "cTrackBar")
+                        if ((item["Control"] != "cTrackBar") && (item["Control"] != "cTableSet"))
                         {
                             bool set = false;
                             bool.TryParse(val, out set);
@@ -915,6 +963,5 @@ namespace PlcSimAdvConfigurator
                 Settings.Default.Save();
             }
         }
-
     }
 }

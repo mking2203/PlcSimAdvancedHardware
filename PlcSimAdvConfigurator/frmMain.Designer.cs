@@ -57,6 +57,8 @@ namespace PlcSimAdvConfigurator
             this.btnTrackBar = new System.Windows.Forms.Button();
             this.btnLabel = new System.Windows.Forms.Button();
             this.btnIntregrator = new System.Windows.Forms.Button();
+            this.btnInput = new System.Windows.Forms.Button();
+            this.btnTableSet = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -143,6 +145,7 @@ namespace PlcSimAdvConfigurator
             // 
             this.dataProperties.AllowUserToAddRows = false;
             this.dataProperties.AllowUserToDeleteRows = false;
+            this.dataProperties.AllowUserToResizeRows = false;
             this.dataProperties.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataProperties.Location = new System.Drawing.Point(1013, 33);
             this.dataProperties.MultiSelect = false;
@@ -294,11 +297,33 @@ namespace PlcSimAdvConfigurator
             this.btnIntregrator.UseVisualStyleBackColor = true;
             this.btnIntregrator.Click += new System.EventHandler(this.btnIntregrator_Click);
             // 
+            // btnInput
+            // 
+            this.btnInput.Location = new System.Drawing.Point(12, 519);
+            this.btnInput.Name = "btnInput";
+            this.btnInput.Size = new System.Drawing.Size(180, 40);
+            this.btnInput.TabIndex = 17;
+            this.btnInput.Text = "Input";
+            this.btnInput.UseVisualStyleBackColor = true;
+            this.btnInput.Click += new System.EventHandler(this.btnInput_Click);
+            // 
+            // btnTableSet
+            // 
+            this.btnTableSet.Location = new System.Drawing.Point(12, 473);
+            this.btnTableSet.Name = "btnTableSet";
+            this.btnTableSet.Size = new System.Drawing.Size(180, 40);
+            this.btnTableSet.TabIndex = 18;
+            this.btnTableSet.Text = "TableSet";
+            this.btnTableSet.UseVisualStyleBackColor = true;
+            this.btnTableSet.Click += new System.EventHandler(this.btnTableSet_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1234, 661);
+            this.Controls.Add(this.btnTableSet);
+            this.Controls.Add(this.btnInput);
             this.Controls.Add(this.btnIntregrator);
             this.Controls.Add(this.btnLabel);
             this.Controls.Add(this.btnTrackBar);
@@ -364,6 +389,8 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.Button btnTrackBar;
         private System.Windows.Forms.Button btnLabel;
         private System.Windows.Forms.Button btnIntregrator;
+        private System.Windows.Forms.Button btnInput;
+        private System.Windows.Forms.Button btnTableSet;
     }
 }
 

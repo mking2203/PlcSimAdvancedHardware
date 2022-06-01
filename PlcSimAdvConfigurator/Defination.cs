@@ -163,6 +163,55 @@ namespace PlcSimAdvConfigurator
 
             return result;
         }
+        public static Dictionary<string, string> getTableSet()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>
+            {
+                { "ID" , "" },
+                { "Control", "cTableSet" },
+                { "Text", "Intregrator" },
+                { "Size", "100x100" },
+                { "Location", "20,20" },
+                { "Output", "" },
+                { "Value" , "" },
+                { "Step01","" },
+                { "Value01", "" },
+                { "Step02","" },
+                { "Value02", "" },
+                { "Step03","" },
+                { "Value03", "" },
+                { "Step04","" },
+                { "Value04", "" },
+                { "Step05","" },
+                { "Value05", "" },
+                { "Step06","" },
+                { "Value06", "" },
+                { "Step07","" },
+                { "Value07", "" },
+                { "Step08","" },
+                { "Value08", "" },
+                { "Step09","" },
+                { "Value09", "" },
+                { "Step10","" },
+                { "Value10", "" }
+            };
 
+            return result;
+        }
+        public static Dictionary<string, string> getInput()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>
+            {
+                { "ID" , "" },
+                { "Control", "cInput" },
+                { "Text", "Input" },
+                { "Size", "100x100" },
+                { "Location", "20,20" },
+                { "Output", "" },
+                { "Value", "" }
+            };
+
+            return result;
+        }
     }
 }

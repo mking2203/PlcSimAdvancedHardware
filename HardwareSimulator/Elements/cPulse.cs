@@ -56,7 +56,7 @@ namespace PlcSimAdvSimulator
         public string PlcnOutputTag { get; set; }
 
         public string caption;
-        public string Caption
+        override public string Text
         {
             get
             {

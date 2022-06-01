@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace PlcSimAdvSimulator
+namespace PlcSimAdvConfigurator
 {
     public partial class cTableSet : Label
     {

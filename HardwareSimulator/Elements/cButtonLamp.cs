@@ -20,14 +20,11 @@ namespace PlcSimAdvSimulator
         }
 
         public bool PlcButtonValue { get; set; }
-        public string PlcButtonTag { get; set; }
 
         // output the signal
         public string PlcOutputTag { get; set; }
         // output the invert signal
         public string PlcnOutputTag { get; set; }
-
-        public string PlcOption { get; set; }
 
         private bool plcLampValue;
         public bool PlcLampValue
@@ -70,33 +67,12 @@ namespace PlcSimAdvSimulator
 
         private void cButton_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!String.IsNullOrEmpty(PlcOption))
-            {
-                if (!PlcOption.Contains("NC"))
-                    PlcButtonValue = true;
-                else
-                    PlcButtonValue = false;
-            }
-            else
-            {
-                PlcButtonValue = true;
-            }
-
+            PlcButtonValue = true;
         }
 
         private void cButton_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!String.IsNullOrEmpty(PlcOption))
-            {
-                if (!PlcOption.Contains("NC"))
-                    PlcButtonValue = false;
-                else
-                    PlcButtonValue = true;
-            }
-            else
-            {
-                PlcButtonValue = false;
-            }
+            PlcButtonValue = false;
         }
 
     }
