@@ -33,6 +33,8 @@ namespace PlcSimAdvConfigurator
         private IInstance myInstance;
         private STagInfo[] VarData;
 
+        private string fileName = string.Empty;
+
         public frmMain()
         {
             InitializeComponent();
@@ -511,6 +513,8 @@ namespace PlcSimAdvConfigurator
         {
             if (File.Exists(FileName))
             {
+                fileName = FileName;
+
                 string json = File.ReadAllText(FileName);
                 myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
 
@@ -521,6 +525,12 @@ namespace PlcSimAdvConfigurator
                         plcName = item["PLC"];
                         controlID = item["ID"];
                         this.Text = "Actual PLC: " + plcName;
+
+                        if(fileName != string.Empty)
+                        {
+                            this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                        }
+
                     }
                     else if (item["Control"] == "cButton")
                     {
@@ -886,7 +896,7 @@ namespace PlcSimAdvConfigurator
 
         private void mnuNew_Click(object sender, EventArgs e)
         {
-
+            fileName = string.Empty;
             string input = Interaction.InputBox("Enter PLC name:", "New project", "");
 
             if (input.Length > 0)
@@ -902,8 +912,10 @@ namespace PlcSimAdvConfigurator
                 controlID = "1";
 
                 myList.Add(item);
-
                 pMain.Controls.Clear();
+
+                this.Text = "Actual PLC: " + plcName;
+                fileName = string.Empty;
             }
 
             ConnectPLC();
@@ -916,19 +928,18 @@ namespace PlcSimAdvConfigurator
 
         private void mnuSave_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.Title = "Save configuration";
-            saveFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.FileName = plcName + ".json";
-
-            DialogResult res = saveFileDialog1.ShowDialog();
-            if (res == DialogResult.OK)
+            if(fileName != string.Empty)
             {
-                SaveFile(saveFileDialog1.FileName);
+                SaveFile(fileName);
 
-                Settings.Default["LastConfigFile"] = saveFileDialog1.FileName;
+                Settings.Default["LastConfigFile"] = fileName;
                 Settings.Default.Save();
+
+                MessageBox.Show("File saved");
+            }
+            else
+            {
+                mnuSaveAs_Click(sender, e);
             }
         }
 
@@ -961,6 +972,29 @@ namespace PlcSimAdvConfigurator
 
                 Settings.Default["LastConfigFile"] = openFileDialog1.FileName;
                 Settings.Default.Save();
+
+                this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+            }
+        }
+
+        private void mnuSaveAs_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Title = "Save configuration";
+            saveFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.FileName = plcName + ".json";
+
+            DialogResult res = saveFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                SaveFile(saveFileDialog1.FileName);
+
+                Settings.Default["LastConfigFile"] = saveFileDialog1.FileName;
+                Settings.Default.Save();
+
+                fileName = saveFileDialog1.FileName;
+                this.Text = "Actual PLC: " + plcName + " File: " + fileName;
             }
         }
     }

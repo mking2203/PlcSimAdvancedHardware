@@ -66,7 +66,11 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["ActiveColor"]))
                                 t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
 
-                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                        if (item.ContainsKey("Output_Q"))
+                            t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                        else if (item.ContainsKey("Output_nQ"))
+                            t.ToolTip = "OUT: " + (string)item["Output_nQ"];
+
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cToggleButton")
@@ -91,7 +95,11 @@ namespace PlcSimAdvSimulator
                             if (!String.IsNullOrEmpty(item["Value"]))
                                 t.PlcButtonValue = bool.Parse(item["Value"]);
 
-                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                        if (item.ContainsKey("Output_Q"))
+                            t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                        else if (item.ContainsKey("Output_nQ"))
+                            t.ToolTip = "OUT: " + (string)item["Output_nQ"];
+
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cButtonLamp")
@@ -144,6 +152,7 @@ namespace PlcSimAdvSimulator
                             t.PlcLampTag = item["Lamp"];
 
                         t.ToolTip = "OUT: " + (string)item["Lamp"];
+
                         this.Controls.Add(t);
                     }
                     else if (item["Control"] == "cCheckBox")
