@@ -91,12 +91,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Elements\cButtonLamp.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Elements\cButtonLamp.Designer.cs">
-      <DependentUpon>cButtonLamp.cs</DependentUpon>
-    </Compile>
     <Compile Include="Elements\cCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -133,12 +127,6 @@
     <Compile Include="Elements\cPulse.Designer.cs">
       <DependentUpon>cPulse.cs</DependentUpon>
     </Compile>
-    <Compile Include="Elements\cToggleButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Elements\cToggleButton.Designer.cs">
-      <DependentUpon>cToggleButton.cs</DependentUpon>
-    </Compile>
     <Compile Include="Elements\cButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -167,9 +155,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Elements\cPulse.resx">
       <DependentUpon>cPulse.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Elements\cToggleButton.resx">
-      <DependentUpon>cToggleButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Elements\cButton.resx">
       <DependentUpon>cButton.cs</DependentUpon>

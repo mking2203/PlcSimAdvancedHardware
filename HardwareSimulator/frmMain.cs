@@ -51,6 +51,8 @@ namespace PlcSimAdvSimulator
                     else if (item["Control"] == "cButton")
                     {
                         cButton t = new cButton();
+                        t.ButtonMode = cButton.ButtonModes.Button;
+
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
@@ -75,7 +77,9 @@ namespace PlcSimAdvSimulator
                     }
                     else if (item["Control"] == "cToggleButton")
                     {
-                        cToggleButton t = new cToggleButton();
+                        cButton t = new cButton();
+                        t.ButtonMode = cButton.ButtonModes.ToggleButton;
+
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
@@ -104,7 +108,9 @@ namespace PlcSimAdvSimulator
                     }
                     else if (item["Control"] == "cButtonLamp")
                     {
-                        cButtonLamp t = new cButtonLamp();
+                        cButton t = new cButton();
+                        t.ButtonMode = cButton.ButtonModes.Button;
+
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
@@ -416,14 +422,12 @@ namespace PlcSimAdvSimulator
                                 myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
                             if (!String.IsNullOrEmpty(c.PlcnOutputTag))
                                 myInstance.WriteBool(c.PlcnOutputTag, !c.PlcButtonValue);
-                        }
-                        else if (crtl is cToggleButton)
-                        {
-                            cToggleButton c = (cToggleButton)crtl;
-                            if (!String.IsNullOrEmpty(c.PlcOutputTag))
-                                myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
-                            if (!String.IsNullOrEmpty(c.PlcnOutputTag))
-                                myInstance.WriteBool(c.PlcnOutputTag, !c.PlcButtonValue);
+
+                            // output lamp
+                            if (!String.IsNullOrEmpty(c.PlcLampTag))
+                            {
+                                c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
+                            }
                         }
                         else if (crtl is cCheckBox)
                         {
@@ -442,25 +446,6 @@ namespace PlcSimAdvSimulator
                                 myInstance.WriteBool(c.PlcOutputTag, c.PlcLampValue);
                             if (!String.IsNullOrEmpty(c.PlcnOutputTag))
                                 myInstance.WriteBool(c.PlcnOutputTag, !c.PlcLampValue);
-                        }
-                        else if (crtl is cButtonLamp)
-                        {
-                            cButtonLamp c = (cButtonLamp)crtl;
-                            // input
-                            if (c.PlcOutputTag != null)
-                            {
-                                myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
-                            }
-                            // output
-                            if (!String.IsNullOrEmpty(c.PlcLampTag))
-                            {
-                                c.PlcLampValue = myInstance.ReadBool(c.PlcLampTag);
-                            }
-
-                            if (!String.IsNullOrEmpty(c.PlcOutputTag))
-                                myInstance.WriteBool(c.PlcOutputTag, c.PlcButtonValue);
-                            if (!String.IsNullOrEmpty(c.PlcnOutputTag))
-                                myInstance.WriteBool(c.PlcnOutputTag, !c.PlcButtonValue);
                         }
                         else if (crtl is cPulse)
                         {
