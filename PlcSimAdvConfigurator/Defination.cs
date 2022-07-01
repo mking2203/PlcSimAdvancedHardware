@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlcSimAdvConfigurator
 {
-    class Defination
+    public class Defination
     {
         public static Dictionary<string, string> getButton()
         {

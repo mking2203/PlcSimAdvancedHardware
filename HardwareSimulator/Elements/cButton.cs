@@ -14,6 +14,7 @@ namespace PlcSimAdvSimulator
 {
     public partial class cButton : Button
     {
+        // the button can act in normal or toggle mode
         public enum ButtonModes
         {
             Button = 1,
@@ -40,11 +41,12 @@ namespace PlcSimAdvSimulator
             }
         }
 
-        // output the signal
+        // output the button signal
         public string PlcOutputTag { get; set; }
-        // output the invert signal
+        // output the invert button signal
         public string PlcnOutputTag { get; set; }
 
+        // holds the lamp value if used, otherwise the state is displayed
         private bool plcLampValue = false;
         public bool PlcLampValue
         {
@@ -60,7 +62,7 @@ namespace PlcSimAdvSimulator
         }
         public string PlcLampTag { get; set; }
 
-
+        // default color for the active state
         Color plcActiveColor = Color.ForestGreen;
         [Description("Represents the ON color off the button"), Category("Design")]
         public Color PlcActiveColor
@@ -75,8 +77,8 @@ namespace PlcSimAdvSimulator
             }
         }
 
+        // selector for the lamp - lamp or state is displayed
         private ButtonModes buttonMode = ButtonModes.Button;
-
         public ButtonModes ButtonMode
         {
             get
@@ -90,7 +92,7 @@ namespace PlcSimAdvSimulator
             }
         }
 
-
+        // mouse events
         private void cButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (buttonMode == ButtonModes.Button)
@@ -116,6 +118,7 @@ namespace PlcSimAdvSimulator
             UpdateColor();
         }
 
+        // update the backcolor as lamp or state
         private void UpdateColor()
         {
             if (PlcLampTag == null)

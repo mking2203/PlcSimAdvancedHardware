@@ -526,7 +526,7 @@ namespace PlcSimAdvConfigurator
                         controlID = item["ID"];
                         this.Text = "Actual PLC: " + plcName;
 
-                        if(fileName != string.Empty)
+                        if (fileName != string.Empty)
                         {
                             this.Text = "Actual PLC: " + plcName + " File: " + fileName;
                         }
@@ -681,6 +681,31 @@ namespace PlcSimAdvConfigurator
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
+
+                        t.MouseDown += CrtlMouseDown;
+                        t.MouseMove += CrtlMouseMove;
+                        t.MouseUp += CrtlMouseUp;
+
+                        t.Tag = item["ID"];
+
+                        pMain.Controls.Add(t);
+                    }
+                    else if (item["Control"] == "cInput")
+                    {
+                        cInput t = new cInput();
+                        t.Text = item["Text"];
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        if (item.ContainsKey("Output"))
+                            if (!String.IsNullOrEmpty(item["Output"]))
+                                t.PlcOutputTag = item["Output"];
+
+                        if (item.ContainsKey("Value"))
+                            if (!String.IsNullOrEmpty(item["Value"]))
+                                t.PlcOutputValue = Int16.Parse(item["Value"]);
+
+                        t.ToolTip = "OUT: " + (string)item["Output"];
 
                         t.MouseDown += CrtlMouseDown;
                         t.MouseMove += CrtlMouseMove;
@@ -928,7 +953,7 @@ namespace PlcSimAdvConfigurator
 
         private void mnuSave_Click(object sender, EventArgs e)
         {
-            if(fileName != string.Empty)
+            if (fileName != string.Empty)
             {
                 SaveFile(fileName);
 

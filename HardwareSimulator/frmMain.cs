@@ -73,7 +73,7 @@ namespace PlcSimAdvSimulator
                         else if (item.ContainsKey("Output_nQ"))
                             t.ToolTip = "OUT: " + (string)item["Output_nQ"];
 
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cToggleButton")
                     {
@@ -104,7 +104,7 @@ namespace PlcSimAdvSimulator
                         else if (item.ContainsKey("Output_nQ"))
                             t.ToolTip = "OUT: " + (string)item["Output_nQ"];
 
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cButtonLamp")
                     {
@@ -131,7 +131,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
 
                         t.ToolTip = "IN: " + (string)item["Lamp"] + " - OUT: " + (string)item["Output_Q"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cLamp")
                     {
@@ -159,7 +159,7 @@ namespace PlcSimAdvSimulator
 
                         t.ToolTip = "OUT: " + (string)item["Lamp"];
 
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cCheckBox")
                     {
@@ -180,7 +180,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcButtonValue = bool.Parse(item["Value"]);
 
                         t.ToolTip = "OUT: " + (string)item["Output_Q"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cPulse")
                     {
@@ -201,7 +201,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcTimeMS = Int16.Parse(item["TimeMS"]);
 
                         t.ToolTip = "OUT: " + (string)item["Output_Q"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cTrackBar")
                     {
@@ -226,7 +226,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcOutputValue = Int16.Parse(item["Value"]);
 
                         t.ToolTip = "OUT: " + (string)item["Output"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cLabel")
                     {
@@ -238,7 +238,7 @@ namespace PlcSimAdvSimulator
                         if (item.ContainsKey("FontSize"))
                             t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
 
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cIntregrator")
                     {
@@ -273,7 +273,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcStartTag = item["Start"];
 
                         t.ToolTip = "OUT: " + item["Text"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cTableSet")
                     {
@@ -327,7 +327,7 @@ namespace PlcSimAdvSimulator
                             t.PlcValueStep01 = Int16.Parse(item["Value10"]);
 
                         t.ToolTip = "OUT: " + item["Text"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else if (item["Control"] == "cInput")
                     {
@@ -345,7 +345,7 @@ namespace PlcSimAdvSimulator
                                 t.PlcOutputValue = Int16.Parse(item["Value"]);
 
                         t.ToolTip = "OUT: " + (string)item["Output"];
-                        this.Controls.Add(t);
+                        pMain.Controls.Add(t);
                     }
                     else
                     {
@@ -378,6 +378,7 @@ namespace PlcSimAdvSimulator
                 // get all vars for test
                 Console.WriteLine("Get tag info's");
                 myData = myInstance.TagInfos;
+                txtVars.Text = myData.Length.ToString() + " variables";
 
                 Console.WriteLine("End synchronization - start simulator");
                 //Start a thread to synchronize feedbacks inputs 
@@ -411,7 +412,7 @@ namespace PlcSimAdvSimulator
                 try
                 {
                     // enumerate through controls
-                    foreach (Control crtl in this.Controls)
+                    foreach (Control crtl in pMain.Controls)
                     {
                         #region work on controls
 
@@ -584,14 +585,11 @@ namespace PlcSimAdvSimulator
                 }
                 catch (Exception ex)
                 {
-
                     Console.WriteLine("Exception: " + ex.Message);
 
                     Console.WriteLine("Restart simulation");
                     myInstance = SimulationRuntimeManager.CreateInterface(PlcName);
                     myInstance.UpdateTagList();
-
-
                 }
             }
         }
@@ -608,6 +606,11 @@ namespace PlcSimAdvSimulator
             // display system time
             DateTime dt = new DateTime(aktTicks);
             txtTime.Text = "Sytemzeit: " + dt.ToLongTimeString();
+        }
+
+        private void mnuExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
