@@ -42,7 +42,9 @@ namespace PlcSimAdvConfigurator
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,8 +61,6 @@ namespace PlcSimAdvConfigurator
             this.btnIntregrator = new System.Windows.Forms.Button();
             this.btnInput = new System.Windows.Forms.Button();
             this.btnTableSet = new System.Windows.Forms.Button();
-            this.mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -186,33 +186,45 @@ namespace PlcSimAdvConfigurator
             // mnuOpen
             // 
             this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.Size = new System.Drawing.Size(180, 22);
+            this.mnuOpen.Size = new System.Drawing.Size(111, 22);
             this.mnuOpen.Text = "Open";
             this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
             // mnuNew
             // 
             this.mnuNew.Name = "mnuNew";
-            this.mnuNew.Size = new System.Drawing.Size(180, 22);
+            this.mnuNew.Size = new System.Drawing.Size(111, 22);
             this.mnuNew.Text = "New";
             this.mnuNew.Click += new System.EventHandler(this.mnuNew_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(108, 6);
             // 
             // mnuSave
             // 
             this.mnuSave.Name = "mnuSave";
-            this.mnuSave.Size = new System.Drawing.Size(180, 22);
+            this.mnuSave.Size = new System.Drawing.Size(111, 22);
             this.mnuSave.Text = "Save";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
+            // 
+            // mnuSaveAs
+            // 
+            this.mnuSaveAs.Name = "mnuSaveAs";
+            this.mnuSaveAs.Size = new System.Drawing.Size(111, 22);
+            this.mnuSaveAs.Text = "SaveAs";
+            this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(108, 6);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(180, 22);
+            this.mnuExit.Size = new System.Drawing.Size(111, 22);
             this.mnuExit.Text = "Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -320,18 +332,6 @@ namespace PlcSimAdvConfigurator
             this.btnTableSet.Text = "TableSet";
             this.btnTableSet.UseVisualStyleBackColor = true;
             this.btnTableSet.Click += new System.EventHandler(this.btnTableSet_Click);
-            // 
-            // mnuSaveAs
-            // 
-            this.mnuSaveAs.Name = "mnuSaveAs";
-            this.mnuSaveAs.Size = new System.Drawing.Size(180, 22);
-            this.mnuSaveAs.Text = "SaveAs";
-            this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // frmMain
             // 

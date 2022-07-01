@@ -120,6 +120,12 @@ namespace PlcSimAdvConfigurator
         {
             if (e.Button == MouseButtons.Left)
             {
+
+                foreach (Control crtl in pMain.Controls)
+                {
+                    crtl.BackColor = pMain.BackColor;
+                }
+
                 Control b = (Control)sender;
                 controlPos = b.Location;
                 mousePos = MousePosition;
@@ -144,6 +150,7 @@ namespace PlcSimAdvConfigurator
 
                 dataProperties.DataSource = dt;
 
+                b.BackColor = Color.LightGray;
                 b.BringToFront();
 
                 move = true;
@@ -520,6 +527,19 @@ namespace PlcSimAdvConfigurator
 
                 foreach (Dictionary<string, string> item in myList)
                 {
+                    if (VarData != null)
+                    {
+                        if (item.ContainsKey("Output"))
+                        {
+                            bool result = checkVar(item["Output"]);
+                            if (!result)
+                            {
+                                Console.WriteLine("Unknown var: " + item["Output"]);
+                                item["Output"] = "";
+                            }
+                        }
+                    }
+
                     if (item["Control"] == "Settings")
                     {
                         plcName = item["PLC"];
@@ -529,6 +549,7 @@ namespace PlcSimAdvConfigurator
                         if (fileName != string.Empty)
                         {
                             this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                            ConnectPLC();
                         }
 
                     }
@@ -716,8 +737,6 @@ namespace PlcSimAdvConfigurator
                         pMain.Controls.Add(t);
                     }
                 }
-
-                ConnectPLC();
             }
         }
 
@@ -1021,6 +1040,16 @@ namespace PlcSimAdvConfigurator
                 fileName = saveFileDialog1.FileName;
                 this.Text = "Actual PLC: " + plcName + " File: " + fileName;
             }
+        }
+
+        private bool checkVar(string var)
+        {
+            foreach (STagInfo info in VarData)
+            {
+                if (info.Name == var)
+                    return true;
+            }
+            return false;
         }
     }
 }
