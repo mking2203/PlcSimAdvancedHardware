@@ -1,4 +1,9 @@
-﻿using System;
+﻿//
+// PlcSimAdvanced Hardware Simulation Configurator (Siemens TIA Portal)
+// Mark König, 05/2022
+//
+
+using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -24,7 +29,7 @@ namespace PlcSimAdvConfigurator
         // move is active
         bool move;
 
-        List<Dictionary<string, string>> myList;
+        List<Dictionary<string, string>> myList = new List<Dictionary<string, string>>();
         string controlID = string.Empty;
         string plcName = string.Empty;
         string actID = string.Empty;
@@ -33,6 +38,7 @@ namespace PlcSimAdvConfigurator
         private IInstance myInstance;
         private STagInfo[] VarData;
 
+        // actual fileName
         private string fileName = string.Empty;
 
         public frmMain()
@@ -40,14 +46,419 @@ namespace PlcSimAdvConfigurator
             InitializeComponent();
         }
 
-        private Size GetSize(string value)
+        private void FrmMain_Load(object sender, EventArgs e)
         {
-            return new System.Drawing.Size(Convert.ToInt16(value.Split('x')[0]), Convert.ToInt16(value.Split('x')[1]));
+            lstEvents.Items.Add("Start PlcSimAdv Hardware Configurator");
+
+            // load last file if possible
+            string lastFile = (Settings.Default["LastConfigFile"].ToString());
+            if (!String.IsNullOrEmpty(lastFile))
+            {
+                TryLoadJson(lastFile);
+            }
         }
-        private Point GetLocation(string value)
+
+        private int TryLoadJson(string fileName)
         {
-            return new System.Drawing.Point(Convert.ToInt16(value.Split(',')[0]), Convert.ToInt16(value.Split(',')[1]));
+            lstEvents.Items.Add("Try to load last file: " + fileName);
+
+            int result = LoadJson(fileName);
+            switch (result)
+            {
+                case 1:
+                    lstEvents.Items.Add("Load file OK");
+                    break;
+                case -1:
+                    lstEvents.Items.Add("Last File not exists");
+                    break;
+                default:
+                    lstEvents.Items.Add("Load file error: " + result.ToString());
+                    break;
+            }
+
+            return result;
         }
+
+        private int LoadJson(string FileName)
+        {
+            if (File.Exists(FileName))
+            {
+                fileName = FileName;
+
+                try
+                {
+                    string json = File.ReadAllText(FileName);
+                    myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+
+                    foreach (Dictionary<string, string> item in myList)
+                    {
+                        if (VarData != null)
+                        {
+                            if (item.ContainsKey("Output"))
+                            {
+                                bool result = checkVar(item["Output"]);
+                                if (!result)
+                                {
+                                    lstEvents.Items.Add("Unknown var: " + item["Output"]);
+                                    item["Output"] = "";
+                                }
+                            }
+                        }
+
+                        if (item["Control"] == "Settings")
+                        {
+                            plcName = item["PLC"];
+                            controlID = item["ID"];
+                            this.Text = "Actual PLC: " + plcName;
+                        }
+                        else if (item["Control"] == "cButton")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cToggleButton")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cButtonLamp")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cLamp")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cCheckBox")
+                        {
+                            CheckBox t = new CheckBox();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            t.AutoCheck = false;
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cPulse")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cTrackBar")
+                        {
+                            cTrackBar t = new cTrackBar();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.ModMouseDown += CrtlMouseDown;
+                            t.ModMouseMove += CrtlMouseMove;
+                            t.ModMouseUp += CrtlMouseUp;
+
+                            //t.MouseDown += CrtlMouseDown;
+                            //t.MouseMove += CrtlMouseMove;
+                            //t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cLabel")
+                        {
+                            Label t = new Label();
+                            t.Text = item["Text"];
+                            t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+                            t.BorderStyle = BorderStyle.FixedSingle;
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cIntregrator")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cTableSet")
+                        {
+                            Button t = new Button();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                        else if (item["Control"] == "cInput")
+                        {
+                            cInput t = new cInput();
+                            t.Text = item["Text"];
+                            t.Size = GetSize(item["Size"]);
+                            t.Location = GetLocation(item["Location"]);
+
+                            if (item.ContainsKey("Output"))
+                                if (!String.IsNullOrEmpty(item["Output"]))
+                                    t.PlcOutputTag = item["Output"];
+
+                            if (item.ContainsKey("Value"))
+                                if (!String.IsNullOrEmpty(item["Value"]))
+                                    t.PlcOutputValue = Int16.Parse(item["Value"]);
+
+                            t.ToolTip = "OUT: " + (string)item["Output"];
+
+                            t.MouseDown += CrtlMouseDown;
+                            t.MouseMove += CrtlMouseMove;
+                            t.MouseUp += CrtlMouseUp;
+
+                            t.Tag = item["ID"];
+
+                            pMain.Controls.Add(t);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lstEvents.Items.Add("Error load JSON: " + ex.Message);
+                    return -1000;
+                }
+
+                if (fileName != string.Empty)
+                {
+                    this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                    ConnectPLC();
+                }
+
+                return 1;
+            }
+            else
+                return -1;
+        }
+
+        private void SaveJson(string FileName)
+        {
+            var options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+
+            string json = JsonSerializer.Serialize<List<Dictionary<string, string>>>(myList, options);
+            File.WriteAllText(FileName, json, System.Text.Encoding.UTF8);
+        }
+
+        private void ConnectPLC()
+        {
+            txtSimulation.Text = "Simulation: not connected";
+            VarData = null;
+
+            try
+            {
+                myInstance = SimulationRuntimeManager.CreateInterface(plcName);
+
+                txtSimulation.Text = "Simulation: connected";
+
+                //Update tag list from API
+                myInstance.UpdateTagList();
+
+                txtSimulation.Text = "Simulation: update tags";
+
+                // get all vars
+                VarData = myInstance.TagInfos;
+
+                txtSimulation.Text = "Simulation: ready";
+            }
+            catch (Exception ex)
+            {
+                lstEvents.Items.Add("Could not start PLC instance " + plcName);
+                MessageBox.Show("Could not start PLC instance " + plcName);
+
+                txtSimulation.Text = "Simulation: error ->" + ex.Message;
+            }
+        }
+
+        #region menu items
+
+        private void mnuExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void mnuNew_Click(object sender, EventArgs e)
+        {
+            fileName = string.Empty;
+            string input = Interaction.InputBox("Enter PLC name:", "New project", "");
+
+            if (input.Length > 0)
+            {
+                myList.Clear();
+
+                Dictionary<string, string> item = new Dictionary<string, string>();
+                item.Add("Control", "Settings");
+                item.Add("PLC", input);
+                item.Add("ID", "1");
+
+                plcName = input;
+                controlID = "1";
+
+                myList.Add(item);
+                pMain.Controls.Clear();
+
+                this.Text = "Actual PLC: " + plcName;
+                fileName = string.Empty;
+            }
+
+            ConnectPLC();
+        }
+
+        private void mnuReload_Click(object sender, EventArgs e)
+        {
+            ConnectPLC();
+        }
+
+        private void mnuSave_Click(object sender, EventArgs e)
+        {
+            if (fileName != string.Empty)
+            {
+                SaveJson(fileName);
+
+                Settings.Default["LastConfigFile"] = fileName;
+                Settings.Default.Save();
+
+                MessageBox.Show("File saved");
+            }
+            else
+            {
+                mnuSaveAs_Click(sender, e);
+            }
+        }
+
+        private void mnuOpen_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Title = "Open configuration";
+            openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.FileName = plcName + ".json";
+
+            DialogResult res = openFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                pMain.Controls.Clear();
+                if (myList != null)
+                    myList.Clear();
+
+                int result = TryLoadJson(openFileDialog1.FileName);
+
+                if (result == 1)
+                {
+                    Settings.Default["LastConfigFile"] = openFileDialog1.FileName;
+                    Settings.Default.Save();
+
+                    this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                }
+            }
+        }
+
+        private void mnuSaveAs_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Title = "Save configuration";
+            saveFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+            saveFileDialog1.FileName = plcName + ".json";
+
+            DialogResult res = saveFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                SaveJson(saveFileDialog1.FileName);
+
+                Settings.Default["LastConfigFile"] = saveFileDialog1.FileName;
+                Settings.Default.Save();
+
+                fileName = saveFileDialog1.FileName;
+                this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+            }
+        }
+
+        #endregion
 
         #region mouse events 
 
@@ -449,6 +860,15 @@ namespace PlcSimAdvConfigurator
             myList[0]["ID"] = controlID;
         }
 
+        private Size GetSize(string value)
+        {
+            return new Size(Convert.ToInt16(value.Split('x')[0]), Convert.ToInt16(value.Split('x')[1]));
+        }
+        private Point GetLocation(string value)
+        {
+            return new Point(Convert.ToInt16(value.Split(',')[0]), Convert.ToInt16(value.Split(',')[1]));
+        }
+
         private void AddControl(Control crtl)
         {
             crtl.MouseDown += CrtlMouseDown;
@@ -459,7 +879,7 @@ namespace PlcSimAdvConfigurator
             crtl.BringToFront();
         }
 
-        private void BtnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click(object sender, EventArgs e)
         {
             if (actID != string.Empty)
             {
@@ -504,275 +924,7 @@ namespace PlcSimAdvConfigurator
                 }
             }
         }
-
-        private void FrmMain_Load(object sender, EventArgs e)
-        {
-            string lastFile = (Settings.Default["LastConfigFile"].ToString());
-            if (!String.IsNullOrEmpty(lastFile))
-            {
-                LoadJson(lastFile);
-            }
-
-            //LoadJson(Application.StartupPath + "\\elements.json");
-        }
-
-        private void LoadJson(string FileName)
-        {
-            if (File.Exists(FileName))
-            {
-                fileName = FileName;
-
-                string json = File.ReadAllText(FileName);
-                myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
-
-                foreach (Dictionary<string, string> item in myList)
-                {
-                    if (VarData != null)
-                    {
-                        if (item.ContainsKey("Output"))
-                        {
-                            bool result = checkVar(item["Output"]);
-                            if (!result)
-                            {
-                                Console.WriteLine("Unknown var: " + item["Output"]);
-                                item["Output"] = "";
-                            }
-                        }
-                    }
-
-                    if (item["Control"] == "Settings")
-                    {
-                        plcName = item["PLC"];
-                        controlID = item["ID"];
-                        this.Text = "Actual PLC: " + plcName;
-
-                        if (fileName != string.Empty)
-                        {
-                            this.Text = "Actual PLC: " + plcName + " File: " + fileName;
-                            ConnectPLC();
-                        }
-
-                    }
-                    else if (item["Control"] == "cButton")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cToggleButton")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cButtonLamp")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cLamp")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cCheckBox")
-                    {
-                        CheckBox t = new CheckBox();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        t.AutoCheck = false;
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cPulse")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cTrackBar")
-                    {
-                        cTrackBar t = new cTrackBar();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.ModMouseDown += CrtlMouseDown;
-                        t.ModMouseMove += CrtlMouseMove;
-                        t.ModMouseUp += CrtlMouseUp;
-
-                        //t.MouseDown += CrtlMouseDown;
-                        //t.MouseMove += CrtlMouseMove;
-                        //t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cLabel")
-                    {
-                        Label t = new Label();
-                        t.Text = item["Text"];
-                        t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-                        t.BorderStyle = BorderStyle.FixedSingle;
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cIntregrator")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cTableSet")
-                    {
-                        Button t = new Button();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cInput")
-                    {
-                        cInput t = new cInput();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output"))
-                            if (!String.IsNullOrEmpty(item["Output"]))
-                                t.PlcOutputTag = item["Output"];
-
-                        if (item.ContainsKey("Value"))
-                            if (!String.IsNullOrEmpty(item["Value"]))
-                                t.PlcOutputValue = Int16.Parse(item["Value"]);
-
-                        t.ToolTip = "OUT: " + (string)item["Output"];
-
-                        t.MouseDown += CrtlMouseDown;
-                        t.MouseMove += CrtlMouseMove;
-                        t.MouseUp += CrtlMouseUp;
-
-                        t.Tag = item["ID"];
-
-                        pMain.Controls.Add(t);
-                    }
-                }
-            }
-        }
-
-        private void ConnectPLC()
-        {
-            txtSimulation.Text = "Simulation: not connected";
-            VarData = null;
-
-            try
-            {
-                myInstance = SimulationRuntimeManager.CreateInterface(plcName);
-
-                txtSimulation.Text = "Simulation: connected";
-
-                //Update tag list from API
-                myInstance.UpdateTagList();
-
-                txtSimulation.Text = "Simulation: update tags";
-
-                // get all vars
-                VarData = myInstance.TagInfos;
-
-                txtSimulation.Text = "Simulation: ready";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not start PLC instance " + plcName);
-                txtSimulation.Text = "Simulation: error ->" + ex.Message;
-            }
-        }
-
-        private void mnuExit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
+ 
         private void dataProperties_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -937,111 +1089,7 @@ namespace PlcSimAdvConfigurator
                 }
             }
         }
-
-        private void mnuNew_Click(object sender, EventArgs e)
-        {
-            fileName = string.Empty;
-            string input = Interaction.InputBox("Enter PLC name:", "New project", "");
-
-            if (input.Length > 0)
-            {
-                myList.Clear();
-
-                Dictionary<string, string> item = new Dictionary<string, string>();
-                item.Add("Control", "Settings");
-                item.Add("PLC", input);
-                item.Add("ID", "1");
-
-                plcName = input;
-                controlID = "1";
-
-                myList.Add(item);
-                pMain.Controls.Clear();
-
-                this.Text = "Actual PLC: " + plcName;
-                fileName = string.Empty;
-            }
-
-            ConnectPLC();
-        }
-
-        private void mnuReload_Click(object sender, EventArgs e)
-        {
-            ConnectPLC();
-        }
-
-        private void mnuSave_Click(object sender, EventArgs e)
-        {
-            if (fileName != string.Empty)
-            {
-                SaveFile(fileName);
-
-                Settings.Default["LastConfigFile"] = fileName;
-                Settings.Default.Save();
-
-                MessageBox.Show("File saved");
-            }
-            else
-            {
-                mnuSaveAs_Click(sender, e);
-            }
-        }
-
-        private void SaveFile(string FileName)
-        {
-            var options = new JsonSerializerOptions();
-            options.WriteIndented = true;
-            options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-
-            string json = JsonSerializer.Serialize<List<Dictionary<string, string>>>(myList, options);
-            File.WriteAllText(FileName, json, System.Text.Encoding.UTF8);
-        }
-
-        private void mnuOpen_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.Title = "Open configuration";
-            openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
-            openFileDialog1.FileName = plcName + ".json";
-
-            DialogResult res = openFileDialog1.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                pMain.Controls.Clear();
-                if (myList != null)
-                    myList.Clear();
-
-                LoadJson(openFileDialog1.FileName);
-
-                Settings.Default["LastConfigFile"] = openFileDialog1.FileName;
-                Settings.Default.Save();
-
-                this.Text = "Actual PLC: " + plcName + " File: " + fileName;
-            }
-        }
-
-        private void mnuSaveAs_Click(object sender, EventArgs e)
-        {
-            saveFileDialog1.Title = "Save configuration";
-            saveFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.FileName = plcName + ".json";
-
-            DialogResult res = saveFileDialog1.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                SaveFile(saveFileDialog1.FileName);
-
-                Settings.Default["LastConfigFile"] = saveFileDialog1.FileName;
-                Settings.Default.Save();
-
-                fileName = saveFileDialog1.FileName;
-                this.Text = "Actual PLC: " + plcName + " File: " + fileName;
-            }
-        }
-
+    
         private bool checkVar(string var)
         {
             foreach (STagInfo info in VarData)

@@ -61,6 +61,7 @@ namespace PlcSimAdvConfigurator
             this.btnIntregrator = new System.Windows.Forms.Button();
             this.btnInput = new System.Windows.Forms.Button();
             this.btnTableSet = new System.Windows.Forms.Button();
+            this.lstEvents = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -71,7 +72,7 @@ namespace PlcSimAdvConfigurator
             this.pMain.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pMain.Location = new System.Drawing.Point(203, 33);
             this.pMain.Name = "pMain";
-            this.pMain.Size = new System.Drawing.Size(800, 600);
+            this.pMain.Size = new System.Drawing.Size(800, 526);
             this.pMain.TabIndex = 0;
             // 
             // btnButton
@@ -122,7 +123,7 @@ namespace PlcSimAdvConfigurator
             this.btnDelete.TabIndex = 6;
             this.btnDelete.Text = "Delete Item";
             this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // txtItemID
             // 
@@ -333,11 +334,20 @@ namespace PlcSimAdvConfigurator
             this.btnTableSet.UseVisualStyleBackColor = true;
             this.btnTableSet.Click += new System.EventHandler(this.btnTableSet_Click);
             // 
+            // lstEvents
+            // 
+            this.lstEvents.FormattingEnabled = true;
+            this.lstEvents.Location = new System.Drawing.Point(203, 580);
+            this.lstEvents.Name = "lstEvents";
+            this.lstEvents.Size = new System.Drawing.Size(800, 56);
+            this.lstEvents.TabIndex = 19;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1234, 661);
+            this.Controls.Add(this.lstEvents);
             this.Controls.Add(this.btnTableSet);
             this.Controls.Add(this.btnInput);
             this.Controls.Add(this.btnIntregrator);
@@ -409,6 +419,7 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.Button btnTableSet;
         private System.Windows.Forms.ToolStripMenuItem mnuSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ListBox lstEvents;
     }
 }
 
