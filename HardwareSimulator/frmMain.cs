@@ -36,418 +36,457 @@ namespace PlcSimAdvSimulator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // try to open last file
-            string lastFile = (Settings.Default["LastConfigFile"].ToString());
-            string loadJson = string.Empty;
+            // open splash screen
+            frmStart start = new frmStart();
+            start.Show();
 
-            if (!String.IsNullOrEmpty(lastFile))
+            // check at least one instance open
+            start.StatusText = "Check at least one instance is open";
+            start.StatusProcent = 10;
+            Application.DoEvents();
+
+            if (SimulationRuntimeManager.RegisteredInstanceInfo.Length == 0)
             {
-                if (File.Exists(lastFile))
-                    loadJson = lastFile;
+                MessageBox.Show("PlcSimAdvanced: no instance active", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Application.Exit();
             }
-
-            if (loadJson == string.Empty)
+            else
             {
-                openFileDialog1.Title = "Open configuration";
-                openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
-                openFileDialog1.FilterIndex = 1;
-                openFileDialog1.RestoreDirectory = true;
+                start.StatusText = "Try to load last configuration";
+                start.StatusProcent = 20;
+                Application.DoEvents();
 
-                DialogResult res = openFileDialog1.ShowDialog();
-                if (res == DialogResult.OK)
+                // try to open last file
+                string lastFile = (Settings.Default["LastConfigFile"].ToString());
+                string loadJson = string.Empty;
+
+                if (!String.IsNullOrEmpty(lastFile))
                 {
-                    loadJson = openFileDialog1.FileName;
+                    if (File.Exists(lastFile))
+                        loadJson = lastFile;
                 }
-                else
-                    Application.Exit();
-            }
 
-            #region read json config
-
-            try
-            {
-                string json = File.ReadAllText(loadJson);
-                List<Dictionary<string, string>> myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
-
-                foreach (Dictionary<string, string> item in myList)
+                if (loadJson == string.Empty)
                 {
-                    if (item["Control"] == "Settings")
+                    // file does not exist, browse for new file
+                    start.StatusText = "Open configuration file";
+                    start.StatusProcent = 30;
+                    Application.DoEvents();
+
+                    openFileDialog1.Title = "Open configuration";
+                    openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+                    openFileDialog1.FilterIndex = 1;
+                    openFileDialog1.RestoreDirectory = true;
+
+                    DialogResult res = openFileDialog1.ShowDialog();
+                    if (res == DialogResult.OK)
                     {
-                        PlcName = item["PLC"];
-                        this.Text = "Actual PLC: " + PlcName + " File: " + loadJson;
-                    }
-                    else if (item["Control"] == "cButton")
-                    {
-                        cButton t = new cButton();
-                        t.ButtonMode = cButton.ButtonModes.Button;
-
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            if (!String.IsNullOrEmpty(item["Output_Q"]))
-                                t.PlcOutputTag = item["Output_Q"];
-                        if (item.ContainsKey("Output_nQ"))
-                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
-                                t.PlcnOutputTag = item["Output_nQ"];
-
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            t.ToolTip = "OUT: " + (string)item["Output_Q"];
-                        else if (item.ContainsKey("Output_nQ"))
-                            t.ToolTip = "OUT: " + (string)item["Output_nQ"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cToggleButton")
-                    {
-                        cButton t = new cButton();
-                        t.ButtonMode = cButton.ButtonModes.ToggleButton;
-
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            if (!String.IsNullOrEmpty(item["Output_Q"]))
-                                t.PlcOutputTag = item["Output_Q"];
-                        if (item.ContainsKey("Output_nQ"))
-                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
-                                t.PlcnOutputTag = item["Output_nQ"];
-
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
-
-                        if (item.ContainsKey("Value"))
-                            if (!String.IsNullOrEmpty(item["Value"]))
-                                t.PlcButtonValue = bool.Parse(item["Value"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            t.ToolTip = "OUT: " + (string)item["Output_Q"];
-                        else if (item.ContainsKey("Output_nQ"))
-                            t.ToolTip = "OUT: " + (string)item["Output_nQ"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cButtonLamp")
-                    {
-                        cButton t = new cButton();
-                        t.ButtonMode = cButton.ButtonModes.Button;
-
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            if (!String.IsNullOrEmpty(item["Output_Q"]))
-                                t.PlcOutputTag = item["Output_Q"];
-                        if (item.ContainsKey("Output_nQ"))
-                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
-                                t.PlcnOutputTag = item["Output_nQ"];
-
-                        if (item.ContainsKey("Lamp"))
-                            if (!String.IsNullOrEmpty(item["Lamp"]))
-                                t.PlcLampTag = item["Lamp"];
-
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
-
-                        t.ToolTip = "IN: " + (string)item["Lamp"] + " - OUT: " + (string)item["Output_Q"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cLamp")
-                    {
-                        cLamp t = new cLamp();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            if (!String.IsNullOrEmpty(item["Output_Q"]))
-                                t.PlcOutputTag = item["Output_Q"];
-                        if (item.ContainsKey("Output_nQ"))
-                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
-                                t.PlcnOutputTag = item["Output_nQ"];
-
-                        if (item.ContainsKey("ActiveColor"))
-                            if (!String.IsNullOrEmpty(item["ActiveColor"]))
-                                t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
-
-                        t.AutoSize = false;
-                        t.BorderStyle = BorderStyle.FixedSingle;
-                        t.TextAlign = ContentAlignment.MiddleCenter;
-                        if (!String.IsNullOrEmpty(item["Lamp"]))
-                            t.PlcLampTag = item["Lamp"];
-
-                        t.ToolTip = "OUT: " + (string)item["Lamp"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cCheckBox")
-                    {
-                        cCheckBox t = new cCheckBox();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            if (!String.IsNullOrEmpty(item["Output_Q"]))
-                                t.PlcOutputTag = item["Output_Q"];
-                        if (item.ContainsKey("Output_nQ"))
-                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
-                                t.PlcnOutputTag = item["Output_nQ"];
-
-                        if (item.ContainsKey("Value"))
-                            if (item.ContainsKey("Value"))
-                                t.PlcButtonValue = bool.Parse(item["Value"]);
-
-                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cPulse")
-                    {
-                        cPulse t = new cPulse();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output_Q"))
-                            if (!String.IsNullOrEmpty(item["Output_Q"]))
-                                t.PlcOutputTag = item["Output_Q"];
-                        if (item.ContainsKey("Output_nQ"))
-                            if (!String.IsNullOrEmpty(item["Output_nQ"]))
-                                t.PlcnOutputTag = item["Output_nQ"];
-
-                        if (item.ContainsKey("TimeMS"))
-                            if (!String.IsNullOrEmpty(item["TimeMS"]))
-                                t.PlcTimeMS = Int16.Parse(item["TimeMS"]);
-
-                        t.ToolTip = "OUT: " + (string)item["Output_Q"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cTrackBar")
-                    {
-                        cTrackBar t = new cTrackBar();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output"))
-                            if (!String.IsNullOrEmpty(item["Output"]))
-                                t.PlcOutputTag = item["Output"];
-
-                        if (item.ContainsKey("Max"))
-                            if (!String.IsNullOrEmpty(item["Max"]))
-                                t.PlcMaxValue = Int16.Parse(item["Max"]);
-                        if (item.ContainsKey("Min"))
-                            if (!String.IsNullOrEmpty(item["Min"]))
-                                t.PlcMinValue = Int16.Parse(item["Min"]);
-
-                        if (item.ContainsKey("Value"))
-                            if (!String.IsNullOrEmpty(item["Value"]))
-                                t.PlcOutputValue = Int16.Parse(item["Value"]);
-
-                        t.ToolTip = "OUT: " + (string)item["Output"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cLabel")
-                    {
-                        Label t = new Label();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("FontSize"))
-                            t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
-
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cIntregrator")
-                    {
-                        cIntregrator t = new cIntregrator();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output"))
-                            if (!String.IsNullOrEmpty(item["Output"]))
-                                t.PlcActualValueTag = item["Output"];
-
-
-                        if (item.ContainsKey("Value"))
-                            if (!String.IsNullOrEmpty(item["Value"]))
-                                t.PlcActualValue = Int16.Parse(item["Value"]);
-                        if (item.ContainsKey("Gradiant"))
-                            if (!String.IsNullOrEmpty(item["Gradiant"]))
-                                t.PlcGradientTag = item["Gradiant"];
-                        if (item.ContainsKey("SetPoint"))
-                            if (!String.IsNullOrEmpty(item["SetPoint"]))
-                                t.PlcSetValueTag = item["SetPoint"];
-                        if (item.ContainsKey("Target"))
-                            if (!String.IsNullOrEmpty(item["Target"]))
-                                t.PlcTargetValueTag = item["Target"];
-
-                        if (item.ContainsKey("Set"))
-                            if (!String.IsNullOrEmpty(item["Set"]))
-                                t.PlcSetTag = item["Set"];
-                        if (item.ContainsKey("Start"))
-                            if (!String.IsNullOrEmpty(item["Start"]))
-                                t.PlcStartTag = item["Start"];
-
-                        t.ToolTip = "OUT: " + item["Text"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cTableSet")
-                    {
-                        cTableSet t = new cTableSet();
-
-                        t.AutoSize = false;
-                        t.BorderStyle = BorderStyle.FixedSingle;
-
-
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.PlcValueTag = item["Output"];
-
-                        if (item.ContainsKey("Step01"))
-                            t.PlcTagStep01 = item["Step01"];
-                        if (item.ContainsKey("Step02"))
-                            t.PlcTagStep02 = item["Step02"];
-                        if (item.ContainsKey("Step03"))
-                            t.PlcTagStep03 = item["Step03"];
-                        if (item.ContainsKey("Step04"))
-                            t.PlcTagStep04 = item["Step04"];
-                        if (item.ContainsKey("Step05"))
-                            t.PlcTagStep05 = item["Step05"];
-                        if (item.ContainsKey("Step06"))
-                            t.PlcTagStep06 = item["Step06"];
-                        if (item.ContainsKey("Step07"))
-                            t.PlcTagStep07 = item["Step07"];
-                        if (item.ContainsKey("Step08"))
-                            t.PlcTagStep08 = item["Step08"];
-                        if (item.ContainsKey("Step09"))
-                            t.PlcTagStep09 = item["Step09"];
-                        if (item.ContainsKey("Step10"))
-                            t.PlcTagStep10 = item["Step10"];
-
-                        if (item.ContainsKey("Value01"))
-                            t.PlcValueStep01 = Int16.Parse(item["Value01"]);
-                        if (item.ContainsKey("Value02"))
-                            t.PlcValueStep02 = Int16.Parse(item["Value02"]);
-                        if (item.ContainsKey("Value03"))
-                            t.PlcValueStep03 = Int16.Parse(item["Value03"]);
-                        if (item.ContainsKey("Value04"))
-                            t.PlcValueStep04 = Int16.Parse(item["Value04"]);
-                        if (item.ContainsKey("Value05"))
-                            t.PlcValueStep05 = Int16.Parse(item["Value05"]);
-                        if (item.ContainsKey("Value06"))
-                            t.PlcValueStep06 = Int16.Parse(item["Value06"]);
-                        if (item.ContainsKey("Value07"))
-                            t.PlcValueStep07 = Int16.Parse(item["Value07"]);
-                        if (item.ContainsKey("Value08"))
-                            t.PlcValueStep08 = Int16.Parse(item["Value08"]);
-                        if (item.ContainsKey("Value09"))
-                            t.PlcValueStep09 = Int16.Parse(item["Value09"]);
-                        if (item.ContainsKey("Value10"))
-                            t.PlcValueStep01 = Int16.Parse(item["Value10"]);
-
-                        t.ToolTip = "OUT: " + item["Text"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cInput")
-                    {
-                        cInput t = new cInput();
-                        t.Text = item["Text"];
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        if (item.ContainsKey("Output"))
-                            if (!String.IsNullOrEmpty(item["Output"]))
-                                t.PlcOutputTag = item["Output"];
-
-                        if (item.ContainsKey("Value"))
-                            if (!String.IsNullOrEmpty(item["Value"]))
-                                t.PlcOutputValue = Int16.Parse(item["Value"]);
-
-                        t.ToolTip = "OUT: " + (string)item["Output"];
-                        pMain.Controls.Add(t);
-                    }
-                    else if (item["Control"] == "cDisplay")
-                    {
-                        cDisplay t = new cDisplay();
-
-                        t.Size = GetSize(item["Size"]);
-                        t.Location = GetLocation(item["Location"]);
-
-                        t.DisplayText = item["Text"];
-                        t.DisplayMode = cDisplay.DisplayModes.Dez;
-                        if (item["Mode"].ToString() == "Hex")
-                            t.DisplayMode = cDisplay.DisplayModes.Hex;
-
-                        if (!string.IsNullOrEmpty(item["Scale"]))
-                            t.DisplayScale = float.Parse(item["Scale"]);
-
-                        t.DisplayOutput = item["Output"];
-
-                        t.ToolTip = "OUT: " + (string)item["Output"];
-
-                        pMain.Controls.Add(t);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Unknown control: " + item["Control"]);
+                        loadJson = openFileDialog1.FileName;
                     }
                 }
 
-                Settings.Default["LastConfigFile"] = loadJson;
-                Settings.Default.Save();
+                if (loadJson != string.Empty)
+                {
+                    start.StatusText = "Parse config file";
+                    start.StatusProcent = 40;
+                    Application.DoEvents();
+
+                    #region read json config
+
+                    try
+                    {
+                        string json = File.ReadAllText(loadJson);
+                        List<Dictionary<string, string>> myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+
+                        foreach (Dictionary<string, string> item in myList)
+                        {
+                            if (item["Control"] == "Settings")
+                            {
+                                PlcName = item["PLC"];
+                                this.Text = "Actual PLC: " + PlcName + " File: " + loadJson;
+                            }
+                            else if (item["Control"] == "cButton")
+                            {
+                                cButton t = new cButton();
+                                t.ButtonMode = cButton.ButtonModes.Button;
+
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                        t.PlcOutputTag = item["Output_Q"];
+                                if (item.ContainsKey("Output_nQ"))
+                                    if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                        t.PlcnOutputTag = item["Output_nQ"];
+
+                                if (item.ContainsKey("ActiveColor"))
+                                    if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                        t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                                else if (item.ContainsKey("Output_nQ"))
+                                    t.ToolTip = "OUT: " + (string)item["Output_nQ"];
+
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cToggleButton")
+                            {
+                                cButton t = new cButton();
+                                t.ButtonMode = cButton.ButtonModes.ToggleButton;
+
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                        t.PlcOutputTag = item["Output_Q"];
+                                if (item.ContainsKey("Output_nQ"))
+                                    if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                        t.PlcnOutputTag = item["Output_nQ"];
+
+                                if (item.ContainsKey("ActiveColor"))
+                                    if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                        t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                                if (item.ContainsKey("Value"))
+                                    if (!String.IsNullOrEmpty(item["Value"]))
+                                        t.PlcButtonValue = bool.Parse(item["Value"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                                else if (item.ContainsKey("Output_nQ"))
+                                    t.ToolTip = "OUT: " + (string)item["Output_nQ"];
+
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cButtonLamp")
+                            {
+                                cButton t = new cButton();
+                                t.ButtonMode = cButton.ButtonModes.Button;
+
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                        t.PlcOutputTag = item["Output_Q"];
+                                if (item.ContainsKey("Output_nQ"))
+                                    if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                        t.PlcnOutputTag = item["Output_nQ"];
+
+                                if (item.ContainsKey("Lamp"))
+                                    if (!String.IsNullOrEmpty(item["Lamp"]))
+                                        t.PlcLampTag = item["Lamp"];
+
+                                if (item.ContainsKey("ActiveColor"))
+                                    if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                        t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                                t.ToolTip = "IN: " + (string)item["Lamp"] + " - OUT: " + (string)item["Output_Q"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cLamp")
+                            {
+                                cLamp t = new cLamp();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                        t.PlcOutputTag = item["Output_Q"];
+                                if (item.ContainsKey("Output_nQ"))
+                                    if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                        t.PlcnOutputTag = item["Output_nQ"];
+
+                                if (item.ContainsKey("ActiveColor"))
+                                    if (!String.IsNullOrEmpty(item["ActiveColor"]))
+                                        t.PlcActiveColor = ColorTranslator.FromHtml(item["ActiveColor"]);
+
+                                t.AutoSize = false;
+                                t.BorderStyle = BorderStyle.FixedSingle;
+                                t.TextAlign = ContentAlignment.MiddleCenter;
+                                if (!String.IsNullOrEmpty(item["Lamp"]))
+                                    t.PlcLampTag = item["Lamp"];
+
+                                t.ToolTip = "OUT: " + (string)item["Lamp"];
+
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cCheckBox")
+                            {
+                                cCheckBox t = new cCheckBox();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                        t.PlcOutputTag = item["Output_Q"];
+                                if (item.ContainsKey("Output_nQ"))
+                                    if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                        t.PlcnOutputTag = item["Output_nQ"];
+
+                                if (item.ContainsKey("Value"))
+                                    if (item.ContainsKey("Value"))
+                                        t.PlcButtonValue = bool.Parse(item["Value"]);
+
+                                t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cPulse")
+                            {
+                                cPulse t = new cPulse();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output_Q"))
+                                    if (!String.IsNullOrEmpty(item["Output_Q"]))
+                                        t.PlcOutputTag = item["Output_Q"];
+                                if (item.ContainsKey("Output_nQ"))
+                                    if (!String.IsNullOrEmpty(item["Output_nQ"]))
+                                        t.PlcnOutputTag = item["Output_nQ"];
+
+                                if (item.ContainsKey("TimeMS"))
+                                    if (!String.IsNullOrEmpty(item["TimeMS"]))
+                                        t.PlcTimeMS = Int16.Parse(item["TimeMS"]);
+
+                                t.ToolTip = "OUT: " + (string)item["Output_Q"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cTrackBar")
+                            {
+                                cTrackBar t = new cTrackBar();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output"))
+                                    if (!String.IsNullOrEmpty(item["Output"]))
+                                        t.PlcOutputTag = item["Output"];
+
+                                if (item.ContainsKey("Max"))
+                                    if (!String.IsNullOrEmpty(item["Max"]))
+                                        t.PlcMaxValue = Int16.Parse(item["Max"]);
+                                if (item.ContainsKey("Min"))
+                                    if (!String.IsNullOrEmpty(item["Min"]))
+                                        t.PlcMinValue = Int16.Parse(item["Min"]);
+
+                                if (item.ContainsKey("Value"))
+                                    if (!String.IsNullOrEmpty(item["Value"]))
+                                        t.PlcOutputValue = Int16.Parse(item["Value"]);
+
+                                t.ToolTip = "OUT: " + (string)item["Output"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cLabel")
+                            {
+                                Label t = new Label();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("FontSize"))
+                                    t.Font = new System.Drawing.Font("Arial", float.Parse(item["FontSize"]));
+
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cIntregrator")
+                            {
+                                cIntregrator t = new cIntregrator();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output"))
+                                    if (!String.IsNullOrEmpty(item["Output"]))
+                                        t.PlcActualValueTag = item["Output"];
+
+
+                                if (item.ContainsKey("Value"))
+                                    if (!String.IsNullOrEmpty(item["Value"]))
+                                        t.PlcActualValue = Int16.Parse(item["Value"]);
+                                if (item.ContainsKey("Gradiant"))
+                                    if (!String.IsNullOrEmpty(item["Gradiant"]))
+                                        t.PlcGradientTag = item["Gradiant"];
+                                if (item.ContainsKey("SetPoint"))
+                                    if (!String.IsNullOrEmpty(item["SetPoint"]))
+                                        t.PlcSetValueTag = item["SetPoint"];
+                                if (item.ContainsKey("Target"))
+                                    if (!String.IsNullOrEmpty(item["Target"]))
+                                        t.PlcTargetValueTag = item["Target"];
+
+                                if (item.ContainsKey("Set"))
+                                    if (!String.IsNullOrEmpty(item["Set"]))
+                                        t.PlcSetTag = item["Set"];
+                                if (item.ContainsKey("Start"))
+                                    if (!String.IsNullOrEmpty(item["Start"]))
+                                        t.PlcStartTag = item["Start"];
+
+                                t.ToolTip = "OUT: " + item["Text"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cTableSet")
+                            {
+                                cTableSet t = new cTableSet();
+
+                                t.AutoSize = false;
+                                t.BorderStyle = BorderStyle.FixedSingle;
+
+
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                t.PlcValueTag = item["Output"];
+
+                                if (item.ContainsKey("Step01"))
+                                    t.PlcTagStep01 = item["Step01"];
+                                if (item.ContainsKey("Step02"))
+                                    t.PlcTagStep02 = item["Step02"];
+                                if (item.ContainsKey("Step03"))
+                                    t.PlcTagStep03 = item["Step03"];
+                                if (item.ContainsKey("Step04"))
+                                    t.PlcTagStep04 = item["Step04"];
+                                if (item.ContainsKey("Step05"))
+                                    t.PlcTagStep05 = item["Step05"];
+                                if (item.ContainsKey("Step06"))
+                                    t.PlcTagStep06 = item["Step06"];
+                                if (item.ContainsKey("Step07"))
+                                    t.PlcTagStep07 = item["Step07"];
+                                if (item.ContainsKey("Step08"))
+                                    t.PlcTagStep08 = item["Step08"];
+                                if (item.ContainsKey("Step09"))
+                                    t.PlcTagStep09 = item["Step09"];
+                                if (item.ContainsKey("Step10"))
+                                    t.PlcTagStep10 = item["Step10"];
+
+                                if (item.ContainsKey("Value01"))
+                                    t.PlcValueStep01 = Int16.Parse(item["Value01"]);
+                                if (item.ContainsKey("Value02"))
+                                    t.PlcValueStep02 = Int16.Parse(item["Value02"]);
+                                if (item.ContainsKey("Value03"))
+                                    t.PlcValueStep03 = Int16.Parse(item["Value03"]);
+                                if (item.ContainsKey("Value04"))
+                                    t.PlcValueStep04 = Int16.Parse(item["Value04"]);
+                                if (item.ContainsKey("Value05"))
+                                    t.PlcValueStep05 = Int16.Parse(item["Value05"]);
+                                if (item.ContainsKey("Value06"))
+                                    t.PlcValueStep06 = Int16.Parse(item["Value06"]);
+                                if (item.ContainsKey("Value07"))
+                                    t.PlcValueStep07 = Int16.Parse(item["Value07"]);
+                                if (item.ContainsKey("Value08"))
+                                    t.PlcValueStep08 = Int16.Parse(item["Value08"]);
+                                if (item.ContainsKey("Value09"))
+                                    t.PlcValueStep09 = Int16.Parse(item["Value09"]);
+                                if (item.ContainsKey("Value10"))
+                                    t.PlcValueStep01 = Int16.Parse(item["Value10"]);
+
+                                t.ToolTip = "OUT: " + item["Text"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cInput")
+                            {
+                                cInput t = new cInput();
+                                t.Text = item["Text"];
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                if (item.ContainsKey("Output"))
+                                    if (!String.IsNullOrEmpty(item["Output"]))
+                                        t.PlcOutputTag = item["Output"];
+
+                                if (item.ContainsKey("Value"))
+                                    if (!String.IsNullOrEmpty(item["Value"]))
+                                        t.PlcOutputValue = Int16.Parse(item["Value"]);
+
+                                t.ToolTip = "OUT: " + (string)item["Output"];
+                                pMain.Controls.Add(t);
+                            }
+                            else if (item["Control"] == "cDisplay")
+                            {
+                                cDisplay t = new cDisplay();
+
+                                t.Size = GetSize(item["Size"]);
+                                t.Location = GetLocation(item["Location"]);
+
+                                t.DisplayText = item["Text"];
+
+                                t.DisplayMode = cDisplay.DisplayModes.Dez;
+                                if (item.ContainsKey("Mode"))
+                                    if (item["Mode"].ToString() == "Hex")
+                                        t.DisplayMode = cDisplay.DisplayModes.Hex;
+
+                                t.DisplayScale = 1.0f;
+                                if (item.ContainsKey("Scale"))
+                                    t.DisplayScale = float.Parse(item["Scale"]);
+
+                                t.DisplayOutput = item["Output"];
+
+                                t.ToolTip = "OUT: " + (string)item["Output"];
+
+                                pMain.Controls.Add(t);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Unknown control: " + item["Control"]);
+                            }
+                        }
+
+                        Settings.Default["LastConfigFile"] = loadJson;
+                        Settings.Default.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error reading JSON:" + ex.Message + "\n" + ex.StackTrace);
+                        Application.Exit();
+                        return;
+                    }
+
+                    #endregion
+
+                    start.StatusText = "Read tags from instance";
+                    start.StatusProcent = 50;
+                    Application.DoEvents();
+
+                    try
+                    {
+                        //Connect local to PlcSimAdvanced
+                        Console.WriteLine("Starting simulation");
+                        myInstance = SimulationRuntimeManager.CreateInterface(PlcName);
+
+                        //Update tag list from API
+                        Console.WriteLine("Tags synchronization");
+                        myInstance.UpdateTagList();
+
+                        // write taglist as xml for test
+                        //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
+
+                        // get all vars for test
+                        Console.WriteLine("Get tag info's");
+                        myData = myInstance.TagInfos;
+                        txtVars.Text = myData.Length.ToString() + " variables";
+
+                        Console.WriteLine("End synchronization - start simulator");
+                        //Start a thread to synchronize feedbacks inputs 
+                        tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
+                        tFeedbacks.IsBackground = true;
+                        tFeedbacks.Start();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not start PLC instance " + PlcName, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Application.Exit();
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error reading JSON:" + ex.Message + "\n" + ex.StackTrace);
-                Application.Exit();
-                return;
-            }
-
-            #endregion
-
-            try
-            {
-                //Connect local to PlcSimAdvanced
-                Console.WriteLine("Starting simulation");
-                myInstance = SimulationRuntimeManager.CreateInterface(PlcName);
-
-                //Update tag list from API
-                Console.WriteLine("Tags synchronization");
-                myInstance.UpdateTagList();
-
-                // write taglist as xml for test
-                //myInstance.CreateConfigurationFile(Application.StartupPath + "\\test.xml");
-
-                // get all vars for test
-                Console.WriteLine("Get tag info's");
-                myData = myInstance.TagInfos;
-                txtVars.Text = myData.Length.ToString() + " variables";
-
-                Console.WriteLine("End synchronization - start simulator");
-                //Start a thread to synchronize feedbacks inputs 
-                tFeedbacks = new Thread(() => synchroFeedbacks(myInstance));
-                tFeedbacks.IsBackground = true;
-                tFeedbacks.Start();
-            }
-            catch
-            {
-                MessageBox.Show("Could not start PLC instance " + PlcName);
-                Application.Exit();
-            }
+            start.Close();
         }
 
         private System.Drawing.Size GetSize(string value)
@@ -636,6 +675,8 @@ namespace PlcSimAdvSimulator
                                     {
                                         if (s.Name == c.PlcOutputTag)
                                         {
+                                            if (s.DataType == EDataType.DInt)
+                                                myInstance.WriteInt32(c.PlcOutputTag, (int)c.PlcOutputValue);
                                             if (s.DataType == EDataType.Word)
                                                 myInstance.WriteUInt16(c.PlcOutputTag, (UInt16)c.PlcOutputValue);
                                             if (s.DataType == EDataType.Int)
@@ -662,6 +703,9 @@ namespace PlcSimAdvSimulator
                                         break;
                                     case EDataType.Int:
                                         data = Convert.ToInt16(myInstance.ReadInt16(c.DisplayOutput));
+                                        break;
+                                    case EDataType.DInt:
+                                        data = Convert.ToInt32(myInstance.ReadInt32(c.DisplayOutput));
                                         break;
                                 }
                                 c.DisplayValue = data;
