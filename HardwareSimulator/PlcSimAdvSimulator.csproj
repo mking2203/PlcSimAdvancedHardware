@@ -97,6 +97,12 @@
     <Compile Include="Elements\cCheckBox.Designer.cs">
       <DependentUpon>cCheckBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Elements\cDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Elements\cDisplay.Designer.cs">
+      <DependentUpon>cDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Elements\cIntregrator.cs">
       <SubType>UserControl</SubType>
     </Compile>

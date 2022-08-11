@@ -22,5 +22,17 @@ namespace PlcSimAdvSimulator.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastConfigFile {
+            get {
+                return ((string)(this["LastConfigFile"]));
+            }
+            set {
+                this["LastConfigFile"] = value;
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.IO;
 using System.Drawing;
+using PlcSimAdvSimulator.Properties;
 
 namespace PlcSimAdvSimulator
 {
@@ -35,11 +36,37 @@ namespace PlcSimAdvSimulator
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // try to open last file
+            string lastFile = (Settings.Default["LastConfigFile"].ToString());
+            string loadJson = string.Empty;
+
+            if (!String.IsNullOrEmpty(lastFile))
+            {
+                if (File.Exists(lastFile))
+                    loadJson = lastFile;
+            }
+
+            if (loadJson == string.Empty)
+            {
+                openFileDialog1.Title = "Open configuration";
+                openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+                openFileDialog1.FilterIndex = 1;
+                openFileDialog1.RestoreDirectory = true;
+
+                DialogResult res = openFileDialog1.ShowDialog();
+                if (res == DialogResult.OK)
+                {
+                    loadJson = openFileDialog1.FileName;
+                }
+                else
+                    Application.Exit();
+            }
+
             #region read json config
 
             try
             {
-                string json = File.ReadAllText(Application.StartupPath + "\\elements.json");
+                string json = File.ReadAllText(loadJson);
                 List<Dictionary<string, string>> myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
 
                 foreach (Dictionary<string, string> item in myList)
@@ -47,6 +74,7 @@ namespace PlcSimAdvSimulator
                     if (item["Control"] == "Settings")
                     {
                         PlcName = item["PLC"];
+                        this.Text = "Actual PLC: " + PlcName + " File: " + loadJson;
                     }
                     else if (item["Control"] == "cButton")
                     {
@@ -278,6 +306,11 @@ namespace PlcSimAdvSimulator
                     else if (item["Control"] == "cTableSet")
                     {
                         cTableSet t = new cTableSet();
+
+                        t.AutoSize = false;
+                        t.BorderStyle = BorderStyle.FixedSingle;
+
+
                         t.Text = item["Text"];
                         t.Size = GetSize(item["Size"]);
                         t.Location = GetLocation(item["Location"]);
@@ -347,11 +380,35 @@ namespace PlcSimAdvSimulator
                         t.ToolTip = "OUT: " + (string)item["Output"];
                         pMain.Controls.Add(t);
                     }
+                    else if (item["Control"] == "cDisplay")
+                    {
+                        cDisplay t = new cDisplay();
+
+                        t.Size = GetSize(item["Size"]);
+                        t.Location = GetLocation(item["Location"]);
+
+                        t.DisplayText = item["Text"];
+                        t.DisplayMode = cDisplay.DisplayModes.Dez;
+                        if (item["Mode"].ToString() == "Hex")
+                            t.DisplayMode = cDisplay.DisplayModes.Hex;
+
+                        if (!string.IsNullOrEmpty(item["Scale"]))
+                            t.DisplayScale = float.Parse(item["Scale"]);
+
+                        t.DisplayOutput = item["Output"];
+
+                        t.ToolTip = "OUT: " + (string)item["Output"];
+
+                        pMain.Controls.Add(t);
+                    }
                     else
                     {
                         MessageBox.Show("Unknown control: " + item["Control"]);
                     }
                 }
+
+                Settings.Default["LastConfigFile"] = loadJson;
+                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -559,6 +616,14 @@ namespace PlcSimAdvSimulator
                                 if (myInstance.ReadBool(c.PlcTagStep10))
                                     myInstance.WriteUInt16(c.PlcValueTag, Convert.ToUInt16(c.PlcValueStep10));
                             }
+
+                            STagInfo info = getVar(c.PlcValueTag);
+                            if (!c.InvokeRequired)
+                                c.Text = "Value= " + myInstance.ReadUInt16(c.PlcValueTag);
+                            else
+                                c.Invoke((MethodInvoker)(() => c.Text = "Value= " + myInstance.ReadUInt16(c.PlcValueTag)));
+
+
                         }
                         else if (crtl is cInput)
                         {
@@ -578,6 +643,29 @@ namespace PlcSimAdvSimulator
                                         }
                                     }
                                 }
+                        }
+                        else if (crtl is cDisplay)
+                        {
+                            cDisplay c = (cDisplay)crtl;
+                            if (!String.IsNullOrEmpty(c.DisplayOutput))
+                            {
+                                STagInfo var = getVar(c.DisplayOutput);
+                                int data = 0;
+
+                                switch (var.DataType)
+                                {
+                                    case EDataType.Bool:
+                                        data = Convert.ToInt16(myInstance.ReadBool(c.DisplayOutput));
+                                        break;
+                                    case EDataType.Word:
+                                        data = Convert.ToInt16(myInstance.ReadUInt16(c.DisplayOutput));
+                                        break;
+                                    case EDataType.Int:
+                                        data = Convert.ToInt16(myInstance.ReadInt16(c.DisplayOutput));
+                                        break;
+                                }
+                                c.DisplayValue = data;
+                            }
                         }
                     }
 
@@ -611,6 +699,21 @@ namespace PlcSimAdvSimulator
         private void mnuExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private STagInfo getVar(string var)
+        {
+            foreach (STagInfo info in myData)
+            {
+                if (info.Name == var)
+                    return info;
+            }
+            return new STagInfo();
+        }
+
+        private void mnuOpen_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
