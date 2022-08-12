@@ -133,6 +133,12 @@
     <Compile Include="frmSelectDefault.Designer.cs">
       <DependentUpon>frmSelectDefault.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSelectPlc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSelectPlc.Designer.cs">
+      <DependentUpon>frmSelectPlc.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSelectVar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSelectDefault.resx">
       <DependentUpon>frmSelectDefault.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSelectPlc.resx">
+      <DependentUpon>frmSelectPlc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSelectVar.resx">
       <DependentUpon>frmSelectVar.cs</DependentUpon>

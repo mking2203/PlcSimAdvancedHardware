@@ -29,6 +29,7 @@ namespace PlcSimAdvConfigurator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pMain = new System.Windows.Forms.Panel();
             this.btnButton = new System.Windows.Forms.Button();
             this.btnToggleButton = new System.Windows.Forms.Button();
@@ -49,6 +50,11 @@ namespace PlcSimAdvConfigurator
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuReload = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSnapTo05 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSnapTo10 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSnapTo20 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtSimulation = new System.Windows.Forms.ToolStripStatusLabel();
@@ -62,6 +68,8 @@ namespace PlcSimAdvConfigurator
             this.btnInput = new System.Windows.Forms.Button();
             this.btnTableSet = new System.Windows.Forms.Button();
             this.lstEvents = new System.Windows.Forms.ListBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.btnPlcName = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataProperties)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -117,7 +125,7 @@ namespace PlcSimAdvConfigurator
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(1018, 455);
+            this.btnDelete.Location = new System.Drawing.Point(1015, 398);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(207, 40);
             this.btnDelete.TabIndex = 6;
@@ -163,7 +171,8 @@ namespace PlcSimAdvConfigurator
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.simulationToolStripMenuItem});
+            this.simulationToolStripMenuItem,
+            this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1234, 24);
@@ -243,6 +252,45 @@ namespace PlcSimAdvConfigurator
             this.mnuReload.Size = new System.Drawing.Size(110, 22);
             this.mnuReload.Text = "Reload";
             this.mnuReload.Click += new System.EventHandler(this.mnuReload_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSnapTo05,
+            this.menuSnapTo10,
+            this.menuSnapTo20,
+            this.toolStripMenuItem3});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // menuSnapTo05
+            // 
+            this.menuSnapTo05.Name = "menuSnapTo05";
+            this.menuSnapTo05.Size = new System.Drawing.Size(180, 22);
+            this.menuSnapTo05.Text = "Snap to grid 5";
+            this.menuSnapTo05.Click += new System.EventHandler(this.menuSnapTo05_Click);
+            // 
+            // menuSnapTo10
+            // 
+            this.menuSnapTo10.Name = "menuSnapTo10";
+            this.menuSnapTo10.Size = new System.Drawing.Size(180, 22);
+            this.menuSnapTo10.Text = "Snap to grid 10";
+            this.menuSnapTo10.Click += new System.EventHandler(this.menuSnapTo10_Click);
+            // 
+            // menuSnapTo20
+            // 
+            this.menuSnapTo20.Checked = true;
+            this.menuSnapTo20.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menuSnapTo20.Name = "menuSnapTo20";
+            this.menuSnapTo20.Size = new System.Drawing.Size(180, 22);
+            this.menuSnapTo20.Text = "Snap to grid 20";
+            this.menuSnapTo20.Click += new System.EventHandler(this.menuSnapTo20_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
             // 
             // label1
             // 
@@ -342,11 +390,27 @@ namespace PlcSimAdvConfigurator
             this.lstEvents.Size = new System.Drawing.Size(800, 56);
             this.lstEvents.TabIndex = 19;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // btnPlcName
+            // 
+            this.btnPlcName.Location = new System.Drawing.Point(1015, 519);
+            this.btnPlcName.Name = "btnPlcName";
+            this.btnPlcName.Size = new System.Drawing.Size(207, 40);
+            this.btnPlcName.TabIndex = 20;
+            this.btnPlcName.Text = "not connected";
+            this.btnPlcName.UseVisualStyleBackColor = true;
+            this.btnPlcName.Click += new System.EventHandler(this.btnPlcName_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1234, 661);
+            this.Controls.Add(this.btnPlcName);
             this.Controls.Add(this.lstEvents);
             this.Controls.Add(this.btnTableSet);
             this.Controls.Add(this.btnInput);
@@ -420,6 +484,13 @@ namespace PlcSimAdvConfigurator
         private System.Windows.Forms.ToolStripMenuItem mnuSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ListBox lstEvents;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button btnPlcName;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuSnapTo05;
+        private System.Windows.Forms.ToolStripMenuItem menuSnapTo10;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem menuSnapTo20;
     }
 }
 

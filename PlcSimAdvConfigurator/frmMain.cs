@@ -25,7 +25,7 @@ namespace PlcSimAdvConfigurator
         Point mousePos = new Point();
 
         // grid size
-        const int snap = 20;
+        private int snapGrid = 20;
         // move is active
         bool move;
 
@@ -49,6 +49,9 @@ namespace PlcSimAdvConfigurator
         private void FrmMain_Load(object sender, EventArgs e)
         {
             lstEvents.Items.Add("Start PlcSimAdv Hardware Configurator");
+
+            snapGrid = (int)Settings.Default["SnapGrid"];
+            setSnapGrid();
 
             // load last file if possible
             string lastFile = (Settings.Default["LastConfigFile"].ToString());
@@ -327,30 +330,43 @@ namespace PlcSimAdvConfigurator
         private void ConnectPLC()
         {
             txtSimulation.Text = "Simulation: not connected";
-            VarData = null;
+            lstEvents.Items.Add("Try to connect to PLC instance "+ plcName);
 
-            try
+            if (checkPlcIntanceExists(plcName))
             {
-                myInstance = SimulationRuntimeManager.CreateInterface(plcName);
 
-                txtSimulation.Text = "Simulation: connected";
+                VarData = null;
 
-                //Update tag list from API
-                myInstance.UpdateTagList();
+                try
+                {
+                    myInstance = SimulationRuntimeManager.CreateInterface(plcName);
 
-                txtSimulation.Text = "Simulation: update tags";
+                    txtSimulation.Text = "Simulation: connected";
 
-                // get all vars
-                VarData = myInstance.TagInfos;
+                    //Update tag list from API
+                    myInstance.UpdateTagList();
 
-                txtSimulation.Text = "Simulation: ready";
-            }
-            catch (Exception ex)
-            {
-                lstEvents.Items.Add("Could not start PLC instance " + plcName);
-                MessageBox.Show("Could not start PLC instance " + plcName);
+                    txtSimulation.Text = "Simulation: update tags";
 
-                txtSimulation.Text = "Simulation: error ->" + ex.Message;
+                    // get all vars
+                    VarData = myInstance.TagInfos;
+
+                    txtSimulation.Text = "Simulation: ready";
+                    lstEvents.Items.Add($"PLC instance {plcName} is connected.");
+                }
+                catch (Exception ex)
+                {
+                    lstEvents.Items.Add("Could not start PLC instance " + plcName);
+                    MessageBox.Show("Could not start PLC instance " + plcName);
+
+                    txtSimulation.Text = "Simulation: error ->" + ex.Message;
+
+                    if (myInstance != null)
+                    {
+                        myInstance.UnregisterInstance();
+                        myInstance = null;
+                    }
+                }
             }
         }
 
@@ -484,18 +500,18 @@ namespace PlcSimAdvConfigurator
                 if (newY > pMain.Height - b.Height) newY = pMain.Height - b.Height;
 
                 // calc for grid
-                int dX = newX / snap;
-                int dy = newY / snap;
+                int dX = newX / snapGrid;
+                int dy = newY / snapGrid;
                 // calc the remaining px
-                int rX = newX - dX * snap;
-                int rY = newY - dy * snap;
+                int rX = newX - dX * snapGrid;
+                int rY = newY - dy * snapGrid;
 
                 // re-calc the position
-                newX = dX * snap;
-                newY = dy * snap;
+                newX = dX * snapGrid;
+                newY = dy * snapGrid;
                 // if more the half use next grid point
-                if (rX > (snap / 2)) newX += snap;
-                if (rY > (snap / 2)) newY += snap;
+                if (rX > (snapGrid / 2)) newX += snapGrid;
+                if (rY > (snapGrid / 2)) newY += snapGrid;
 
                 b.Location = new Point(newX, newY);
 
@@ -584,7 +600,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -608,7 +624,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -632,7 +648,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -656,7 +672,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -680,7 +696,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -706,7 +722,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -730,7 +746,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -756,7 +772,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -780,7 +796,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -812,7 +828,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -838,7 +854,7 @@ namespace PlcSimAdvConfigurator
 
                 t.Size = GetSize(newItem["Size"]);
 
-                t.Location = new Point(snap, snap);
+                t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
 
                 t.Tag = controlID;
@@ -924,7 +940,7 @@ namespace PlcSimAdvConfigurator
                 }
             }
         }
- 
+
         private void dataProperties_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -1089,7 +1105,7 @@ namespace PlcSimAdvConfigurator
                 }
             }
         }
-    
+
         private bool checkVar(string var)
         {
             foreach (STagInfo info in VarData)
@@ -1098,6 +1114,103 @@ namespace PlcSimAdvConfigurator
                     return true;
             }
             return false;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (SimulationRuntimeManager.RegisteredInstanceInfo.Length == 0)
+            {
+                btnPlcName.Text = "no PLC instance available";
+                btnPlcName.Enabled = false;
+                btnPlcName.BackColor = Color.Orange;
+            }
+            else
+            {
+                btnPlcName.Enabled = true;
+                
+                // check instance is available
+                if (plcName != string.Empty)
+                {
+                    if (!checkPlcIntanceExists(plcName))
+                    {
+                        lstEvents.Items.Add("PLC instance not available!");
+                        plcName = string.Empty;
+                    }
+                }
+
+                // display name of the PLC instance
+                if (plcName == string.Empty)
+                {
+                    btnPlcName.BackColor = SystemColors.Control;
+                    btnPlcName.Text = "no PLC selected";
+                }
+                else
+                {
+                    btnPlcName.Text = "PLC: " + plcName;
+                    btnPlcName.BackColor = Color.ForestGreen;
+
+                    if (myInstance == null)
+                        ConnectPLC();
+                    else
+                        if (myInstance.Name != plcName)
+                            ConnectPLC();
+                }
+            }
+        }
+
+        private bool checkPlcIntanceExists(string name)
+        {
+            foreach (SInstanceInfo s in SimulationRuntimeManager.RegisteredInstanceInfo)
+            {
+                if (s.Name == name) return true;
+            }
+            return false;
+        }
+
+
+        private void btnPlcName_Click(object sender, EventArgs e)
+        {
+            frmSelectPlc plc = new frmSelectPlc();
+            if (plc.ShowDialog() == DialogResult.OK)
+            {
+                plcName = plc.PlcName;
+
+                ConnectPLC();
+            }
+        }
+
+        private void menuSnapTo05_Click(object sender, EventArgs e)
+        {
+            snapGrid = 5;
+            setSnapGrid();
+        }
+
+        private void menuSnapTo10_Click(object sender, EventArgs e)
+        {
+            snapGrid = 10;
+            setSnapGrid();
+        }
+
+        private void menuSnapTo20_Click(object sender, EventArgs e)
+        {
+            snapGrid = 20;
+            setSnapGrid();
+        }
+
+        private void setSnapGrid()
+        {
+            menuSnapTo05.Checked = false;
+            menuSnapTo10.Checked = false;
+            menuSnapTo20.Checked = false;
+
+            if(snapGrid == 5) menuSnapTo05.Checked = true;
+            if (snapGrid == 10) menuSnapTo10.Checked = true;
+            if (snapGrid == 20) menuSnapTo20.Checked = true;
+
+            lstEvents.Items.Add("Set snap to grid to " + snapGrid.ToString());
+
+            Settings.Default["SnapGrid"] = snapGrid;
+            Settings.Default.Save();
         }
     }
 }

@@ -114,6 +114,11 @@ namespace PlcSimAdvSimulator
                                 t.Size = GetSize(item["Size"]);
                                 t.Location = GetLocation(item["Location"]);
 
+                                // main signal
+                                if (item.ContainsKey("Button"))
+                                    if (!String.IsNullOrEmpty(item["Button"]))
+                                        t.PlcButtonTag = item["Button"];
+                                // mirrored signals
                                 if (item.ContainsKey("Output_Q"))
                                     if (!String.IsNullOrEmpty(item["Output_Q"]))
                                         t.PlcOutputTag = item["Output_Q"];
@@ -141,6 +146,11 @@ namespace PlcSimAdvSimulator
                                 t.Size = GetSize(item["Size"]);
                                 t.Location = GetLocation(item["Location"]);
 
+                                // main signal
+                                if (item.ContainsKey("Button"))
+                                    if (!String.IsNullOrEmpty(item["Button"]))
+                                        t.PlcButtonTag = item["Button"];
+                                // mirrored signals
                                 if (item.ContainsKey("Output_Q"))
                                     if (!String.IsNullOrEmpty(item["Output_Q"]))
                                         t.PlcOutputTag = item["Output_Q"];
@@ -172,6 +182,11 @@ namespace PlcSimAdvSimulator
                                 t.Size = GetSize(item["Size"]);
                                 t.Location = GetLocation(item["Location"]);
 
+                                // main signal
+                                if (item.ContainsKey("Button"))
+                                    if (!String.IsNullOrEmpty(item["Button"]))
+                                        t.PlcButtonTag = item["Button"];
+                                // mirrored signals
                                 if (item.ContainsKey("Output_Q"))
                                     if (!String.IsNullOrEmpty(item["Output_Q"]))
                                         t.PlcOutputTag = item["Output_Q"];
@@ -197,6 +212,12 @@ namespace PlcSimAdvSimulator
                                 t.Size = GetSize(item["Size"]);
                                 t.Location = GetLocation(item["Location"]);
 
+                                // lamp output
+                                if (item.ContainsKey("Lamp"))
+                                    if (!String.IsNullOrEmpty(item["Lamp"]))
+                                        t.PlcLampTag = item["Lamp"];
+
+                                // mirrored signals
                                 if (item.ContainsKey("Output_Q"))
                                     if (!String.IsNullOrEmpty(item["Output_Q"]))
                                         t.PlcOutputTag = item["Output_Q"];
@@ -211,8 +232,6 @@ namespace PlcSimAdvSimulator
                                 t.AutoSize = false;
                                 t.BorderStyle = BorderStyle.FixedSingle;
                                 t.TextAlign = ContentAlignment.MiddleCenter;
-                                if (!String.IsNullOrEmpty(item["Lamp"]))
-                                    t.PlcLampTag = item["Lamp"];
 
                                 t.ToolTip = "OUT: " + (string)item["Lamp"];
 
@@ -742,6 +761,9 @@ namespace PlcSimAdvSimulator
 
         private void mnuExit_Click(object sender, EventArgs e)
         {
+            if (myInstance != null)
+                myInstance.UnregisterInstance();
+
             Application.Exit();
         }
 
