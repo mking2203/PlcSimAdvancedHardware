@@ -48,6 +48,8 @@ namespace PlcSimAdvConfigurator
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            txtSimulation.Text = "Simulation: not connected";
+
             lstEvents.Items.Add("Start PlcSimAdv Hardware Configurator");
 
             snapGrid = (int)Settings.Default["SnapGrid"];
@@ -330,11 +332,10 @@ namespace PlcSimAdvConfigurator
         private void ConnectPLC()
         {
             txtSimulation.Text = "Simulation: not connected";
-            lstEvents.Items.Add("Try to connect to PLC instance "+ plcName);
+            lstEvents.Items.Add("Try to connect to PLC instance " + plcName);
 
             if (checkPlcIntanceExists(plcName))
             {
-
                 VarData = null;
 
                 try
@@ -943,6 +944,17 @@ namespace PlcSimAdvConfigurator
 
         private void dataProperties_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            // try to conect if failed earlier
+            if (myInstance == null)
+            {
+                ConnectPLC();
+            }
+            else
+            {
+                if (myInstance.Name != plcName)
+                    ConnectPLC();
+            }
+
             if (e.RowIndex >= 0)
             {
                 string key = (string)dataProperties.Rows[e.RowIndex].Cells[0].Value;
@@ -1127,7 +1139,7 @@ namespace PlcSimAdvConfigurator
             else
             {
                 btnPlcName.Enabled = true;
-                
+
                 // check instance is available
                 if (plcName != string.Empty)
                 {
@@ -1148,14 +1160,25 @@ namespace PlcSimAdvConfigurator
                 {
                     btnPlcName.Text = "PLC: " + plcName;
                     btnPlcName.BackColor = Color.ForestGreen;
-
-                    if (myInstance == null)
-                        ConnectPLC();
-                    else
-                        if (myInstance.Name != plcName)
-                            ConnectPLC();
                 }
             }
+
+            if (checkPlcIntanceExists(plcName))
+            {
+                if(myInstance == null)
+                {
+                    myInstance = SimulationRuntimeManager.CreateInterface(plcName);
+                }
+                if(myInstance.OperatingState == EOperatingState.Stop)
+                {
+                    if(VarData == null)
+                    {
+                        ConnectPLC();
+                    }
+                }
+            }
+
+
         }
 
         private bool checkPlcIntanceExists(string name)
@@ -1166,7 +1189,6 @@ namespace PlcSimAdvConfigurator
             }
             return false;
         }
-
 
         private void btnPlcName_Click(object sender, EventArgs e)
         {
@@ -1203,7 +1225,7 @@ namespace PlcSimAdvConfigurator
             menuSnapTo10.Checked = false;
             menuSnapTo20.Checked = false;
 
-            if(snapGrid == 5) menuSnapTo05.Checked = true;
+            if (snapGrid == 5) menuSnapTo05.Checked = true;
             if (snapGrid == 10) menuSnapTo10.Checked = true;
             if (snapGrid == 20) menuSnapTo20.Checked = true;
 
