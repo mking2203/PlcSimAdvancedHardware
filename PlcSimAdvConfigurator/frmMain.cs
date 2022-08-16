@@ -1165,13 +1165,13 @@ namespace PlcSimAdvConfigurator
 
             if (checkPlcIntanceExists(plcName))
             {
-                if(myInstance == null)
+                if (myInstance == null)
                 {
                     myInstance = SimulationRuntimeManager.CreateInterface(plcName);
                 }
-                if(myInstance.OperatingState == EOperatingState.Stop)
+                if (myInstance.OperatingState == EOperatingState.Stop)
                 {
-                    if(VarData == null)
+                    if (VarData == null)
                     {
                         ConnectPLC();
                     }

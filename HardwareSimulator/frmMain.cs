@@ -781,5 +781,14 @@ namespace PlcSimAdvSimulator
         {
 
         }
+
+        private bool checkPlcIntanceExists(string name)
+        {
+            foreach (SInstanceInfo s in SimulationRuntimeManager.RegisteredInstanceInfo)
+            {
+                if (s.Name == name) return true;
+            }
+            return false;
+        }
     }
 }
