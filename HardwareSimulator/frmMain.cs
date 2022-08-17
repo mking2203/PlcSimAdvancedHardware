@@ -66,22 +66,32 @@ namespace PlcSimAdvSimulator
                         loadJson = lastFile;
                 }
 
-                if (loadJson == string.Empty)
+                while ((!checkPlcIntanceExists(getPlcNameFromJson(loadJson))))
                 {
-                    // file does not exist, browse for new file
-                    start.StatusText = "Open configuration file";
-                    start.StatusProcent = 30;
-                    Application.DoEvents();
-
-                    openFileDialog1.Title = "Open configuration";
-                    openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
-                    openFileDialog1.FilterIndex = 1;
-                    openFileDialog1.RestoreDirectory = true;
-
-                    DialogResult res = openFileDialog1.ShowDialog();
-                    if (res == DialogResult.OK)
+                    string selName = getPlcNameFromJson(loadJson);
+                    if (!checkPlcIntanceExists(selName))
                     {
-                        loadJson = openFileDialog1.FileName;
+                        MessageBox.Show($"PlcSimAdvanced: {selName} instance is not active", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        loadJson = string.Empty;
+                    }
+
+                    if (loadJson == string.Empty)
+                    {
+                        // file does not exist, browse for new file
+                        start.StatusText = "Open configuration file";
+                        start.StatusProcent = 30;
+                        Application.DoEvents();
+
+                        openFileDialog1.Title = "Open configuration";
+                        openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+                        openFileDialog1.FilterIndex = 1;
+                        openFileDialog1.RestoreDirectory = true;
+
+                        DialogResult res = openFileDialog1.ShowDialog();
+                        if (res == DialogResult.OK)
+                        {
+                            loadJson = openFileDialog1.FileName;
+                        }
                     }
                 }
 
@@ -789,6 +799,23 @@ namespace PlcSimAdvSimulator
                 if (s.Name == name) return true;
             }
             return false;
+        }
+
+        private string getPlcNameFromJson(string Filename)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                string json = File.ReadAllText(Filename);
+                List<Dictionary<string, string>> myList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+
+                return myList[0]["PLC"];
+
+                }
+            catch { }
+            
+            return result;
         }
     }
 }
