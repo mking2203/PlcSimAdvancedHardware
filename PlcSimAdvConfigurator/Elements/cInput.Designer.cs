@@ -46,6 +46,7 @@ namespace PlcSimAdvConfigurator
             // 
             // txtInput
             // 
+            this.txtInput.Enabled = false;
             this.txtInput.Location = new System.Drawing.Point(3, 40);
             this.txtInput.Name = "txtInput";
             this.txtInput.Size = new System.Drawing.Size(92, 20);

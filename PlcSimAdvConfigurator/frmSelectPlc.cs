@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//
+// PlcSimAdvanced Hardware Simulation Configurator (Siemens TIA Portal)
+// Mark König, 05/2022
+//
+
+using System;
 using System.Windows.Forms;
 using Siemens.Simatic.Simulation.Runtime;
 
@@ -19,10 +17,15 @@ namespace PlcSimAdvConfigurator
 
             this.DialogResult = DialogResult.None;
 
+            // add all instances
             foreach (SInstanceInfo s in SimulationRuntimeManager.RegisteredInstanceInfo)
             {
                 listBox1.Items.Add(s.Name);
             }
+
+            // select first instance
+            if (listBox1.Items.Count > 0)
+                listBox1.SelectedIndex = 0;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

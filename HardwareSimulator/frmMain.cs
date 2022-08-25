@@ -771,9 +771,6 @@ namespace PlcSimAdvSimulator
 
         private void mnuExit_Click(object sender, EventArgs e)
         {
-            if (myInstance != null)
-                myInstance.UnregisterInstance();
-
             Application.Exit();
         }
 

@@ -29,12 +29,12 @@ namespace PlcSimAdvConfigurator
         // move is active
         bool move;
 
+        // holds the elements
         List<Dictionary<string, string>> myList = new List<Dictionary<string, string>>();
         string controlID = string.Empty;
-        string plcName = string.Empty;
         string actID = string.Empty;
 
-        // api interface
+        // API interface
         private IInstance myInstance;
         private STagInfo[] VarData;
 
@@ -49,9 +49,11 @@ namespace PlcSimAdvConfigurator
         private void FrmMain_Load(object sender, EventArgs e)
         {
             txtSimulation.Text = "Simulation: not connected";
-
             lstEvents.Items.Add("Start PlcSimAdv Hardware Configurator");
 
+            txtPLC.Text = $"PLC: {Program.PlcName }";
+
+            // load snap to grid
             snapGrid = (int)Settings.Default["SnapGrid"];
             setSnapGrid();
 
@@ -74,13 +76,18 @@ namespace PlcSimAdvConfigurator
                     lstEvents.Items.Add("Load file OK");
                     break;
                 case -1:
-                    lstEvents.Items.Add("Last File not exists");
+                    lstEvents.Items.Add("File not exists");
+                    break;
+                case -1000:
+                    lstEvents.Items.Add("Load exception");
+                    break;
+                case -2000:
+                    lstEvents.Items.Add("Wrong config file?");
                     break;
                 default:
                     lstEvents.Items.Add("Load file error: " + result.ToString());
                     break;
             }
-
             return result;
         }
 
@@ -112,9 +119,17 @@ namespace PlcSimAdvConfigurator
 
                         if (item["Control"] == "Settings")
                         {
-                            plcName = item["PLC"];
+                            string selPLC = item["PLC"];
+                            if (selPLC != Program.PlcName)
+                            {
+                                //no intance found
+                                if (MessageBox.Show($"Wrong PLC? config= {selPLC} / selected= {Program.PlcName}. Continue?",
+                                    "Config error",
+                                    MessageBoxButtons.OKCancel,
+                                    MessageBoxIcon.Warning) == DialogResult.Cancel)
+                                    return -2000;
+                            }
                             controlID = item["ID"];
-                            this.Text = "Actual PLC: " + plcName;
                         }
                         else if (item["Control"] == "cButton")
                         {
@@ -309,7 +324,8 @@ namespace PlcSimAdvConfigurator
 
                 if (fileName != string.Empty)
                 {
-                    this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                    this.Text = "File: " + fileName;
+
                     ConnectPLC();
                 }
 
@@ -321,6 +337,9 @@ namespace PlcSimAdvConfigurator
 
         private void SaveJson(string FileName)
         {
+            Dictionary<string, string> itm = myList[0];
+            itm["PLC"] = Program.PlcName;
+
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;
             options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
@@ -332,15 +351,15 @@ namespace PlcSimAdvConfigurator
         private void ConnectPLC()
         {
             txtSimulation.Text = "Simulation: not connected";
-            lstEvents.Items.Add("Try to connect to PLC instance " + plcName);
+            lstEvents.Items.Add("Try to connect to PLC instance " + Program.PlcName);
 
-            if (checkPlcIntanceExists(plcName))
+            if (checkPlcIntanceExists(Program.PlcName))
             {
                 VarData = null;
 
                 try
                 {
-                    myInstance = SimulationRuntimeManager.CreateInterface(plcName);
+                    myInstance = SimulationRuntimeManager.CreateInterface(Program.PlcName);
 
                     txtSimulation.Text = "Simulation: connected";
 
@@ -353,12 +372,12 @@ namespace PlcSimAdvConfigurator
                     VarData = myInstance.TagInfos;
 
                     txtSimulation.Text = "Simulation: ready";
-                    lstEvents.Items.Add($"PLC instance {plcName} is connected.");
+                    lstEvents.Items.Add($"PLC instance {Program.PlcName} is connected.");
                 }
                 catch (Exception ex)
                 {
-                    lstEvents.Items.Add("Could not start PLC instance " + plcName);
-                    MessageBox.Show("Could not start PLC instance " + plcName);
+                    lstEvents.Items.Add("Could not start PLC instance " + Program.PlcName);
+                    MessageBox.Show("Could not start PLC instance " + Program.PlcName);
 
                     txtSimulation.Text = "Simulation: error ->" + ex.Message;
 
@@ -380,29 +399,20 @@ namespace PlcSimAdvConfigurator
 
         private void mnuNew_Click(object sender, EventArgs e)
         {
+            myList.Clear();
+
+            Dictionary<string, string> item = new Dictionary<string, string>();
+            item.Add("Control", "Settings");
+            item.Add("PLC", Program.PlcName);
+            item.Add("ID", "1");
+            myList.Add(item);
+
+            pMain.Controls.Clear();
+
+            controlID = "1";
+
+            this.Text = "File: not saved";
             fileName = string.Empty;
-            string input = Interaction.InputBox("Enter PLC name:", "New project", "");
-
-            if (input.Length > 0)
-            {
-                myList.Clear();
-
-                Dictionary<string, string> item = new Dictionary<string, string>();
-                item.Add("Control", "Settings");
-                item.Add("PLC", input);
-                item.Add("ID", "1");
-
-                plcName = input;
-                controlID = "1";
-
-                myList.Add(item);
-                pMain.Controls.Clear();
-
-                this.Text = "Actual PLC: " + plcName;
-                fileName = string.Empty;
-            }
-
-            ConnectPLC();
         }
 
         private void mnuReload_Click(object sender, EventArgs e)
@@ -419,7 +429,10 @@ namespace PlcSimAdvConfigurator
                 Settings.Default["LastConfigFile"] = fileName;
                 Settings.Default.Save();
 
-                MessageBox.Show("File saved");
+                MessageBox.Show("File saved",
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             else
             {
@@ -433,7 +446,7 @@ namespace PlcSimAdvConfigurator
             openFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
-            openFileDialog1.FileName = plcName + ".json";
+            openFileDialog1.FileName = Program.PlcName + ".json";
 
             DialogResult res = openFileDialog1.ShowDialog();
             if (res == DialogResult.OK)
@@ -449,7 +462,7 @@ namespace PlcSimAdvConfigurator
                     Settings.Default["LastConfigFile"] = openFileDialog1.FileName;
                     Settings.Default.Save();
 
-                    this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                    this.Text = "File: " + fileName;
                 }
             }
         }
@@ -460,7 +473,7 @@ namespace PlcSimAdvConfigurator
             saveFileDialog1.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.FileName = plcName + ".json";
+            saveFileDialog1.FileName = Program.PlcName + ".json";
 
             DialogResult res = saveFileDialog1.ShowDialog();
             if (res == DialogResult.OK)
@@ -470,9 +483,48 @@ namespace PlcSimAdvConfigurator
                 Settings.Default["LastConfigFile"] = saveFileDialog1.FileName;
                 Settings.Default.Save();
 
+                MessageBox.Show("File saved",
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
                 fileName = saveFileDialog1.FileName;
-                this.Text = "Actual PLC: " + plcName + " File: " + fileName;
+                this.Text = "File: " + fileName;
             }
+        }
+
+        private void menuSnapTo05_Click(object sender, EventArgs e)
+        {
+            snapGrid = 5;
+            setSnapGrid();
+        }
+
+        private void menuSnapTo10_Click(object sender, EventArgs e)
+        {
+            snapGrid = 10;
+            setSnapGrid();
+        }
+
+        private void menuSnapTo20_Click(object sender, EventArgs e)
+        {
+            snapGrid = 20;
+            setSnapGrid();
+        }
+
+        private void setSnapGrid()
+        {
+            menuSnapTo05.Checked = false;
+            menuSnapTo10.Checked = false;
+            menuSnapTo20.Checked = false;
+
+            if (snapGrid == 5) menuSnapTo05.Checked = true;
+            if (snapGrid == 10) menuSnapTo10.Checked = true;
+            if (snapGrid == 20) menuSnapTo20.Checked = true;
+
+            lstEvents.Items.Add("Set snap to grid to " + snapGrid.ToString());
+
+            Settings.Default["SnapGrid"] = snapGrid;
+            Settings.Default.Save();
         }
 
         #endregion
@@ -516,7 +568,7 @@ namespace PlcSimAdvConfigurator
 
                 b.Location = new Point(newX, newY);
 
-                GetItemByID((string)b.Tag)["Location"] = b.Location.X.ToString() + "," + b.Location.Y.ToString();
+                GetItemListByID((string)b.Tag)["Location"] = b.Location.X.ToString() + "," + b.Location.Y.ToString();
 
             }
         }
@@ -548,7 +600,6 @@ namespace PlcSimAdvConfigurator
         {
             if (e.Button == MouseButtons.Left)
             {
-
                 foreach (Control crtl in pMain.Controls)
                 {
                     crtl.BackColor = pMain.BackColor;
@@ -561,7 +612,7 @@ namespace PlcSimAdvConfigurator
                 txtItemID.Text = "ItemID: " + (string)b.Tag;
                 actID = (string)b.Tag;
 
-                Dictionary<string, string> item = GetItemByID(actID);
+                Dictionary<string, string> item = GetItemListByID(actID);
                 DataTable dt = new DataTable();
 
                 dt.Columns.Add("Key");
@@ -772,6 +823,7 @@ namespace PlcSimAdvConfigurator
                 t.Font = new System.Drawing.Font("Arial", 15.0f);
 
                 t.Size = GetSize(newItem["Size"]);
+                t.BorderStyle = BorderStyle.FixedSingle;
 
                 t.Location = new Point(snapGrid, snapGrid);
                 newItem["Location"] = t.Location.X.ToString() + "," + t.Location.Y.ToString();
@@ -910,11 +962,23 @@ namespace PlcSimAdvConfigurator
             }
         }
 
-        private Dictionary<string, string> GetItemByID(string id)
+        private Dictionary<string, string> GetItemListByID(string id)
         {
             foreach (Dictionary<string, string> item in myList)
             {
                 if (item["ID"] == id) return item;
+            }
+            return null;
+        }
+
+        private Control GetControlByID(string id)
+        {
+            foreach (Control c in pMain.Controls)
+            {
+                if ((string)c.Tag == id)
+                {
+                    return c;
+                }
             }
             return null;
         }
@@ -944,17 +1008,6 @@ namespace PlcSimAdvConfigurator
 
         private void dataProperties_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // try to conect if failed earlier
-            if (myInstance == null)
-            {
-                ConnectPLC();
-            }
-            else
-            {
-                if (myInstance.Name != plcName)
-                    ConnectPLC();
-            }
-
             if (e.RowIndex >= 0)
             {
                 string key = (string)dataProperties.Rows[e.RowIndex].Cells[0].Value;
@@ -966,7 +1019,7 @@ namespace PlcSimAdvConfigurator
 
                     if ((input != val) && (input.Length > 0))
                     {
-                        GetItemByID(actID)["Text"] = input;
+                        GetItemListByID(actID)["Text"] = input;
 
                         foreach (Control c in pMain.Controls)
                         {
@@ -989,7 +1042,7 @@ namespace PlcSimAdvConfigurator
                         {
                             Size newSize = GetSize(input);
 
-                            GetItemByID(actID)["Size"] = newSize.Width.ToString() + "x" + newSize.Height.ToString();
+                            GetItemListByID(actID)["Size"] = newSize.Width.ToString() + "x" + newSize.Height.ToString();
 
                             foreach (Control c in pMain.Controls)
                             {
@@ -1024,7 +1077,7 @@ namespace PlcSimAdvConfigurator
                             DialogResult res = sel.ShowDialog();
                             if (res == DialogResult.OK)
                             {
-                                GetItemByID(actID)[key] = sel.ActualSelection;
+                                GetItemListByID(actID)[key] = sel.ActualSelection;
                                 dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection;
                             }
                         }
@@ -1045,7 +1098,7 @@ namespace PlcSimAdvConfigurator
                             DialogResult res = sel.ShowDialog();
                             if (res == DialogResult.OK)
                             {
-                                GetItemByID(actID)[key] = sel.ActualSelection;
+                                GetItemListByID(actID)[key] = sel.ActualSelection;
                                 dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection;
                             }
                         }
@@ -1056,7 +1109,7 @@ namespace PlcSimAdvConfigurator
                 {
                     if (myInstance != null)
                     {
-                        Dictionary<string, string> item = GetItemByID(actID);
+                        Dictionary<string, string> item = GetItemListByID(actID);
 
                         if ((item["Control"] != "cTrackBar") && (item["Control"] != "cTableSet"))
                         {
@@ -1069,7 +1122,7 @@ namespace PlcSimAdvConfigurator
                             DialogResult res = sel.ShowDialog();
                             if (res == DialogResult.OK)
                             {
-                                GetItemByID(actID)["Value"] = sel.ActualSelection.ToString();
+                                GetItemListByID(actID)["Value"] = sel.ActualSelection.ToString();
                                 dataProperties.Rows[e.RowIndex].Cells[1].Value = sel.ActualSelection.ToString();
                             }
                         }
@@ -1082,7 +1135,7 @@ namespace PlcSimAdvConfigurator
                                 int set = 0;
                                 int.TryParse(input, out set);
 
-                                GetItemByID(actID)["Value"] = set.ToString();
+                                GetItemListByID(actID)["Value"] = set.ToString();
                                 dataProperties.Rows[e.RowIndex].Cells[1].Value = set.ToString();
                             }
                         }
@@ -1098,11 +1151,12 @@ namespace PlcSimAdvConfigurator
                         int set = 0;
                         int.TryParse(input, out set);
 
-                        GetItemByID(actID)[key] = set.ToString();
+                        GetItemListByID(actID)[key] = set.ToString();
                         dataProperties.Rows[e.RowIndex].Cells[1].Value = set.ToString();
                     }
                 }
-                if (key == "ActiveColor")
+                if ((key == "ActiveColor") ||
+                    (key == "BackColor"))
                 {
                     colorDialog1.Color = ColorTranslator.FromHtml(val);
                     DialogResult res = colorDialog1.ShowDialog();
@@ -1110,10 +1164,9 @@ namespace PlcSimAdvConfigurator
                     if (res == DialogResult.OK)
                     {
                         string f = ColorTranslator.ToHtml(colorDialog1.Color);
-                        GetItemByID(actID)["ActiveColor"] = f;
+                        GetItemListByID(actID)[key] = f;
                         dataProperties.Rows[e.RowIndex].Cells[1].Value = f;
                     }
-
                 }
             }
         }
@@ -1130,44 +1183,11 @@ namespace PlcSimAdvConfigurator
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (SimulationRuntimeManager.RegisteredInstanceInfo.Length == 0)
-            {
-                btnPlcName.Text = "no PLC instance available";
-                btnPlcName.Enabled = false;
-                btnPlcName.BackColor = Color.Orange;
-            }
-            else
-            {
-                btnPlcName.Enabled = true;
-
-                // check instance is available
-                if (plcName != string.Empty)
-                {
-                    if (!checkPlcIntanceExists(plcName))
-                    {
-                        lstEvents.Items.Add("PLC instance not available!");
-                        plcName = string.Empty;
-                    }
-                }
-
-                // display name of the PLC instance
-                if (plcName == string.Empty)
-                {
-                    btnPlcName.BackColor = SystemColors.Control;
-                    btnPlcName.Text = "no PLC selected";
-                }
-                else
-                {
-                    btnPlcName.Text = "PLC: " + plcName;
-                    btnPlcName.BackColor = Color.ForestGreen;
-                }
-            }
-
-            if (checkPlcIntanceExists(plcName))
+            if (checkPlcIntanceExists(Program.PlcName))
             {
                 if (myInstance == null)
                 {
-                    myInstance = SimulationRuntimeManager.CreateInterface(plcName);
+                    myInstance = SimulationRuntimeManager.CreateInterface(Program.PlcName);
                 }
                 if (myInstance.OperatingState == EOperatingState.Stop)
                 {
@@ -1177,8 +1197,6 @@ namespace PlcSimAdvConfigurator
                     }
                 }
             }
-
-
         }
 
         private bool checkPlcIntanceExists(string name)
@@ -1188,51 +1206,6 @@ namespace PlcSimAdvConfigurator
                 if (s.Name == name) return true;
             }
             return false;
-        }
-
-        private void btnPlcName_Click(object sender, EventArgs e)
-        {
-            frmSelectPlc plc = new frmSelectPlc();
-            if (plc.ShowDialog() == DialogResult.OK)
-            {
-                plcName = plc.PlcName;
-
-                ConnectPLC();
-            }
-        }
-
-        private void menuSnapTo05_Click(object sender, EventArgs e)
-        {
-            snapGrid = 5;
-            setSnapGrid();
-        }
-
-        private void menuSnapTo10_Click(object sender, EventArgs e)
-        {
-            snapGrid = 10;
-            setSnapGrid();
-        }
-
-        private void menuSnapTo20_Click(object sender, EventArgs e)
-        {
-            snapGrid = 20;
-            setSnapGrid();
-        }
-
-        private void setSnapGrid()
-        {
-            menuSnapTo05.Checked = false;
-            menuSnapTo10.Checked = false;
-            menuSnapTo20.Checked = false;
-
-            if (snapGrid == 5) menuSnapTo05.Checked = true;
-            if (snapGrid == 10) menuSnapTo10.Checked = true;
-            if (snapGrid == 20) menuSnapTo20.Checked = true;
-
-            lstEvents.Items.Add("Set snap to grid to " + snapGrid.ToString());
-
-            Settings.Default["SnapGrid"] = snapGrid;
-            Settings.Default.Save();
         }
     }
 }
